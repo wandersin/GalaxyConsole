@@ -9,7 +9,35 @@
 
 export default {
     name: 'App',
-    components: {}
+    data() {
+        return {
+            gc_baseUrl: process.env.VUE_APP_GALAXY_CONSOLE_BASEURL,
+            // 左侧菜单
+            leftMenu: [
+                {
+                    name: '菜单1',
+                    group: 'group1'
+                }, {
+                    name: '菜单2',
+                    group: 'group1'
+                }, {
+                    name: '菜单3',
+                    group: 'group2'
+                }
+            ]
+        }
+    },
+    components: {},
+    methods: {
+        // 加载左侧菜单
+        loadLeftMenu() {
+            console.log(this.gc_baseUrl);
+        }
+    },
+    created() {
+        // 加载左侧菜单
+        this.loadLeftMenu();
+    }
 }
 </script>
 <style>
@@ -17,7 +45,7 @@ export default {
     position: absolute;
     top: 0;
     left: 0;
-    height: 3rem;
+    height: 7%;
     width: 100%;
     border-bottom: 1px solid #ccc;
     box-sizing: border-box;
@@ -25,10 +53,10 @@ export default {
 
 #app-lefter {
     position: absolute;
-    top: 3rem;
+    top: 7%;
     left: 0;
-    height: calc(100% - 3rem);
-    width: 10rem;
+    height: 93%;
+    width: 10%;
     border-right: 1px solid #ccc;
     box-sizing: border-box;
 }
