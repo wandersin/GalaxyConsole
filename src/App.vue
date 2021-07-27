@@ -9,18 +9,24 @@
                         <template slot="title">{{ group.name }}</template>
                         <el-menu-item v-for="(item, itemIndex) in group.menuList"
                                       :key="item.itemId"
-                                      v-bind:index="groupIndex + '-' + itemIndex">
+                                      v-bind:index="groupIndex + '-' + itemIndex"
+                                      @click="changeComponent(item.component)">
                             {{ item.name }}
                         </el-menu-item>
                     </el-menu-item-group>
                 </el-menu>
             </el-row>
         </div>
+        <div id="app-main">
+            <component :is="currentComponent"></component>
+        </div>
     </div>
 </template>
 
 <script>
 import axios from 'axios';
+import Welcome from "@/components/base/Welcome";
+import FileManager from "@/components/life/FileManager";
 
 export default {
     name: 'App',
@@ -28,10 +34,14 @@ export default {
         return {
             gc_baseUrl: process.env.VUE_APP_GALAXY_CONSOLE_BASEURL,
             // 左侧菜单
-            leftMenu: {}
+            leftMenu: {},
+            currentComponent: 'Welcome'
         }
     },
-    components: {},
+    components: {
+        Welcome,
+        FileManager
+    },
     methods: {
         // 加载左侧菜单
         loadLeftMenu() {
@@ -39,11 +49,18 @@ export default {
                 let data = resp.data;
                 if (data.status === 'SUCCESS') { // 成功
                     this.leftMenu = data.result;
-                    console.log(this.leftMenu);
                 } else {
                     alert(data.message);
                 }
             })
+        },
+        // 页面切换
+        changeComponent(name) {
+            if (this.$commonUtils.isNotEmpty(name)) {
+                this.currentComponent = name;
+            } else {
+                this.currentComponent = 'Welcome';
+            }
         }
     },
     created() {
@@ -71,5 +88,13 @@ export default {
     width: 10%;
     border-right: 1px solid #ccc;
     box-sizing: border-box;
+}
+
+#app-main {
+    position: absolute;
+    top: 7%;
+    right: 0;
+    height: 93%;
+    width: 90%;
 }
 </style>
