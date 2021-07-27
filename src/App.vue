@@ -1,11 +1,26 @@
 <template>
     <div id="app">
         <div id="app-header"></div>
-        <div id="app-lefter"></div>
+        <div id="app-lefter">
+            <el-row class="tac">
+                <el-menu default-active="0-0" class="el-menu-vertical-demo">
+                    <el-menu-item-group v-for="(group, groupIndex) in this.leftMenu"
+                                        :key="group.groupId">
+                        <template slot="title">{{ group.name }}</template>
+                        <el-menu-item v-for="(item, itemIndex) in group.menuList"
+                                      :key="item.itemId"
+                                      v-bind:index="groupIndex + '-' + itemIndex">
+                            {{ item.name }}
+                        </el-menu-item>
+                    </el-menu-item-group>
+                </el-menu>
+            </el-row>
+        </div>
     </div>
 </template>
 
 <script>
+import axios from 'axios';
 
 export default {
     name: 'App',
@@ -13,25 +28,22 @@ export default {
         return {
             gc_baseUrl: process.env.VUE_APP_GALAXY_CONSOLE_BASEURL,
             // 左侧菜单
-            leftMenu: [
-                {
-                    name: '菜单1',
-                    group: 'group1'
-                }, {
-                    name: '菜单2',
-                    group: 'group1'
-                }, {
-                    name: '菜单3',
-                    group: 'group2'
-                }
-            ]
+            leftMenu: {}
         }
     },
     components: {},
     methods: {
         // 加载左侧菜单
         loadLeftMenu() {
-            console.log(this.gc_baseUrl);
+            axios.get(`${this.gc_baseUrl}/index/left-menu`).then(resp => {
+                let data = resp.data;
+                if (data.status === 'SUCCESS') { // 成功
+                    this.leftMenu = data.result;
+                    console.log(this.leftMenu);
+                } else {
+                    alert(data.message);
+                }
+            })
         }
     },
     created() {
