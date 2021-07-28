@@ -50,7 +50,10 @@ export default {
                 if (data.status === 'SUCCESS') { // 成功
                     this.leftMenu = data.result;
                 } else {
-                    alert(data.message);
+                    this.$message({
+                        message: data.message,
+                        center: true
+                    });
                 }
             })
         },
