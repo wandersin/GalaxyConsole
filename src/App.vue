@@ -24,7 +24,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 import Welcome from "@/components/base/Welcome";
 import FileManager from "@/components/life/FileManager";
 
@@ -32,7 +31,6 @@ export default {
     name: 'App',
     data() {
         return {
-            gc_baseUrl: process.env.VUE_APP_GALAXY_CONSOLE_BASEURL,
             // 左侧菜单
             leftMenu: {},
             currentComponent: 'Welcome'
@@ -45,16 +43,8 @@ export default {
     methods: {
         // 加载左侧菜单
         loadLeftMenu() {
-            axios.get(`${this.gc_baseUrl}/index/left-menu`).then(resp => {
-                let data = resp.data;
-                if (data.status === 'SUCCESS') { // 成功
-                    this.leftMenu = data.result;
-                } else {
-                    this.$message({
-                        message: data.message,
-                        center: true
-                    });
-                }
+            this.$commonUtils.get(`${this.$gc_baseUrl}/index/left-menu`, data => {
+                this.leftMenu = data;
             })
         },
         // 页面切换
