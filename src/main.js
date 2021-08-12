@@ -12,6 +12,7 @@ Vue.config.productionTip = false;
 
 Vue.prototype.$commonUtils = commonUtils;
 Vue.prototype.$gc_baseUrl = process.env.VUE_APP_GALAXY_CONSOLE_BASEURL;
+Vue.prototype.$dsp_baseUrl = process.env.VUE_APP_DYSON_SPHERE_PROGRAM_BASEURL;
 
 Axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
 
