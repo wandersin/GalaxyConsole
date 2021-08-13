@@ -1,15 +1,15 @@
 <template>
-    <selection/>
+  <selection/>
 </template>
 
 <script>
 import Selection from "@/components/dyson/Selection";
 
 export default {
-    name: "Welcome",
-    components: {
-        Selection
-    }
+  name: "Welcome",
+  components: {
+    Selection
+  }
 }
 </script>
 

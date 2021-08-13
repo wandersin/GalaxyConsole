@@ -17,5 +17,5 @@ Vue.prototype.$dsp_baseUrl = process.env.VUE_APP_DYSON_SPHERE_PROGRAM_BASEURL;
 Axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
 
 new Vue({
-  render: h => h(App),
+    render: h => h(App),
 }).$mount('#app');
