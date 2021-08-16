@@ -32,7 +32,17 @@ export default {
   data() {
     return {
       // 左侧菜单
-      leftMenu: {},
+      leftMenu: [
+        {
+          name: '',
+          menuList: [
+            {
+              name: '',
+              itemId: ''
+            }
+          ]
+        }
+      ],
       currentComponent: 'Welcome'
     }
   },
