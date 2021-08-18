@@ -2,7 +2,7 @@
   <el-tabs type="border-card">
     <!-- 基本信息查询 -->
     <el-tab-pane style="overflow:visible;">
-      <span slot="label"><i class="el-icon-date"></i>我的行程</span>
+      <span slot="label"><i class="el-icon-date tab-icon"></i>查询</span>
       <div id="dsp-body">
         <el-row>
           <el-col :span="3">
@@ -19,7 +19,7 @@
     </el-tab-pane>
     <!-- 量化计算 -->
     <el-tab-pane>
-      <span slot="label"><i class="el-icon-date"></i>计算</span>
+      <span slot="label"><i class="el-icon-date tab-icon"></i>计算</span>
       计算
     </el-tab-pane>
   </el-tabs>
@@ -100,5 +100,9 @@ export default {
 >>> .el-tabs__content {
   overflow: visible;
   height: 10rem;
+}
+
+.tab-icon {
+  margin: 0 .5rem;
 }
 </style>
