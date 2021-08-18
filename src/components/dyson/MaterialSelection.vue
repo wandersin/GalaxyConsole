@@ -3,7 +3,7 @@
     <tr v-for="(row, rowIndex) in materialList" :key="rowIndex">
       <td v-for="(item, itemIndex) in row" :key="itemIndex">
         <template v-if="item != null">
-          <div class="img-box">
+          <div class="img-box" @click="selectCallback(item.id)">
             <el-image :src="item.img"></el-image>
           </div>
         </template>
@@ -31,7 +31,9 @@ export default {
   created() {
     this.loadMaterial(false);
   },
-  props: {}
+  props: {
+    selectCallback: Function
+  }
 }
 </script>
 

@@ -1,14 +1,15 @@
 <template>
-  <selection/>
+  <div>Welcome</div>
 </template>
 
 <script>
-import Selection from "@/components/dyson/Selection";
-
 export default {
   name: "Welcome",
   components: {
-    Selection
+
+  },
+  methods: {
+
   }
 }
 </script>

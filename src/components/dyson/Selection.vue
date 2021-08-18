@@ -11,7 +11,7 @@
       </div>
     </div>
     <div id="selection-body">
-      <material-selection ref="selection"/>
+      <material-selection ref="selection" :select-callback="selectCallback"/>
     </div>
   </div>
 </template>
@@ -32,6 +32,9 @@ export default {
       this.isBuilding = false;
       this.$refs.selection.loadMaterial(isBuilding);
     }
+  },
+  props: {
+    selectCallback: Function
   }
 }
 </script>
@@ -41,6 +44,7 @@ export default {
   float: left;
   padding: .5rem;
   border: 1px solid lightskyblue;
+  background-color: white;
 }
 
 #selection-header {

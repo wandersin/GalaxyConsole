@@ -26,6 +26,7 @@
 <script>
 import Welcome from "@/components/base/Welcome";
 import FileManager from "@/components/life/FileManager";
+import DysonSphereProgram from "@/components/dyson/DysonSphereProgram";
 
 export default {
   name: 'App',
@@ -48,7 +49,8 @@ export default {
   },
   components: {
     Welcome,
-    FileManager
+    FileManager,
+    DysonSphereProgram
   },
   methods: {
     // 加载左侧菜单
