@@ -27,6 +27,7 @@
 import Welcome from "@/components/base/Welcome";
 import FileManager from "@/components/life/FileManager";
 import DysonSphereProgram from "@/components/dyson/DysonSphereProgram";
+import PipelineManager from "@/components/environment/PipelineManager";
 
 export default {
   name: 'App',
@@ -50,7 +51,8 @@ export default {
   components: {
     Welcome,
     FileManager,
-    DysonSphereProgram
+    DysonSphereProgram,
+    PipelineManager
   },
   methods: {
     // 加载左侧菜单
