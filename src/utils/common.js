@@ -1,4 +1,14 @@
 import axios from "axios";
+import qs from "qs";
+
+function reqCallback(resp, callback, failed) {
+    let data = resp.data;
+    if (data.status === 'SUCCESS' && typeof callback === 'function') { // 成功
+        callback(data.result);
+    } else if (data.status !== 'SUCCESS' && typeof failed === 'function') { // 失败
+        failed(data.message);
+    }
+}
 
 export default {
     isEmpty(str) {
@@ -9,16 +19,12 @@ export default {
     },
     get(url, callback, failed) {
         axios.get(url).then(resp => {
-            let data = resp.data;
-            if (data.status === 'SUCCESS') { // 成功
-                if (typeof callback === 'function') {
-                    callback(data.result);
-                }
-            } else {
-                if (typeof failed === 'function') {
-                    failed(data.message);
-                }
-            }
+            reqCallback(resp, callback, failed);
+        })
+    },
+    post(url, param, callback, failed) {
+        axios.post(url, qs.stringify(param)).then(resp => {
+            reqCallback(resp, callback, failed);
         })
     },
     // 文件大小格式转换
