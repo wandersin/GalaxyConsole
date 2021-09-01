@@ -29,6 +29,8 @@ import FileManager from "@/components/life/FileManager";
 import DysonSphereProgram from "@/components/dyson/DysonSphereProgram";
 import PipelineManager from "@/components/environment/PipelineManager";
 import ServiceDeploy from "@/components/environment/ServiceDeploy";
+import OperationPlatform from "@/components/environment/OperationPlatform";
+import ScriptStore from "@/components/environment/ScriptStore";
 
 export default {
   name: 'App',
@@ -54,7 +56,9 @@ export default {
     FileManager,
     DysonSphereProgram,
     PipelineManager,
-    ServiceDeploy
+    ServiceDeploy,
+    OperationPlatform,
+    ScriptStore
   },
   methods: {
     // 加载左侧菜单

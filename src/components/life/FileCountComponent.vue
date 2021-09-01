@@ -43,7 +43,7 @@ export default {
   },
   methods: {
     loadFileCount() {
-      this.$commonUtils.get(`${this.$gc_baseUrl}/index/count-files?day=${this.time}`, data => {
+      this.$commonUtils.get(`${this.$em_baseUrl}/file/count-files?day=${this.time}`, data => {
         this.countFileResult = data;
         this.fileSize = this.$commonUtils.fileSizeTransform(this.countFileResult.fileSize);
       })
