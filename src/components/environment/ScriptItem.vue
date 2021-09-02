@@ -6,8 +6,8 @@
     <span id="script-item-name">{{ this.scriptDetail.scriptName }}</span>
     <span id="script-item-desc">{{ this.scriptDetail.scriptDesc }}</span>
     <div id="script-item-footer">
-      <span id="script-item-date">发布时间：2021-06-08</span>
-      <el-button id="script-execute" @click="executeScript(scriptDetail.scriptId)">执行</el-button>
+      <span id="script-item-date">发布时间：{{ this.$moment(this.scriptDetail.createdTime).format('YYYY-MM-DD') }}</span>
+      <el-button id="script-execute" @click="executeScript(scriptDetail)">查看</el-button>
     </div>
   </div>
 </template>
@@ -17,12 +17,13 @@ export default {
   name: "ScriptItem",
   methods: {
     // 执行脚本
-    executeScript(scriptId) {
-      console.log(scriptId);
+    executeScript(scriptDetail) {
+      this.addScriptTab(scriptDetail);
     }
   },
   props: {
-    scriptDetail: Object
+    scriptDetail: Object,
+    addScriptTab: Function
   }
 }
 </script>
