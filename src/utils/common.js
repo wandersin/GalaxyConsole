@@ -1,5 +1,4 @@
 import axios from "axios";
-import qs from "qs";
 
 function reqCallback(resp, callback, failed) {
     let data = resp.data;
@@ -23,7 +22,12 @@ export default {
         })
     },
     post(url, param, callback, failed) {
-        axios.post(url, qs.stringify(param)).then(resp => {
+        axios.post(url, param).then(resp => {
+            reqCallback(resp, callback, failed);
+        })
+    },
+    delete(url, param, callback, failed) {
+        axios.delete(url, param).then(resp => {
             reqCallback(resp, callback, failed);
         })
     },
