@@ -3,7 +3,7 @@
     <el-descriptions class="margin-top" :column="4" border>
       <el-descriptions-item :span="4">
         <template slot="label" style="width: 20rem;">
-          <i class="el-icon-user"></i>
+          <i class="el-icon-key"></i>
           脚本id
         </template>
         {{ scriptDetail.scriptId }}
@@ -38,7 +38,7 @@
       </el-descriptions-item>
       <el-descriptions-item :span="2">
         <template slot="label">
-          <i class="el-icon-cpu"></i>
+          <i class="el-icon-monitor"></i>
           执行机列表
         </template>
         <el-tree :data="hostList" :props="hostProps" show-checkbox></el-tree>
@@ -105,12 +105,7 @@ export default {
       scriptContent: '',
       // 参数列表
       body: {
-        hostInfo: {
-          host: '',
-          port: '',
-          user: '',
-          pwd: ''
-        },
+        hostInfo: [],
         parameters: {}
       },
       // 执行脚本请求参数
