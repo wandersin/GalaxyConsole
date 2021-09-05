@@ -41,7 +41,28 @@
           <i class="el-icon-monitor"></i>
           执行机列表
         </template>
-        <el-tree :data="hostList" :props="hostProps" show-checkbox></el-tree>
+        <!-- 树形选择器 -->
+        <el-tree :data="hostList"
+                 :props="hostProps"
+                 show-checkbox
+                 ref="tree"
+                 style="width: 30rem; margin-right: -100rem;"
+                 @check-change="getHost">
+          <el-row class="host-tree-item" slot-scope="{ node, data }">
+            <el-col :span="12">
+              <div>{{ node.label }}</div>
+            </el-col>
+            <el-col v-if="data.hostFlag" :span="10" :offset="2">
+              <el-select v-if="data.hostFlag" size="mini" v-model="data.user" placeholder="执行用户" @change="getHost">
+                <el-option v-for="user in data.userList"
+                           :key="user.name"
+                           :label="user.name"
+                           :value="user.name">
+                </el-option>
+              </el-select>
+            </el-col>
+          </el-row>
+        </el-tree>
       </el-descriptions-item>
       <el-descriptions-item :span="2">
         <template slot="label">
@@ -112,7 +133,42 @@ export default {
       parameterRaw: '',
       parameterArr: [],
       // 执行机列表
-      hostList: [],
+      hostList: [
+        {
+          label: 'Alpha',
+          hostFlag: false,
+
+          children: [
+            {
+              label: '192.168.3.2',
+              user: '',
+              hostFlag: true,
+              userList: [
+                {
+                  name: 'pi'
+                }
+              ]
+            },
+            {
+              label: '192.168.3.20',
+              user: '',
+              hostFlag: true,
+              userList: [
+                {
+                  name: 'root'
+                },
+                {
+                  name: 'wangyunshu'
+                }
+              ]
+            }
+          ]
+        },
+        {
+          label: 'Gamma',
+          hostFlag: false,
+        }
+      ],
       hostProps: {},
       // 添加参数模式
       addParameterFlag: false,
@@ -166,6 +222,20 @@ export default {
     // 取消添加参数
     cancel() {
       this.addParameterFlag = false;
+    },
+    // 获取选中的主机列表
+    getHost() {
+      this.body.hostInfo.length = 0;
+      this.refreshJson();
+      this.$refs.tree.getCheckedNodes().forEach(item => {
+        if (item.hostFlag) {
+          let host = {};
+          host.ip = item.label;
+          host.user = item.user;
+          this.body.hostInfo.unshift(host);
+          this.refreshJson();
+        }
+      })
     }
   },
   created() {
@@ -213,5 +283,20 @@ export default {
 
 .parameter-button-box {
   margin-top: 6px;
+}
+
+.host-tree-item {
+  height: 40px;
+  line-height: 40px;
+  width: 100%;
+}
+
+>>> .el-tree-node__content {
+  height: 40px;
+  line-height: 40px;
+}
+
+>>> .el-descriptions-item__content {
+  vertical-align: top;
 }
 </style>
