@@ -5,7 +5,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 import App from './App.vue';
 import moment from "moment";
 
-import commonUtils from './utils/common.js'
+import commonUtils from './utils/CommonUtils.js'
 
 Vue.use(ElementUI);
 Vue.prototype.$axios = Axios;
