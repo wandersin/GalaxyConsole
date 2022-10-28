@@ -1,10 +1,21 @@
 <template>
-<div>Momentum</div>
+<div id="momentum-root">
+  <schedule-status scheduleName="momentumAutoDownloadSchedule"/>
+</div>
 </template>
 
 <script>
+import ScheduleStatus from "@/components/schedule/ScheduleStatus";
+
 export default {
-  name: "Momentum"
+  name: "Momentum",
+  components: {
+    ScheduleStatus
+  },
+  data() {
+    return {
+    }
+  }
 }
 </script>
 
