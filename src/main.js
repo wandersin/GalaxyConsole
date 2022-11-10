@@ -4,7 +4,7 @@ import Axios from "axios";
 import 'element-ui/lib/theme-chalk/index.css';
 import App from './App.vue';
 import moment from "moment";
-import router from "@/router";
+import router from "@/router/router";
 
 import commonUtils from './utils/CommonUtils.js'
 import ArrayUtils from './utils/ArrayUtils.js'
