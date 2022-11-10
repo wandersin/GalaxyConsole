@@ -3,21 +3,18 @@ import ElementUI from 'element-ui';
 import Axios from "axios";
 import 'element-ui/lib/theme-chalk/index.css';
 import App from './App.vue';
+import router from "@/script/router";
+import commonUtils from "@/script/common-utils";
 import moment from "moment";
-import router from "@/router/router";
-
-import commonUtils from './utils/CommonUtils.js'
-import ArrayUtils from './utils/ArrayUtils.js'
 
 Vue.use(ElementUI);
-Vue.prototype.$axios = Axios;
-Vue.prototype.$moment = moment;
 Vue.config.productionTip = false;
+Axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
 
 Vue.prototype.$commonUtils = commonUtils;
-Vue.prototype.$arrayUtils = ArrayUtils;
-
-Axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
+Vue.prototype.$axios = Axios;
+Vue.prototype.$moment = moment;
+Vue.prototype.$authman_baseUrl = process.env.VUE_APP_AUTH_MAN_BASEURL;
 
 new Vue({
     render: h => h(App),

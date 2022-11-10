@@ -1,11 +1,11 @@
 <template>
   <div id="register-root">
-    <input type="text" placeholder="邮箱"><br>
-    <input type="text" placeholder="用户名"><br>
-    <input type="password" placeholder="请输入密码"><br>
-    <input type="password" placeholder="请再次输入密码"><br>
-    <input type="text" placeholder="请输入验证码">
-    <button>发送验证码</button>
+    <input type="text" v-model="user.email" placeholder="邮箱"><br>
+    <input type="text" v-model="user.username" placeholder="用户名"><br>
+    <input type="password" v-model="user.password" placeholder="请输入密码"><br>
+    <input type="password" v-model="password" placeholder="请再次输入密码"><br>
+    <input type="text" v-model="code" placeholder="请输入验证码">
+    <button @click="sendVerificationCode">发送验证码</button>
     <br>
     <button @click="register">注册</button>
     <button @click="toLoginPage">已有账号，去登录</button>
@@ -15,9 +15,43 @@
 <script>
 export default {
   name: "Register",
+  data() {
+    return {
+      user: {
+        username: 'wangyunshu',
+        password: '514232098zx.',
+        email: '13041202543@163.com'
+      },
+      password: '514232098zx.',
+      code: ''
+    }
+  },
   methods: {
+    verify() {
+      if (this.$commonUtils.isEmpty(this.user.username) || this.$commonUtils.isEmpty(this.user.password) || this.$commonUtils.isEmpty(this.user.email)) {
+        return false;
+      }
+      if (this.user.password !== this.password) {
+        return false;
+      }
+    },
+    sendVerificationCode() {
+      if (this.verify() === false) {
+        return;
+      }
+      // this.$script.push({path: '/index'});
+      this.$commonUtils.get(`${this.$authman_baseUrl}/user/email-code?email=${this.user.email}&operation=register`, data => {
+        console.log(data);
+        alert("验证码发送成功");
+      })
+    },
     register() {
-      this.$router.push({path: '/index'});
+      if (this.verify() === false) {
+        return;
+      }
+      this.$commonUtils.post(`${this.$authman_baseUrl}/user/register?code=${this.code}`, this.user, data => {
+        console.log(data);
+      });
     },
     toLoginPage() {
       this.$router.push({path: '/login'});

@@ -26,6 +26,11 @@ export default {
             reqCallback(resp, callback, failed);
         })
     },
+    put(url, param, callback, failed) {
+        axios.put(url, param).then(resp => {
+            reqCallback(resp, callback, failed);
+        })
+    },
     delete(url, param, callback, failed) {
         axios.delete(url, param).then(resp => {
             reqCallback(resp, callback, failed);
