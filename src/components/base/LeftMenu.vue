@@ -16,6 +16,10 @@
           <i class="el-icon-setting"></i>
           <span slot="title">动态域名解析</span>
         </el-menu-item>
+        <el-menu-item index="ImageSearchTest">
+          <i class="el-icon-magic-stick"></i>
+          <span slot="title">图片OCR</span>
+        </el-menu-item>
       </el-menu>
     </el-row>
   </div>

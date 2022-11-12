@@ -1,11 +1,11 @@
 <template>
   <div>
     <div id="welcome-root">welcome</div>
-    <!-- 注册 -->
     <div>
-      <input type="text" v-model="username" placeholder="username">
-      <input type="text" v-model="email" placeholder="email">
-      <button @click="getEmailVerificationCode">发送验证码</button>
+      <div class="block">
+        <span class="demonstration">默认</span>
+        <el-image :src="src"></el-image>
+      </div>
     </div>
   </div>
 
@@ -19,16 +19,13 @@ export default {
   },
   data() {
     return {
-      src: 'http://192.168.3.2:58082/artifactory/img/9900KF_2022-08-18_20-39-47.png',
+      src: '',
       username: '',
       email: '',
     }
   },
   methods: {
     getEmailVerificationCode() {
-      this.$commonUtils.get(`http://192.168.3.2:58080/authman/user/email-code`, data => {
-        console.log(data);
-      })
     }
   }
 }

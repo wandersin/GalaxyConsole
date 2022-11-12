@@ -18,6 +18,7 @@ import Welcome from "@/components/base/Welcome";
 import LeftMenu from "@/components/base/LeftMenu";
 import MainHeader from "@/components/base/MainHeader";
 import Momentum from "@/components/schedule/Momentum";
+import ImageSearchTest from "@/components/image/ImageSearchTest";
 
 export default {
   name: 'App',
@@ -30,7 +31,8 @@ export default {
     Welcome,
     MainHeader,
     LeftMenu,
-    Momentum
+    Momentum,
+    ImageSearchTest
   },
   methods: {
     selectLeftMenu(index) {
