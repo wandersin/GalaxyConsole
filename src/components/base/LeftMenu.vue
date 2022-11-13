@@ -7,6 +7,7 @@
         <el-menu-item index="Momentum">
           <i class="el-icon-menu"></i>
           <span slot="title">Momentum</span>
+          <el-tag class="beta-tag" type="danger" effect="plain">beta</el-tag>
         </el-menu-item>
         <el-menu-item index="2" disabled>
           <i class="el-icon-document"></i>
@@ -19,6 +20,7 @@
         <el-menu-item index="ImageSearchTest">
           <i class="el-icon-magic-stick"></i>
           <span slot="title">图片OCR</span>
+          <el-tag class="beta-tag" type="danger" effect="plain">beta</el-tag>
         </el-menu-item>
       </el-menu>
     </el-row>
@@ -45,5 +47,13 @@ export default {
 <style scoped>
 .el-menu-vertical-demo {
   border-right: none;
+}
+
+.beta-tag {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 5%;
+  margin: auto;
 }
 </style>

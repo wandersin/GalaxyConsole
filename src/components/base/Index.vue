@@ -71,5 +71,6 @@ export default {
   right: 0;
   height: 93%;
   width: 85%;
+  overflow: auto;
 }
 </style>
