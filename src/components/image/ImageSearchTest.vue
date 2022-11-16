@@ -39,20 +39,21 @@ export default {
     return {
       keyWord: '*',
       imageInfo:[],
-      fit: 'cover'
+      fit: 'cover',
+      searchRow: 24
     }
   },
   methods: {
     search() {
       this.imageInfo = [];
-      this.$commonUtils.get(`http://192.168.3.2:58080/core/image/search/word?word=${this.keyWord}&row=24`, data => {
+      this.$commonUtils.get(`${this.$core_baseUrl}/image/search/word?word=${this.keyWord}&row=${this.searchRow}`, data => {
         for (let i = 0; i < data.length; i++) {
           this.imageInfo.push(data[i]);
         }
       })
     },
     getImageSrcById(id) {
-      return `http://192.168.3.2:58080/core/image/${id}`;
+      return `${this.$core_baseUrl}/image/${id}`;
     },
     showImageInfo(info) {
       alert(JSON.stringify(info, null, 4));

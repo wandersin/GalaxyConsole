@@ -15,6 +15,7 @@ Vue.prototype.$commonUtils = commonUtils;
 Vue.prototype.$axios = Axios;
 Vue.prototype.$moment = moment;
 Vue.prototype.$authman_baseUrl = process.env.VUE_APP_AUTH_MAN_BASEURL;
+Vue.prototype.$core_baseUrl = process.env.VUE_APP_CORE_BASEURL;
 
 new Vue({
     render: h => h(App),
