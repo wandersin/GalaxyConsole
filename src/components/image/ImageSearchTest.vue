@@ -19,7 +19,7 @@
       </el-col>
     </el-row>
     <el-row>
-      <el-col v-for="item in imageInfo" v-bind:key="item" :span="4" class="ocr-image-box">
+      <el-col v-for="item in imageInfo" v-bind:key="item.id" :span="4" class="ocr-image-box">
         <div class="ocr-image-body">
           <div class="ocr-image-operation">
             <i class="el-icon-info ocr-image-operation-item" @click="showImageInfo(item)"></i>

@@ -13,6 +13,9 @@ const Interceptors = {
         if (status === 401) {
             router.push({path: '/login'});
         } else {
+            if (response.headers['content-type'] === 'application/octet-stream') {
+                return response.data;
+            }
             if (response.data.status === 'ok') {
                 return response.data.result;
             } else {
