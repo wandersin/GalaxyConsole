@@ -14,6 +14,10 @@ const userApi = {
         url: `/user/register?code=${code}`,
         method: 'post',
         data: user
+    }),
+    logout: (token) => authService({
+        url: `/user/logout/${token}`,
+        method: 'post'
     })
 }
 
