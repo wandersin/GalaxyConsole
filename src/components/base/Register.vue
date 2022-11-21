@@ -18,11 +18,11 @@ export default {
   data() {
     return {
       user: {
-        username: 'wangyunshu',
-        password: '514232098zx.',
-        email: '13041202543@163.com'
+        username: '',
+        password: '',
+        email: ''
       },
-      password: '514232098zx.',
+      password: '',
       code: ''
     }
   },
@@ -39,19 +39,19 @@ export default {
       if (this.verify() === false) {
         return;
       }
-      // this.$script.push({path: '/index'});
-      this.$commonUtils.get(`${this.$authman_baseUrl}/user/email-code?email=${this.user.email}&operation=register`, data => {
-        console.log(data);
+      this.$api.authUser.emailCode(this.user.email, 'register').then(() => {
         alert("验证码发送成功");
-      })
+      });
     },
     register() {
       if (this.verify() === false) {
         return;
       }
-      this.$commonUtils.post(`${this.$authman_baseUrl}/user/register?code=${this.code}`, this.user, data => {
-        console.log(data);
-      });
+      this.$api.authUser.register(this.user, this.code).then(token => {
+        localStorage.setItem('xAuthToken', token);
+        // 注册成功跳转到首页
+        this.$router.push({path: '/index'});
+      })
     },
     toLoginPage() {
       this.$router.push({path: '/login'});
