@@ -21,18 +21,16 @@ Vue.prototype.$core_baseUrl = process.env.VUE_APP_CORE_BASEURL;
 Vue.prototype.$api = api;
 
 router.beforeEach((to, from, next) => {
-    if (to.path === '/login' || to.path === '/register') {
+    if (to.path === '/login' || to.path === '/register') { // 登录和注册页面直接跳转
         next();
     } else {
         let token = localStorage.getItem('xAuthToken');
         if (token) {
-            console.log("验证token");
             next();
         } else if (from.path === '/login') { // 登录页面跳转其他页, 未登录成功不跳转
 
         } else {
-            let routePromise = router.push('/login');
-            console.log(routePromise);
+            router.push('/login');
         }
     }
 })

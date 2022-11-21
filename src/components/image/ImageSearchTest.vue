@@ -33,6 +33,8 @@
 </template>
 
 <script>
+import coreService from "@/utils/core-service";
+
 export default {
   name: "ImageSearchTest",
   data() {
@@ -46,7 +48,7 @@ export default {
   methods: {
     search() {
       this.imageInfo = [];
-      this.$commonUtils.get(`${this.$core_baseUrl}/image/search/word?word=${this.keyWord}&row=${this.searchRow}`, data => {
+      this.$api.coreImage.search(this.keyWord, this.searchRow).then(data => {
         for (let i = 0; i < data.length; i++) {
           this.imageInfo.push(data[i]);
         }
