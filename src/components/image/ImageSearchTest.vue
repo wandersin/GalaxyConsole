@@ -33,8 +33,6 @@
 </template>
 
 <script>
-import coreService from "@/utils/core-service";
-
 export default {
   name: "ImageSearchTest",
   data() {
