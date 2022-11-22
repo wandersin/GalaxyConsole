@@ -11,7 +11,8 @@ authService.interceptors.request.use(
 )
 
 authService.interceptors.response.use(
-    response => interceptors.responseHandler(response)
+    response => interceptors.responseHandler(response),
+    error => interceptors.errorHandler(error)
 )
 
 export default authService

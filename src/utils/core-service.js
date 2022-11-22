@@ -11,7 +11,8 @@ coreService.interceptors.request.use(
 )
 
 coreService.interceptors.response.use(
-    response => interceptors.responseHandler(response)
+    response => interceptors.responseHandler(response),
+    error => interceptors.errorHandler(error)
 )
 
 export default coreService

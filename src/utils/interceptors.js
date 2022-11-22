@@ -9,18 +9,18 @@ const Interceptors = {
         return config;
     },
     responseHandler: function (response) {
-        let status = response.status;
-        if (status === 401) {
-            router.push({path: '/login'});
+        if (response.headers['content-type'] === 'application/octet-stream') {
+            return response.data;
+        }
+        if (response.data.status === 'ok') {
+            return response.data.result;
         } else {
-            if (response.headers['content-type'] === 'application/octet-stream') {
-                return response.data;
-            }
-            if (response.data.status === 'ok') {
-                return response.data.result;
-            } else {
-                throw response.data.message;
-            }
+            throw response.data.message;
+        }
+    },
+    errorHandler: function (error) {
+        if (error.response.status === 401) {
+            router.push({path: '/login'});
         }
     }
 }

@@ -1,6 +1,5 @@
 <template>
   <div>
-    <div>header</div>
     <button @click="logout">退出登录</button>
   </div>
 </template>
