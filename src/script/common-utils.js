@@ -1,4 +1,5 @@
 import axios from "axios";
+import api from "@/api";
 
 function reqCallback(resp, callback, failed) {
     let data = resp.data;
@@ -10,6 +11,18 @@ function reqCallback(resp, callback, failed) {
 }
 
 export default {
+    async hadLogged() {
+        let token = localStorage.getItem('xAuthToken');
+        if (!token) {
+            return false;
+        }
+        try {
+            let resp = await api.authUser.checkToken(token);
+            return !!resp;
+        } catch (err) {
+            return false;
+        }
+    },
     isEmpty(str) {
         return str == null || str === '';
     },

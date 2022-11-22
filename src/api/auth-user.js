@@ -18,6 +18,10 @@ const userApi = {
     logout: (token) => authService({
         url: `/user/logout/${token}`,
         method: 'post'
+    }),
+    checkToken: (token) => authService({
+        url: `/user/verification/${token}`,
+        method: 'get'
     })
 }
 
