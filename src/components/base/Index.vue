@@ -18,7 +18,7 @@ import Welcome from "@/components/base/Welcome";
 import LeftMenu from "@/components/base/LeftMenu";
 import MainHeader from "@/components/base/MainHeader";
 import Momentum from "@/components/schedule/Momentum";
-import ImageSearchTest from "@/components/image/ImageSearchTest";
+import ImageSearchTest from "@/components/image/ImageSearch";
 
 export default {
   name: 'App',

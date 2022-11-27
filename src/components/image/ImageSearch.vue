@@ -29,12 +29,15 @@
         </div>
       </el-col>
     </el-row>
+    <div id="image-ocr-preview-root">
+
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "ImageSearchTest",
+  name: "ImageSearch",
   data() {
     return {
       keyWord: '*',
@@ -53,7 +56,8 @@ export default {
       })
     },
     getImageSrcById(id) {
-      return `${this.$core_baseUrl}/image/${id}`;
+      let token = localStorage.getItem('xAuthToken');
+      return `${this.$core_baseUrl}/image/${token}/${id}/binary`;
     },
     showImageInfo(info) {
       alert(JSON.stringify(info, null, 4));
@@ -142,5 +146,17 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+#image-ocr-preview-root {
+  height: 100%;
+  width: 100%;
+  background: gray;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  opacity: .5;
 }
 </style>

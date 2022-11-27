@@ -1,4 +1,5 @@
 import router from "@/script/router";
+import Vue from "vue";
 
 const Interceptors = {
     headersHandler: function (config) {
@@ -6,6 +7,7 @@ const Interceptors = {
         if (token) {
             config.headers['X-Auth-Token'] = token;
         }
+        config.headers['Archimedes-Active'] = Vue.prototype.$archimedes_active;
         return config;
     },
     responseHandler: function (response) {

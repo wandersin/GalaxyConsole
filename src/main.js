@@ -16,6 +16,7 @@ Vue.prototype.$commonUtils = commonUtils;
 Vue.prototype.$axios = Axios;
 Vue.prototype.$moment = moment;
 Vue.prototype.$core_baseUrl = process.env.VUE_APP_CORE_BASEURL;
+Vue.prototype.$archimedes_active = process.env.VUE_APP_ARCHIMEDES_ACTIVE;
 
 Vue.prototype.$api = api;
 
