@@ -24,17 +24,11 @@
           <div class="ocr-image-operation">
             <i class="el-icon-info ocr-image-operation-item" @click="showImageInfo(item)"></i>
           </div>
-          <el-image style="height: 10rem" :src="getImageSrcById(item.id)" :fit="fit" lazy @click="showPreview(getImageSrcById(item.id))"></el-image>
+          <el-image style="height: 10rem" :src="getImageSrcById(item.id)" :fit="fit" lazy :previewSrcList="previewList"/>
           <div class="ocr-image-url">{{ item.fileName }}</div>
         </div>
       </el-col>
     </el-row>
-    <div id="image-ocr-preview-root" v-show="preview" @click="hidePreview">
-      <div id="preview-background"></div>
-      <div id="preview-image-box">
-        <el-image :src="previewSrc" id="preview-image" fit="contain" style="height: 100%; width: 100%;"></el-image>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -47,16 +41,17 @@ export default {
       imageInfo:[],
       fit: 'cover',
       searchRow: 24,
-      preview: false,
-      previewSrc: ''
+      previewList: []
     }
   },
   methods: {
     search() {
+      this.previewList = [];
       this.imageInfo = [];
       this.$api.coreImage.search(this.keyWord, this.searchRow).then(data => {
         for (let i = 0; i < data.length; i++) {
           this.imageInfo.push(data[i]);
+          this.previewList.push(this.getImageSrcById(data[i].id));
         }
       })
     },
@@ -66,16 +61,6 @@ export default {
     },
     showImageInfo(info) {
       alert(JSON.stringify(info, null, 4));
-    },
-    hidePreview() {
-      this.preview = false;
-    },
-    showPreview(src) {
-      if (this.$commonUtils.isEmpty(src)) {
-        return;
-      }
-      this.previewSrc = src;
-      this.preview = true;
     }
   }
 }
@@ -158,38 +143,5 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-#image-ocr-preview-root {
-  height: 100%;
-  width: 100%;
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-}
-
-#preview-background {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  height: 100%;
-  background: gray;
-  opacity: .7;
-}
-
-#preview-image-box {
-  height: 80%;
-  width: 80%;
-  position: absolute;
-  top: 10%;
-  bottom: 10%;
-  left: 10%;
-  right: 10%;
-  text-align: center;
 }
 </style>
