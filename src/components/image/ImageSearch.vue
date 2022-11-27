@@ -24,13 +24,16 @@
           <div class="ocr-image-operation">
             <i class="el-icon-info ocr-image-operation-item" @click="showImageInfo(item)"></i>
           </div>
-          <el-image style="height: 10rem" :src="getImageSrcById(item.id)" :fit="fit" lazy @click="openImageInNewWindow(getImageSrcById(item.id))"></el-image>
+          <el-image style="height: 10rem" :src="getImageSrcById(item.id)" :fit="fit" lazy @click="showPreview(getImageSrcById(item.id))"></el-image>
           <div class="ocr-image-url">{{ item.fileName }}</div>
         </div>
       </el-col>
     </el-row>
-    <div id="image-ocr-preview-root">
-
+    <div id="image-ocr-preview-root" v-show="preview" @click="hidePreview">
+      <div id="preview-background"></div>
+      <div id="preview-image-box">
+        <el-image :src="previewSrc" id="preview-image" fit="contain" style="height: 100%; width: 100%;"></el-image>
+      </div>
     </div>
   </div>
 </template>
@@ -43,7 +46,9 @@ export default {
       keyWord: '*',
       imageInfo:[],
       fit: 'cover',
-      searchRow: 24
+      searchRow: 24,
+      preview: false,
+      previewSrc: ''
     }
   },
   methods: {
@@ -62,8 +67,15 @@ export default {
     showImageInfo(info) {
       alert(JSON.stringify(info, null, 4));
     },
-    openImageInNewWindow(url) {
-      window.open(url, '_blank');
+    hidePreview() {
+      this.preview = false;
+    },
+    showPreview(src) {
+      if (this.$commonUtils.isEmpty(src)) {
+        return;
+      }
+      this.previewSrc = src;
+      this.preview = true;
     }
   }
 }
@@ -151,12 +163,33 @@ export default {
 #image-ocr-preview-root {
   height: 100%;
   width: 100%;
-  background: gray;
   position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  opacity: .5;
+}
+
+#preview-background {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: gray;
+  opacity: .7;
+}
+
+#preview-image-box {
+  height: 80%;
+  width: 80%;
+  position: absolute;
+  top: 10%;
+  bottom: 10%;
+  left: 10%;
+  right: 10%;
+  text-align: center;
 }
 </style>
