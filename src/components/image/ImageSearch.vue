@@ -2,7 +2,7 @@
   <div id="image-ocr-root">
     <el-row id="ocr-input-row">
       <el-col :span="4">
-        <el-input v-model="keyWord" placeholder="请输入关键词"></el-input>
+        <el-input v-model="keyWord" placeholder="请输入关键词" @keydown.enter.native="search"></el-input>
       </el-col>
       <el-col :span="2">
         <el-badge value="Beta" class="item">
