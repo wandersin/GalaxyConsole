@@ -18,7 +18,7 @@ export default {
   data() {
     return {
       src: img,
-      fit: 'none'
+      fit: 'cover'
     }
   },
   components: {Login}
