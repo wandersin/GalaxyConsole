@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import ScheduleStatus from "@/components/schedule/ScheduleStatus";
+import ScheduleStatus from "@/components/pc/schedule/ScheduleStatus.vue";
 
 export default {
   name: "Momentum",

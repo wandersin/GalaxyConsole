@@ -30,8 +30,8 @@
 </template>
 
 <script>
-import ScriptItem from "@/components/environment/ScriptItem";
-import ScriptDetail from "@/components/environment/ScriptDetail";
+import ScriptItem from "@/components/pc/environment/ScriptItem.vue";
+import ScriptDetail from "@/components/pc/environment/ScriptDetail.vue";
 
 export default {
   name: "ScriptStore",

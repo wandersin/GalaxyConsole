@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import Login from "@/components/base/Login";
+import Login from "@/components/pc/base/Login.vue";
 import img from '@/images/login.jpg';
 
 export default {

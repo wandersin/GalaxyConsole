@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import FileCountComponent from "@/components/life/FileCountComponent";
+import FileCountComponent from "@/components/pc/life/FileCountComponent.vue";
 
 export default {
   name: "FileManager",

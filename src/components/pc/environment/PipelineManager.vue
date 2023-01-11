@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import PipelineDetailList from "@/components/environment/PipelineDetailList";
+import PipelineDetailList from "@/components/pc/environment/PipelineDetailList.vue";
 
 export default {
   name: "PipelineManager",

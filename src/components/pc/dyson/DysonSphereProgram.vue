@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import Selection from "@/components/dyson/Selection";
+import Selection from "@/components/pc/dyson/Selection.vue";
 
 export default {
   name: "DysonSphereProgram",

@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import Register from "@/components/base/Register";
+import Register from "@/components/pc/base/Register.vue";
 
 export default {
   name: "RegisterPage",
