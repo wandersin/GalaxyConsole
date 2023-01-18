@@ -48,10 +48,11 @@ router.beforeEach((to, from, next) => {
             });
         }
     } else {
+        let tmp = to.path === '/' ? '' : to.path;
         if (isMobile()) {
-            next({path: `/mobile${to.path}`});
+            next({path: `/mobile${tmp}`});
         } else {
-            next({path: `/pc${to.path}`});
+            next({path: `/pc${tmp}`});
         }
     }
 })
