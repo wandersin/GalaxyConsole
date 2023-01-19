@@ -1,6 +1,16 @@
 <template>
   <div id="image-ocr-root">
     <el-row id="ocr-input-row">
+      <el-col :span="2">
+        <el-select v-model="precision" placeholder="请选择搜索模式">
+          <el-option
+              v-for="item in selectionType"
+              :key="item.key"
+              :label="item.key"
+              :value="item.precision">
+          </el-option>
+        </el-select>
+      </el-col>
       <el-col :span="4">
         <el-input v-model="keyWord" placeholder="请输入关键词" @keydown.enter.native="search"></el-input>
       </el-col>
@@ -29,6 +39,17 @@
         </div>
       </el-col>
     </el-row>
+    <el-row v-show="page.show">
+      <el-pagination
+          background
+          @size-change="pageSizeChangeHandler"
+          @current-change="pageChangeHandler"
+          :page-sizes="page.size"
+          :page-size="page.row"
+          layout="total, sizes, prev, pager, next"
+          :total="page.numFound">
+      </el-pagination>
+    </el-row>
   </div>
 </template>
 
@@ -40,19 +61,45 @@ export default {
       keyWord: '',
       imageInfo:[],
       fit: 'cover',
-      searchRow: 24,
+      page: {
+        start: 0,
+        row: 24,
+        numFound: 0,
+        size: [12, 24, 48],
+        show: false
+      },
+      precision: 75,
+      selectionType: [
+        {key: '精确搜索', precision: 100},
+        {key: '标准搜索', precision: 75},
+        {key: '模糊搜索', precision: 50}
+      ],
       previewList: []
     }
   },
   methods: {
+    // 当前页发送变化
+    pageChangeHandler(page) {
+      this.page.start = (page - 1) * this.page.row;
+      this.search();
+    },
+    // 每页显示个数变化
+    pageSizeChangeHandler(size) {
+      this.page.row = size;
+      this.search();
+    },
+    // 搜索, 并刷新结果
     search() {
       this.previewList = [];
       this.imageInfo = [];
-      this.$api.coreImage.search(this.keyWord, this.searchRow).then(data => {
-        for (let i = 0; i < data.length; i++) {
-          this.imageInfo.push(data[i]);
-          this.previewList.push(this.getImageSrcById(data[i].id));
+      this.$api.coreImage.search(this.keyWord, this.page.start, this.page.row, this.precision).then(data => {
+        this.page.numFound = data.numFound;
+        let tmpList = data.list;
+        for (let i = 0; i < tmpList.length; i++) {
+          this.imageInfo.push(tmpList[i]);
+          this.previewList.push(this.getImageSrcById(tmpList[i].id));
         }
+        this.page.show = true;
       })
     },
     getImageSrcById(id) {
