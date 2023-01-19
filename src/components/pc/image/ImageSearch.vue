@@ -33,6 +33,7 @@
         <div class="ocr-image-body">
           <div class="ocr-image-operation">
             <i class="el-icon-info ocr-image-operation-item" @click="showImageInfo(item)"></i>
+            <span>{{ item.datetime | dataFormat('YYYY-MM-DD') }}</span>
           </div>
           <el-image style="height: 10rem" :src="getImageSrcById(item.id)" :fit="fit" lazy :previewSrcList="previewList"/>
           <div class="ocr-image-url">{{ item.fileName }}</div>
@@ -86,6 +87,7 @@ export default {
     // 每页显示个数变化
     pageSizeChangeHandler(size) {
       this.page.row = size;
+      this.page.start = 0;
       this.search();
     },
     // 搜索, 并刷新结果
@@ -162,7 +164,7 @@ export default {
   padding: 0 .5rem;
   opacity: .9;
   z-index: 99;
-  text-align: right;
+  text-align: left;
 }
 
 .ocr-image-operation-item {
