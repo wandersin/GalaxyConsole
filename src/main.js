@@ -14,25 +14,51 @@ Axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
 
 Vue.prototype.$commonUtils = commonUtils;
 Vue.prototype.$axios = Axios;
-Vue.prototype.$moment = moment;
 Vue.prototype.$core_baseUrl = process.env.VUE_APP_CORE_BASEURL;
 Vue.prototype.$archimedes_active = process.env.VUE_APP_ARCHIMEDES_ACTIVE;
 
 Vue.prototype.$api = api;
 
+function isMobile() {
+    return navigator.userAgent.match(
+        /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+    );
+}
+
 router.beforeEach((to, from, next) => {
-    if (to.path === '/login' || to.path === '/register') { // 登录和注册页面直接跳转
-        next();
+    if (to.path.startsWith("/mobile") || to.path.startsWith('/pc')) { // 判断登录
+        if (to.path === '/mobile' || to.path === '/pc') {
+            next({path: '/index'});
+        } else if (to.path.endsWith('/login') || to.path.endsWith('/register')) { // 登录和注册页面直接跳转
+            commonUtils.hadLogged().then(data => {
+                if (data === true) { // 已登录
+                    next({path: '/index'});
+                } else {
+                    next();
+                }
+            });
+        } else {
+            commonUtils.hadLogged().then(data => {
+                if (data === true) {
+                    next();
+                } else if (!from.path.endsWith('/login')) {
+                    next({path: '/login'});
+                }
+            });
+        }
     } else {
-        commonUtils.hadLogged().then(data => {
-            if (data === true) {
-                next();
-            } else if (from.path !== '/login') {
-                router.push('/login');
-            }
-        });
+        let tmp = to.path === '/' ? '' : to.path;
+        if (isMobile()) {
+            next({path: `/mobile${tmp}`});
+        } else {
+            next({path: `/pc${tmp}`});
+        }
     }
 })
+
+Vue.filter('dataFormat', function (dataStr, pattern = 'YYYY-MM-DD HH:mm:ss') {
+    return moment(dataStr).format(pattern);
+});
 
 new Vue({
     render: h => h(App),

@@ -14,11 +14,11 @@
 </template>
 
 <script>
-import Welcome from "@/components/base/Welcome";
-import LeftMenu from "@/components/base/LeftMenu";
-import MainHeader from "@/components/base/MainHeader";
-import Momentum from "@/components/schedule/Momentum";
-import ImageSearchTest from "@/components/image/ImageSearch";
+import Welcome from "@/components/pc/base/Welcome.vue";
+import LeftMenu from "@/components/pc/base/LeftMenu.vue";
+import MainHeader from "@/components/pc/base/MainHeader.vue";
+import Momentum from "@/components/pc/schedule/Momentum.vue";
+import ImageSearchTest from "@/components/pc/image/ImageSearch.vue";
 
 export default {
   name: 'App',

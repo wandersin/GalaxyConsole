@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import MaterialSelection from "@/components/dyson/MaterialSelection";
+import MaterialSelection from "@/components/pc/dyson/MaterialSelection.vue";
 
 export default {
   name: "Selection",

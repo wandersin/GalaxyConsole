@@ -1,8 +1,8 @@
 import coreService from "@/utils/core-service";
 
 const imageApi = {
-    search: (keyWord, searchRow) => coreService({
-        url: `/image/search/word?word=${keyWord}&row=${searchRow}`,
+    search: (keyWord, start, row, precision) => coreService({
+        url: `/image/search/word?word=${keyWord}&start=${start}&row=${row}&precision=${precision}`,
         method: 'get'
     }),
 }

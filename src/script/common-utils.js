@@ -18,8 +18,13 @@ export default {
         }
         try {
             let resp = await api.authUser.checkToken(token);
-            return !!resp;
+            let result = !!resp;
+            if (!result) {
+                localStorage.removeItem('xAuthToken');
+            }
+            return result;
         } catch (err) {
+            localStorage.removeItem('xAuthToken');
             return false;
         }
     },
