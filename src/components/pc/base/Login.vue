@@ -8,7 +8,7 @@
       <i class="el-icon-right"></i>
     </div>
     <div id="link-box">
-      <el-link href="/#/register" type="info" id="to-register-btn">还没有账号？去注册</el-link><br>
+      <el-link type="info" id="to-register-btn" @click="flip">还没有账号？去注册</el-link><br>
       <el-link type="info" id="forget-password-btn">忘记密码</el-link>
     </div>
   </div>
@@ -47,6 +47,9 @@ export default {
     loginFailed() {
       localStorage.removeItem('xAuthToken');
       this.errorMsg = '登录失败';
+    },
+    flip() {
+      this.$emit('flipInputBox');
     }
   }
 }

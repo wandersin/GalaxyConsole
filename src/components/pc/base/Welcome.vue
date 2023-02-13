@@ -1,8 +1,6 @@
 <template>
   <div>
     <div id="welcome-root">welcome</div>
-    <div>
-    </div>
   </div>
 
 </template>
@@ -23,5 +21,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

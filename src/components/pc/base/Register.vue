@@ -1,14 +1,18 @@
 <template>
   <div id="register-root">
-    <input type="text" v-model="user.email" placeholder="邮箱"><br>
-    <input type="text" v-model="user.username" placeholder="用户名"><br>
-    <input type="password" v-model="user.password" placeholder="请输入密码"><br>
-    <input type="password" v-model="password" placeholder="请再次输入密码"><br>
-    <input type="text" v-model="code" placeholder="请输入验证码">
-    <button @click="sendVerificationCode">发送验证码</button>
+    <h1>注册</h1>
+    <el-input placeholder="邮箱" v-model="user.email" clearable></el-input>
+    <el-input placeholder="用户名" v-model="user.username" clearable></el-input>
+    <el-input placeholder="请输入密码" v-model="user.password" show-password></el-input>
+    <el-input placeholder="请输入密码" v-model="password" show-password></el-input>
+    <el-input placeholder="请输入验证码" v-model="code">
+      <el-button slot="append" @click="sendVerificationCode">发送验证码</el-button>
+    </el-input>
     <br>
-    <button @click="register">注册</button>
-    <button @click="toLoginPage">已有账号，去登录</button>
+    <el-button slot="append" @click="register">注册</el-button>
+    <div id="link-box">
+      <el-link type="info" id="to-register-btn" @click="flip">已有账号，去登录</el-link><br>
+    </div>
   </div>
 </template>
 
@@ -53,13 +57,25 @@ export default {
         this.$router.push({path: '/index'});
       })
     },
-    toLoginPage() {
-      this.$router.push({path: '/login'});
+    flip() {
+      this.$emit('flipInputBox');
     }
   }
 }
 </script>
 
 <style scoped>
+h1 {
+  color: #057feb;
+}
 
+.el-input {
+  margin: .5rem 0;
+}
+
+#link-box {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 1.5rem;
+}
 </style>
