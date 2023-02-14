@@ -54,7 +54,7 @@ export default {
       this.$api.authUser.register(this.user, this.code).then(token => {
         localStorage.setItem('xAuthToken', token);
         // 注册成功跳转到首页
-        this.$router.push({path: '/index'});
+        this.$router.push({path: '/index'}).catch(() => {});
       })
     },
     flip() {

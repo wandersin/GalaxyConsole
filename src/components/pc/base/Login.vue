@@ -42,7 +42,7 @@ export default {
     },
     loginSuccess(token) {
       localStorage.setItem('xAuthToken', token);
-      this.$router.push({path: '/index'});
+      this.$router.push({path: '/index'}).catch(() => {});
     },
     loginFailed() {
       localStorage.removeItem('xAuthToken');

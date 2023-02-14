@@ -23,7 +23,7 @@ const Interceptors = {
     errorHandler: function (error) {
         if (error.response.status === 401) {
             localStorage.removeItem('xAuthToken');
-            router.push({path: '/login'});
+            router.push({path: '/login'}).catch(() => {});
         }
     }
 }
