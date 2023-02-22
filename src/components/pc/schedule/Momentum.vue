@@ -1,20 +1,15 @@
 <template>
-<div id="momentum-root">
-  <schedule-status scheduleName="momentumAutoDownloadSchedule"/>
-</div>
+  <div id="momentum-root">
+  </div>
 </template>
 
 <script>
-import ScheduleStatus from "@/components/pc/schedule/ScheduleStatus.vue";
 
 export default {
   name: "Momentum",
-  components: {
-    ScheduleStatus
-  },
+  components: {},
   data() {
-    return {
-    }
+    return {}
   }
 }
 </script>

@@ -4,7 +4,12 @@
       <!-- @select事件第一个参数为index, 第二个参数indexPath包括各级菜单的index -->
       <!-- 只有一级菜单时index和indexPath作用相同 -->
       <el-menu default-active="1" class="el-menu-vertical-demo" @select="select">
-        <el-menu-item index="Momentum">
+        <el-menu-item index="ImageSearchTest">
+          <i class="el-icon-magic-stick"></i>
+          <span slot="title">图片OCR</span>
+          <el-tag class="beta-tag" type="danger" effect="plain">beta</el-tag>
+        </el-menu-item>
+        <el-menu-item index="1" disabled>
           <i class="el-icon-menu"></i>
           <span slot="title">Momentum</span>
           <el-tag class="beta-tag" type="danger" effect="plain">beta</el-tag>
@@ -16,11 +21,6 @@
         <el-menu-item index="3" disabled>
           <i class="el-icon-setting"></i>
           <span slot="title">动态域名解析</span>
-        </el-menu-item>
-        <el-menu-item index="ImageSearchTest">
-          <i class="el-icon-magic-stick"></i>
-          <span slot="title">图片OCR</span>
-          <el-tag class="beta-tag" type="danger" effect="plain">beta</el-tag>
         </el-menu-item>
       </el-menu>
     </el-row>
