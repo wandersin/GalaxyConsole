@@ -3,7 +3,7 @@
     <el-row class="tac">
       <!-- @select事件第一个参数为index, 第二个参数indexPath包括各级菜单的index -->
       <!-- 只有一级菜单时index和indexPath作用相同 -->
-      <el-menu default-active="1" class="el-menu-vertical-demo" @select="select">
+      <el-menu class="el-menu-vertical-demo" @select="select">
         <el-menu-item index="ImageSearchTest">
           <i class="el-icon-magic-stick"></i>
           <span slot="title">图片OCR</span>
