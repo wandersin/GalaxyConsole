@@ -15,9 +15,7 @@
         <el-input v-model="keyWord" placeholder="请输入关键词" @keydown.enter.native="search"></el-input>
       </el-col>
       <el-col :span="2">
-        <el-badge value="Beta" class="item">
-          <el-button @click="search">搜索</el-button>
-        </el-badge>
+        <el-button @click="search">搜索</el-button>
       </el-col>
       <el-col :span="1">
         <el-tooltip class="item" effect="dark" placement="right">
