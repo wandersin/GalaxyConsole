@@ -19,6 +19,7 @@ import LeftMenu from "@/components/pc/base/LeftMenu.vue";
 import MainHeader from "@/components/pc/base/MainHeader.vue";
 import Momentum from "@/components/pc/schedule/Momentum.vue";
 import ImageSearchTest from "@/components/pc/image/ImageSearch.vue";
+import DownloadStation from "@/components/pc/download/DownloadStation.vue";
 
 export default {
   name: 'App',
@@ -32,7 +33,8 @@ export default {
     MainHeader,
     LeftMenu,
     Momentum,
-    ImageSearchTest
+    ImageSearchTest,
+    DownloadStation
   },
   methods: {
     selectLeftMenu(index) {
