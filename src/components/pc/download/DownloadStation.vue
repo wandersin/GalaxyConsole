@@ -11,7 +11,6 @@
         <el-button class="btn" @click="download">下载</el-button>
       </el-col>
     </el-row>
-    <el-pagination hide-on-single-page background layout="prev, pager, next" :page-count=this.searchResult.page @current-change="handleCurrentChange"/>
     <el-row id="download-torrent-row">
       <el-table v-loading="searchFlag" :data="searchResult.torrent" :height="tableHeight" border @selection-change="handleSelectionChange">
         <el-table-column type="selection" fixed/>
@@ -42,6 +41,9 @@
         <el-table-column prop="completed" label="已下载" sortable width="100"/>
         <el-table-column prop="announcer" label="发布者" width="120"/>
       </el-table>
+    </el-row>
+    <el-row id="download-page-row">
+      <el-pagination hide-on-single-page background layout="prev, pager, next" :page-count=this.searchResult.page @current-change="handleCurrentChange"/>
     </el-row>
   </div>
 </template>
@@ -80,7 +82,12 @@ export default {
         this.searchFlag = true;
       }
       this.$api.coreDownload.search(name, page).then(data => {
-        this.searchResult.page = data.page + 1; // 北洋园页码从0开始
+        // 北洋园页码从0开始
+        if (page === this.searchResult.page - 1) { // 查看最后一页
+          this.searchResult.page = data.page + 2;
+        } else {
+          this.searchResult.page = data.page + 1;
+        }
         this.searchResult.torrent = [];
         let tmpList = data.torrent;
         for (let i = 0; i < tmpList.length; i++) {
@@ -130,8 +137,12 @@ export default {
 
 <style scoped>
 #download-controller-row, #download-torrent-row {
-  padding: 1rem .5rem;
+  padding: .5rem;
   position: relative;
+}
+
+#download-page-row {
+  margin-top: .5rem;
 }
 
 .btn {
