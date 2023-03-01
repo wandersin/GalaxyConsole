@@ -13,15 +13,18 @@
     </el-row>
     <el-pagination hide-on-single-page background layout="prev, pager, next" :page-count=this.searchResult.page @current-change="handleCurrentChange"/>
     <el-row id="download-torrent-row">
-      <el-table :data="searchResult.torrent" border @selection-change="handleSelectionChange">
+      <el-table v-loading="searchFlag" :data="searchResult.torrent" :height="tableHeight" border @selection-change="handleSelectionChange">
         <el-table-column type="selection" fixed/>
         <el-table-column prop="id" label="id" width="80"/>
         <el-table-column label="名称">
           <template slot-scope="scope">
             <div class="title">{{ scope.row.title }}</div>
             <div class="subtitle">{{ scope.row.subtitle }}</div>
-            <el-tag v-if="scope.row.downloaded" size="mini" type="info" effect="plain">已下载</el-tag>
-            <el-tag v-else size="mini" effect="plain">未下载</el-tag>
+            <el-tag v-if="scope.row.downloaded" class="pt-tag" size="mini" type="info" effect="plain">已下载</el-tag>
+            <el-tag v-else size="mini" class="pt-tag" effect="plain">未下载</el-tag>
+            <el-tag v-for="item in scope.row.tagList" size="mini" class="pt-tag" type="warning" effect="plain" :key="item">
+              {{ item }}
+            </el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="size" label="文件大小" width="100"/>
@@ -48,13 +51,16 @@ export default {
   name: "DownloadStation",
   data() {
     return {
+      tableHeight: 0,
       searchKey: '',
       searchResult: {
         page: 0,
         torrent: [],
       },
       page: 0,
-      selection: []
+      selection: [],
+      searchFlag: false,
+      downloadFlag: false
     }
   },
   methods: {
@@ -63,6 +69,16 @@ export default {
         alert("关键词不能为空");
         return;
       }
+      if (this.searchFlag === true) {
+        this.$notify({
+          title: '警告',
+          message: '请勿重复点击',
+          type: 'warning'
+        });
+        return;
+      } else {
+        this.searchFlag = true;
+      }
       this.$api.coreDownload.search(name, page).then(data => {
         this.searchResult.page = data.page + 1; // 北洋园页码从0开始
         this.searchResult.torrent = [];
@@ -70,6 +86,7 @@ export default {
         for (let i = 0; i < tmpList.length; i++) {
           this.searchResult.torrent.push(tmpList[i]);
         }
+        this.searchFlag = false;
       })
     },
     handleCurrentChange(page) {
@@ -82,16 +99,31 @@ export default {
       }
     },
     download() {
+      if (this.downloadFlag === true) {
+        this.$notify({
+          title: '警告',
+          message: '请勿重复点击',
+          type: 'warning'
+        });
+        return;
+      } else {
+        this.downloadFlag = true;
+      }
       this.selection.forEach(id => {
         this.$api.coreDownload.download(id).then(() => {
           this.$message({
             message: `添加下载任务成功: ${id}`,
             type: 'success'
           });
+          this.downloadFlag = false;
         })
       });
       this.selection = [];
-    },
+    }
+  },
+  created() {
+    // 表格高度
+    this.tableHeight = window.innerHeight * 0.93 - 120;
   }
 }
 </script>
@@ -126,5 +158,9 @@ export default {
 
 .release-date {
   text-align: center;
+}
+
+.pt-tag {
+  margin: 0 3px;
 }
 </style>
