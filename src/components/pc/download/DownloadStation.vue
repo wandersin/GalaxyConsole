@@ -2,13 +2,16 @@
   <div id="download-station-root">
     <el-row id="download-controller-row">
       <el-col :span="4">
-        <el-input v-model="searchKey" placeholder="请输入关键词进行搜索" @keydown.enter.native="search(searchKey, 0)"></el-input>
+        <el-input v-model="searchKey" placeholder="请输入关键词进行搜索" @keydown.enter.native="search(searchKey, currentPage)"></el-input>
       </el-col>
       <el-col :span="1">
-        <el-button @click="search(searchKey, 0)">搜索</el-button>
+        <el-button @click="search(searchKey, currentPage)">搜索</el-button>
       </el-col>
-      <el-col :span="1">
+      <el-col v-if="searchResult.torrent.length !== 0" :span="1">
         <el-button class="btn" @click="download">下载</el-button>
+      </el-col>
+      <el-col v-if="searchResult.torrent.length !== 0" :span="1">
+        <el-button class="btn" @click="refresh">刷新</el-button>
       </el-col>
     </el-row>
     <el-row id="download-torrent-row">
@@ -19,8 +22,11 @@
           <template slot-scope="scope">
             <div class="title">{{ scope.row.title }}</div>
             <div class="subtitle">{{ scope.row.subtitle }}</div>
-            <el-tag v-if="scope.row.downloaded" class="pt-tag" size="mini" type="info" effect="plain">已下载</el-tag>
-            <el-tag v-else size="mini" class="pt-tag" effect="plain">未下载</el-tag>
+            <el-progress v-if="scope.row.percentage !== 0" :percentage="scope.row.percentage" :format="percentageFormat"/>
+            <el-tag v-if="scope.row.percentage === 100" size="mini" class="pt-tag" type="success" effect="plain">做种中</el-tag>
+            <el-tag v-else-if="scope.row.percentage !== 0" size="mini" class="pt-tag" effect="plain">下载中</el-tag>
+            <el-tag v-else-if="scope.row.downloaded" size="mini" class="pt-tag" type="success" effect="plain">已完成</el-tag>
+            <el-tag v-else size="mini" class="pt-tag" type="info" effect="plain">未下载</el-tag>
             <el-tag v-for="item in scope.row.tagList" size="mini" class="pt-tag" type="warning" effect="plain" :key="item">
               {{ item }}
             </el-tag>
@@ -43,7 +49,7 @@
       </el-table>
     </el-row>
     <el-row id="download-page-row">
-      <el-pagination hide-on-single-page background layout="prev, pager, next" :page-count=this.searchResult.page @current-change="handleCurrentChange"/>
+      <el-pagination hide-on-single-page background layout="prev, pager, next" :page-count="searchResult.page" :current-page="currentPage" @current-change="handleCurrentChange"/>
     </el-row>
   </div>
 </template>
@@ -56,10 +62,11 @@ export default {
       tableHeight: 0,
       searchKey: '',
       searchResult: {
-        page: 0,
-        torrent: [],
+        page: 1,
+        torrent: [
+        ],
       },
-      page: 0,
+      currentPage: 1,
       selection: [],
       searchFlag: false,
       downloadFlag: false
@@ -82,12 +89,7 @@ export default {
         this.searchFlag = true;
       }
       this.$api.coreDownload.search(name, page).then(data => {
-        // 北洋园页码从0开始
-        if (page === this.searchResult.page - 1) { // 查看最后一页
-          this.searchResult.page = data.page + 2;
-        } else {
-          this.searchResult.page = data.page + 1;
-        }
+        this.searchResult.page = data.page;
         this.searchResult.torrent = [];
         let tmpList = data.torrent;
         for (let i = 0; i < tmpList.length; i++) {
@@ -97,7 +99,8 @@ export default {
       })
     },
     handleCurrentChange(page) {
-      this.search(this.searchKey, page - 1);
+      this.currentPage = page;
+      this.search(this.searchKey, this.currentPage);
     },
     handleSelectionChange(val) {
       this.selection = [];
@@ -126,6 +129,12 @@ export default {
         })
       });
       this.selection = [];
+    },
+    refresh() {
+      this.search(this.searchKey, this.currentPage);
+    },
+    percentageFormat(percentage) {
+      return percentage === 100 ? '完成' : `${percentage}%`;
     }
   },
   created() {

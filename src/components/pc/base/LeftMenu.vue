@@ -9,7 +9,7 @@
           <span slot="title">图片OCR</span>
         </el-menu-item>
         <el-menu-item index="DownloadStation">
-          <i class="el-icon-magic-stick"></i>
+          <i class="el-icon-download"></i>
           <span slot="title">PT站批量下载</span>
           <el-tag class="beta-tag" type="danger" effect="plain">beta</el-tag>
         </el-menu-item>
