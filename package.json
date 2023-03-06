@@ -1,11 +1,11 @@
 {
   "name": "galaxyconsole",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "serve": "vue-cli-service serve --mode development --host 0.0.0.0 --port 8080 --https false",
+    "dev": "vue-cli-service build --mode development --dest dist/dev",
+    "prod": "vue-cli-service build --mode production --dest dist/prod"
   },
   "dependencies": {
     "axios": "^0.21.4",
