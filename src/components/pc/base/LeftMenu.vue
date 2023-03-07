@@ -11,7 +11,7 @@
         <el-menu-item index="DownloadStation">
           <i class="el-icon-download"></i>
           <span slot="title">PT站批量下载</span>
-          <el-tag class="beta-tag" type="danger" effect="plain">beta</el-tag>
+          <el-tag class="beta-tag" type="danger" effect="plain">new</el-tag>
         </el-menu-item>
         <el-menu-item index="1" disabled>
           <i class="el-icon-menu"></i>
@@ -27,15 +27,24 @@
         </el-menu-item>
       </el-menu>
     </el-row>
+    <div id="donate-me">
+      <el-popover placement="top" width="300" trigger="hover">
+        <el-image style="width: 300px; height: 450px" :src="ali" fit="contain"></el-image>
+        <div slot="reference">用起来感觉还不错<br>请我喝杯咖啡吧</div>
+      </el-popover>
+
+    </div>
   </div>
 </template>
 
 <script>
+import ali from '@/images/alipay.jpg';
+
 export default {
   name: "LeftMenu",
   data() {
     return {
-
+      ali: ali
     }
   },
   methods: {
@@ -48,6 +57,25 @@ export default {
 </script>
 
 <style scoped>
+#left-menu-root {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+#donate-me {
+  position: absolute;
+  height: 3rem;
+  width: 100%;
+  bottom: 2rem;
+  text-align: center;
+  color: gray;
+}
+
+#donate-me:hover {
+  cursor: pointer;
+}
+
 .el-menu-vertical-demo {
   border-right: none;
 }
