@@ -4,14 +4,22 @@
       <el-col :span="4">
         <el-input v-model="searchKey" placeholder="请输入关键词进行搜索" @keydown.enter.native="search(searchKey, currentPage)"></el-input>
       </el-col>
+      <el-col class="btn-col" :span="1">
+        <el-button @click="search(searchKey, currentPage)" plain>搜索</el-button>
+      </el-col>
+      <el-col class="btn-col" v-if="searchResult.torrent.length !== 0" :span="1">
+        <el-button type="primary" @click="download" plain>下载</el-button>
+      </el-col>
+      <el-col class="btn-col" v-if="searchResult.torrent.length !== 0" :span="1">
+        <el-button type="success" @click="refresh" plain>刷新</el-button>
+      </el-col>
       <el-col :span="1">
-        <el-button @click="search(searchKey, currentPage)">搜索</el-button>
-      </el-col>
-      <el-col v-if="searchResult.torrent.length !== 0" :span="1">
-        <el-button class="btn" @click="download">下载</el-button>
-      </el-col>
-      <el-col v-if="searchResult.torrent.length !== 0" :span="1">
-        <el-button class="btn" @click="refresh">刷新</el-button>
+        <el-tooltip class="item" effect="dark" placement="right">
+          <div slot="content">输入片名关键字进行查找<br>选中要下载的影片后, 点击下载即可开始下载<br>添加任务成功后, 点击刷新即可查看下载进度</div>
+          <div id="download-point-icon-box">
+            <i class="el-icon-warning-outline" id="download-point-icon"></i>
+          </div>
+        </el-tooltip>
       </el-col>
     </el-row>
     <el-row id="download-torrent-row">
@@ -154,8 +162,20 @@ export default {
   margin-top: .5rem;
 }
 
-.btn {
-  margin: 0 .5rem;
+.btn-col {
+  margin-right: .5rem;
+}
+
+#download-point-icon-box {
+  position: absolute;
+  height: calc(100% - 1rem);
+  display: flex;
+  align-items: center;
+}
+
+#download-point-icon {
+  font-size: 1.5rem;
+  color: gray;
 }
 
 .title {
