@@ -4,26 +4,10 @@
       <!-- @select事件第一个参数为index, 第二个参数indexPath包括各级菜单的index -->
       <!-- 只有一级菜单时index和indexPath作用相同 -->
       <el-menu class="el-menu-vertical-demo" @select="select">
-        <el-menu-item index="ImageSearchTest">
-          <i class="el-icon-magic-stick"></i>
-          <span slot="title">图片OCR</span>
-        </el-menu-item>
-        <el-menu-item index="DownloadStation">
-          <i class="el-icon-download"></i>
-          <span slot="title">PT站批量下载</span>
-          <el-tag class="beta-tag" type="danger" effect="plain">new</el-tag>
-        </el-menu-item>
-        <el-menu-item index="1" disabled>
-          <i class="el-icon-menu"></i>
-          <span slot="title">Momentum</span>
-        </el-menu-item>
-        <el-menu-item index="2" disabled>
-          <i class="el-icon-document"></i>
-          <span slot="title">网易云音乐</span>
-        </el-menu-item>
-        <el-menu-item index="3" disabled>
-          <i class="el-icon-setting"></i>
-          <span slot="title">动态域名解析</span>
+        <el-menu-item v-for="(item, index) in menuList" :index="item.index" :key="index" :disabled="item.disable">
+          <i :class="item.icon"></i>
+          <span slot="title">{{ item.title }}</span>
+          <el-tag v-if="item.tag != null && item.tag !== ''" class="beta-tag" type="danger" effect="plain">{{ item.tag }}</el-tag>
         </el-menu-item>
       </el-menu>
     </el-row>
@@ -32,7 +16,6 @@
         <el-image style="width: 300px; height: 450px" :src="ali" fit="contain"></el-image>
         <div slot="reference">用起来感觉还不错<br>请我喝杯咖啡吧</div>
       </el-popover>
-
     </div>
   </div>
 </template>
@@ -44,7 +27,8 @@ export default {
   name: "LeftMenu",
   data() {
     return {
-      ali: ali
+      ali: ali,
+      menuList: []
     }
   },
   methods: {
@@ -52,6 +36,11 @@ export default {
       // 触发自定义事件, 通过事件调用父组件方法
       this.$emit("selectLeftMenu", index);
     }
+  },
+  created() {
+    this.$api.coreIndex.listMenu().then(data => {
+      this.menuList = data;
+    })
   }
 }
 </script>
