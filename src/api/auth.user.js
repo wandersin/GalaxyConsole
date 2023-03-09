@@ -22,6 +22,11 @@ const userApi = {
     checkToken: (token) => authService({
         url: `/user/verification/${token}`,
         method: 'get'
+    }),
+    list: (arr) => authService({
+        url: `/user/info`,
+        method: 'get',
+        data: arr
     })
 }
 

@@ -18,8 +18,9 @@ import Welcome from "@/components/pc/base/Welcome.vue";
 import LeftMenu from "@/components/pc/base/LeftMenu.vue";
 import MainHeader from "@/components/pc/base/MainHeader.vue";
 import Momentum from "@/components/pc/schedule/Momentum.vue";
-import ImageSearchTest from "@/components/pc/image/ImageSearch.vue";
+import ImageSearch from "@/components/pc/image/ImageSearch.vue";
 import DownloadStation from "@/components/pc/download/DownloadStation.vue";
+import PermissionCenter from "@/components/pc/permission/PermissionCenter.vue";
 
 export default {
   name: 'App',
@@ -33,8 +34,9 @@ export default {
     MainHeader,
     LeftMenu,
     Momentum,
-    ImageSearchTest,
-    DownloadStation
+    ImageSearch,
+    DownloadStation,
+    PermissionCenter
   },
   methods: {
     selectLeftMenu(index) {
