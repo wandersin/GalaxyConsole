@@ -49,10 +49,20 @@ export default {
       user: []
     }
   },
+  methods: {
+    refreshUser() {
+      this.loading = true;
+      this.user = [];
+      this.$api.authUser.list().then(data => {
+        this.user = data;
+        this.loading = false;
+      }).catch(() => {
+        this.loading = false;
+      })
+    }
+  },
   mounted() {
-    this.$api.authUser.list().then(data => {
-      this.user = data;
-    })
+    this.refreshUser();
   }
 }
 </script>

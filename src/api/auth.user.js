@@ -24,7 +24,7 @@ const userApi = {
         method: 'get'
     }),
     list: (arr) => authService({
-        url: `/user/info`,
+        url: `/user/list`,
         method: 'get',
         data: arr
     })
