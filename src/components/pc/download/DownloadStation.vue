@@ -96,14 +96,21 @@ export default {
       } else {
         this.searchFlag = true;
       }
-      this.$api.coreDownload.search(name, page).then(data => {
+      this.searchResult.torrent = [];
+      this.searchResult.page = 1;
+      this.$api.coreDownload.search(name, page).then(data => { // 找到资源
         this.searchResult.page = data.page;
-        this.searchResult.torrent = [];
         let tmpList = data.torrent;
         for (let i = 0; i < tmpList.length; i++) {
           this.searchResult.torrent.push(tmpList[i]);
         }
         this.searchFlag = false;
+      }).catch(() => { // 没有搜索到资源
+        this.searchFlag = false;
+        this.$notify({
+          message: '未搜索到相关资源, 试试其他关键词吧',
+          type: 'warning'
+        });
       })
     },
     handleCurrentChange(page) {
