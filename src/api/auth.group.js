@@ -10,6 +10,11 @@ const groupApi = {
         url: `/group/${group}/user`,
         method: 'post',
         data: uid
+    }),
+    createGroup: (group) => authService({
+        url: `/group/create`,
+        method: 'put',
+        data: group
     })
 }
 

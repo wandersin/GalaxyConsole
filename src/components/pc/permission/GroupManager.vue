@@ -1,10 +1,22 @@
 <template>
   <div id="group-manager-root-panel">
+    <el-row id="group-controller-row">
+      <el-button class="inline-btn" @click="refreshGroup">刷新</el-button>
+      <el-button class="inline-btn" @click="create.show = !create.show">新建群组</el-button>
+      <transition v-show="create.show" name="el-zoom-in-center">
+        <div v-show="create.show">
+          <el-input style="margin-left: 10px;" class="inline-input" v-model="create.groupName" placeholder="名称"/>
+          <el-input class="inline-input" v-model="create.desc" placeholder="备注"/>
+          <el-button class="inline-btn" type="danger" plain>取消</el-button>
+          <el-button style="margin: 0;" class="inline-btn" type="primary" plain @click="createGroup">保存</el-button>
+        </div>
+      </transition>
+    </el-row>
     <el-row id="group-row">
-      <el-table v-loading="loading" :data="group" border>
+      <el-table v-loading="group.loading" :data="group.list" border>
         <el-table-column type="selection" fixed/>
         <el-table-column prop="id" label="id" width="350"/>
-        <el-table-column prop="groupName" label="用户组" width="300"/>
+        <el-table-column prop="groupName" label="群组名" width="300"/>
         <el-table-column label="用户数" sortable width="100">
           <template slot-scope="scope">
             <el-link type="primary" @click="editGroupUser(scope.row.id)">{{ scope.row.users.length }}</el-link>
@@ -39,10 +51,10 @@
       </el-table>
     </el-row>
     <el-row id="operation-row">
-      <el-dialog title="群组用户编辑" :visible.sync="editGroupUserFlag" class="dialog-panel" width="40rem">
-        <el-transfer class="transfer-panel" v-model="within" :data="userData" :titles="['其他用户', '组内用户']"/>
+      <el-dialog title="群组用户编辑" :visible.sync="edit.user.editGroupUserFlag" class="dialog-panel" width="40rem">
+        <el-transfer class="transfer-panel" v-model="edit.user.withinGroup" :data="edit.user.userData" :titles="['其他用户', '组内用户']"/>
         <div slot="footer" class="dialog-footer">
-          <el-button @click="editGroupUserFlag = false">取消</el-button>
+          <el-button @click="edit.user.editGroupUserFlag = false">取消</el-button>
           <el-button type="primary" @click="updateGroupUser">保存</el-button>
         </div>
       </el-dialog>
@@ -55,31 +67,43 @@ export default {
   name: "GroupManager",
   data() {
     return {
-      loading: false,
-      group: [],
-      editGroupUserFlag: false,
-      currentGroup: '',
-      userData: [],
-      within: [2]
+      group: {
+        loading: false,
+        list: [],
+      },
+      edit: {
+        currentGroup: '',
+        user: {
+          editGroupUserFlag: false,
+          userData: [],
+          withinGroup: [],
+
+        }
+      },
+      create: {
+        show: false,
+        groupName: '',
+        desc: ''
+      }
     }
   },
   methods: {
     refreshGroup() {
-      this.loading = true;
-      this.group = [];
+      this.group.loading = true;
+      this.group.list = [];
       this.$api.authGroup.list().then(data => {
-        this.group = data;
-        this.loading = false;
+        this.group.list = data;
+        this.group.loading = false;
       }).catch(() => {
-        this.loading = false;
+        this.group.loading = false;
       })
     },
     editGroupUser(id) {
-      this.editGroupUserFlag = true;
-      this.currentGroup = id;
+      this.edit.user.editGroupUserFlag = true;
+      this.edit.currentGroup = id;
       this.$api.authUser.isUserInGroup(id).then(data => {
-        this.userData = [];
-        this.within = [];
+        this.edit.user.userData = [];
+        this.edit.user.withinGroup = [];
         // 全量用户数据
         data.outside.forEach(user => {
           this.addUserData(user);
@@ -87,7 +111,7 @@ export default {
         // 已在组中的用户
         data.within.forEach(user => {
           this.addUserData(user);
-          this.within.push(user.id);
+          this.edit.user.withinGroup.push(user.id);
         })
       })
     },
@@ -96,15 +120,26 @@ export default {
         key: user.id,
         label: user.username
       }
-      this.userData.push(tmp)
+      this.edit.user.userData.push(tmp)
     },
     updateGroupUser() {
-      this.$api.authGroup.updateGroupUser(this.currentGroup, this.within).then(() => {
-        this.editGroupUserFlag = false;
+      this.$api.authGroup.updateGroupUser(this.edit.currentGroup, this.edit.user.withinGroup).then(() => {
+        this.edit.user.editGroupUserFlag = false;
         this.$message.success('更新成功');
         this.refreshGroup();
       }).catch(() => {
         this.$message.error('更新失败');
+      })
+    },
+    createGroup() {
+      if (this.$commonUtils.isEmpty(this.create.groupName)) {
+        this.$message.error('信息有误, 请检查后重试');
+      }
+      this.$api.authGroup.createGroup(this.create).then(() => {
+        this.$message.success('群组创建成功');
+        this.refreshGroup();
+      }).catch(() => {
+        this.$message.error('创建失败, 请稍后重试');
       })
     }
   },
@@ -115,6 +150,19 @@ export default {
 </script>
 
 <style scoped>
+#group-controller-row {
+  margin-bottom: .5rem;
+}
+
+.inline-btn {
+  float: left;
+}
+
+.inline-input {
+  float: left;
+  width: 15rem;
+}
+
 .table-time {
   text-align: center;
 }
