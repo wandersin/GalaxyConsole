@@ -7,7 +7,7 @@
         <div v-show="create.show">
           <el-input style="margin-left: 10px;" class="inline-input" v-model="create.groupName" placeholder="名称"/>
           <el-input class="inline-input" v-model="create.desc" placeholder="备注"/>
-          <el-button class="inline-btn" type="danger" plain>取消</el-button>
+          <el-button class="inline-btn" type="danger" plain @click="clearCreateInput">取消</el-button>
           <el-button style="margin: 0;" class="inline-btn" type="primary" plain @click="createGroup">保存</el-button>
         </div>
       </transition>
@@ -42,10 +42,10 @@
           </template>
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="200">
-          <template>
+          <template slot-scope="scope">
             <el-button type="text" size="small">查看权限</el-button>
             <el-button type="text" size="small">编辑</el-button>
-            <el-button type="text" size="small">删除</el-button>
+            <el-button type="text" size="small" @click="deleteGroup(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -131,16 +131,36 @@ export default {
         this.$message.error('更新失败');
       })
     },
+    clearCreateInput() {
+      this.create.groupName = '';
+      this.create.desc = '';
+      this.create.show = false;
+    },
     createGroup() {
       if (this.$commonUtils.isEmpty(this.create.groupName)) {
         this.$message.error('信息有误, 请检查后重试');
       }
       this.$api.authGroup.createGroup(this.create).then(() => {
         this.$message.success('群组创建成功');
+        this.clearCreateInput();
         this.refreshGroup();
       }).catch(() => {
         this.$message.error('创建失败, 请稍后重试');
       })
+    },
+    deleteGroup(id) {
+      this.$confirm('此操作将删除该群组且无法恢复, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$api.authGroup.delete(id).then(() => {
+          this.$message.success('群组删除成功');
+          this.refreshGroup();
+        }).catch(() => {
+          this.$message.error('删除失败, 请稍后重试');
+        })
+      });
     }
   },
   mounted() {
