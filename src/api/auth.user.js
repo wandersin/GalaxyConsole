@@ -27,6 +27,10 @@ const userApi = {
         url: `/user/list`,
         method: 'get',
         data: arr
+    }),
+    isUserInGroup: (groupId) => authService({
+        url: `/user/in-group/${groupId}`,
+        method: 'get'
     })
 }
 
