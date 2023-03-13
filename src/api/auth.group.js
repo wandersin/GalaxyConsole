@@ -19,6 +19,10 @@ const groupApi = {
         url: `/group/create`,
         method: 'put',
         data: group
+    }),
+    listGroupRole: (id) => authService({
+        url: `/group/role/${id}`,
+        method: 'get'
     })
 }
 

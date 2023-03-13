@@ -23,7 +23,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="desc" label="备注"/>
-        <el-table-column label="注册时间" sortable width="110">
+        <el-table-column label="创建时间" sortable width="110">
           <template slot-scope="scope">
             <div class="table-time">
               {{ scope.row.createdTime | dataFormat('YYYY-MM-DD') }}
@@ -43,7 +43,7 @@
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="200">
           <template slot-scope="scope">
-            <el-button type="text" size="small">查看权限</el-button>
+            <el-button type="text" size="small" @click="editGroupRole(scope.row.id)">角色管理</el-button>
             <el-button type="text" size="small">编辑</el-button>
             <el-button type="text" size="small" @click="deleteGroup(scope.row.id)">删除</el-button>
           </template>
@@ -51,11 +51,20 @@
       </el-table>
     </el-row>
     <el-row id="operation-row">
+      <!-- 用户编辑 -->
       <el-dialog title="群组用户编辑" :visible.sync="edit.user.editGroupUserFlag" class="dialog-panel" width="40rem">
         <el-transfer class="transfer-panel" v-model="edit.user.withinGroup" :data="edit.user.userData" :titles="['其他用户', '组内用户']"/>
         <div slot="footer" class="dialog-footer">
           <el-button @click="edit.user.editGroupUserFlag = false">取消</el-button>
           <el-button type="primary" @click="updateGroupUser">保存</el-button>
+        </div>
+      </el-dialog>
+      <!-- 角色编辑 -->
+      <el-dialog title="群组角色编辑" :visible.sync="edit.role.editGroupRoleFlag" class="dialog-panel" width="40rem">
+        <el-transfer class="transfer-panel" v-model="edit.role.withinGroup" :data="edit.role.roleData" :titles="['其他角色', '已关联角色']"/>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="edit.role.editGroupRoleFlag = false">取消</el-button>
+          <el-button type="primary" @click="updateGroupRole">保存</el-button>
         </div>
       </el-dialog>
     </el-row>
@@ -77,7 +86,11 @@ export default {
           editGroupUserFlag: false,
           userData: [],
           withinGroup: [],
-
+        },
+        role: {
+          editGroupRoleFlag: false,
+          roleData: [],
+          withinGroup: [],
         }
       },
       create: {
@@ -115,12 +128,35 @@ export default {
         })
       })
     },
+    editGroupRole(id) {
+      this.edit.currentGroup = id;
+      this.edit.role.editGroupRoleFlag = true;
+      this.edit.role.roleData = [];
+      this.edit.role.withinGroup = [];
+      this.$api.authRole.list().then(data => {
+        data.forEach(role => {
+          this.addRoleData(role);
+        })
+      });
+      this.$api.authGroup.listGroupRole(id).then(data => {
+        data.forEach(role => {
+          this.edit.role.withinGroup.push(role.id);
+        })
+      })
+    },
     addUserData(user) {
       let tmp = {
         key: user.id,
         label: user.username
       }
       this.edit.user.userData.push(tmp)
+    },
+    addRoleData(role) {
+      let tmp = {
+        key: role.id,
+        label: role.roleName
+      }
+      this.edit.role.roleData.push(tmp)
     },
     updateGroupUser() {
       this.$api.authGroup.updateGroupUser(this.edit.currentGroup, this.edit.user.withinGroup).then(() => {
@@ -130,6 +166,9 @@ export default {
       }).catch(() => {
         this.$message.error('更新失败');
       })
+    },
+    updateGroupRole() {
+
     },
     clearCreateInput() {
       this.create.groupName = '';
