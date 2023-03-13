@@ -30,10 +30,11 @@
           <template slot-scope="scope">
             <div class="title">{{ scope.row.title }}</div>
             <div class="subtitle">{{ scope.row.subtitle }}</div>
-            <el-progress v-if="scope.row.percentage !== 0" :percentage="scope.row.percentage" :format="percentageFormat"/>
-            <el-tag v-if="scope.row.percentage === 100" size="mini" class="pt-tag" type="success" effect="plain">做种中</el-tag>
-            <el-tag v-else-if="scope.row.percentage !== 0" size="mini" class="pt-tag" effect="plain">下载中</el-tag>
-            <el-tag v-else-if="scope.row.downloaded" size="mini" class="pt-tag" type="success" effect="plain">已完成</el-tag>
+            <!-- 当前状态 -->
+            <el-progress v-if="scope.row.percentage >= 0" :percentage="scope.row.percentage" :format="percentageFormat"/>
+            <el-tag v-if="scope.row.status === 'SEEDING'" size="mini" class="pt-tag" type="success" effect="plain">做种中</el-tag>
+            <el-tag v-else-if="scope.row.status === 'DOWNLOADING'" size="mini" class="pt-tag" effect="plain">下载中</el-tag>
+            <el-tag v-else-if="scope.row.status === 'DOWNLOADED'" size="mini" class="pt-tag" type="danger" effect="plain">下载过</el-tag>
             <el-tag v-else size="mini" class="pt-tag" type="info" effect="plain">未下载</el-tag>
             <el-tag v-for="item in scope.row.tagList" size="mini" class="pt-tag" type="warning" effect="plain" :key="item">
               {{ item }}
