@@ -14,6 +14,15 @@ const roleApi = {
         url: `/role/${role}/permission`,
         method: 'post',
         data: permissionArr
+    }),
+    createRole: (role) => authService({
+        url: `/role/create`,
+        method: 'put',
+        data: role
+    }),
+    delete: (id) => authService({
+        url: `/role/${id}`,
+        method: 'delete'
     })
 }
 

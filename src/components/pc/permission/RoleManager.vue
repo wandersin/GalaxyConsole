@@ -1,7 +1,16 @@
 <template>
   <div id="role-manager-root-panel">
     <el-row id="role-controller-row">
-
+      <el-button class="inline-btn" @click="refreshRole">刷新</el-button>
+      <el-button class="inline-btn" @click="create.show = !create.show">新建角色</el-button>
+      <transition v-show="create.show" name="el-zoom-in-center">
+        <div v-show="create.show">
+          <el-input style="margin-left: 10px;" class="inline-input" v-model="create.roleName" placeholder="名称"/>
+          <el-input class="inline-input" v-model="create.desc" placeholder="备注"/>
+          <el-button class="inline-btn" type="danger" plain @click="clearCreateInput">取消</el-button>
+          <el-button style="margin: 0;" class="inline-btn" type="primary" plain @click="createGroup">保存</el-button>
+        </div>
+      </transition>
     </el-row>
     <el-row id="role-row">
       <el-table v-loading="role.loading" :data="role.list" border>
@@ -30,7 +39,7 @@
         <el-table-column fixed="right" label="操作" width="200">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="editRolePermission(scope.row.id)">分配权限</el-button>
-            <el-button type="text" size="small">删除</el-button>
+            <el-button type="text" size="small" @click="deleteRole(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -63,6 +72,11 @@ export default {
           permissionData: [],
           withinRole: []
         }
+      },
+      create: {
+        show: false,
+        roleName: '',
+        desc: ''
       }
     }
   },
@@ -75,6 +89,23 @@ export default {
         this.role.loading = false;
       }).catch(() => {
         this.group.loading = false;
+      })
+    },
+    clearCreateInput() {
+      this.create.roleName = '';
+      this.create.desc = '';
+      this.create.show = false;
+    },
+    createGroup() {
+      if (this.$commonUtils.isEmpty(this.create.roleName)) {
+        this.$message.error('信息有误, 请检查后重试');
+      }
+      this.$api.authRole.createRole(this.create).then(() => {
+        this.$message.success('角色创建成功');
+        this.clearCreateInput();
+        this.refreshRole();
+      }).catch(() => {
+        this.$message.error('创建失败, 请稍后重试');
       })
     },
     addPermissionData(data) {
@@ -106,6 +137,20 @@ export default {
       }).catch(() => {
         this.$message.error('更新失败');
       })
+    },
+    deleteRole(id) {
+      this.$confirm('此操作将删除该角色且无法恢复, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$api.authRole.delete(id).then(() => {
+          this.$message.success('角色删除成功');
+          this.refreshRole();
+        }).catch(() => {
+          this.$message.error('删除失败, 请稍后重试');
+        })
+      });
     }
   },
   mounted() {
@@ -115,7 +160,20 @@ export default {
 </script>
 
 <style scoped>
+#role-controller-row {
+  margin-bottom: .5rem;
+}
+
 .table-time {
   text-align: center;
+}
+
+.inline-btn {
+  float: left;
+}
+
+.inline-input {
+  float: left;
+  width: 15rem;
 }
 </style>

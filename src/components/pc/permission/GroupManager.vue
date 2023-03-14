@@ -199,7 +199,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$api.authGroup.delete(id).then(() => {
+        this.$api.authRole.delete(id).then(() => {
           this.$message.success('群组删除成功');
           this.refreshGroup();
         }).catch(() => {
