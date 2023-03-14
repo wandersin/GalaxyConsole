@@ -50,7 +50,7 @@
         </el-table-column>
       </el-table>
     </el-row>
-    <el-row id="operation-row">
+    <el-row id="group-operation-row">
       <!-- 用户编辑 -->
       <el-dialog title="群组用户编辑" :visible.sync="edit.user.editGroupUserFlag" class="dialog-panel" width="40rem">
         <el-transfer class="transfer-panel" v-model="edit.user.withinGroup" :data="edit.user.userData" :titles="['其他用户', '组内用户']"/>
