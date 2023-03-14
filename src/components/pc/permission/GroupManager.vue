@@ -44,7 +44,7 @@
         <el-table-column fixed="right" label="操作" width="200">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="editGroupRole(scope.row.id)">角色管理</el-button>
-            <el-button type="text" size="small">编辑</el-button>
+<!--            <el-button type="text" size="small">编辑</el-button>-->
             <el-button type="text" size="small" @click="deleteGroup(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
@@ -168,7 +168,13 @@ export default {
       })
     },
     updateGroupRole() {
-
+      this.$api.authGroup.updateGroupRole(this.edit.currentGroup, this.edit.role.withinGroup).then(() => {
+        this.edit.role.editGroupRoleFlag = false;
+        this.$message.success('更新成功');
+        this.refreshGroup();
+      }).catch(() => {
+        this.$message.error('更新失败');
+      })
     },
     clearCreateInput() {
       this.create.groupName = '';

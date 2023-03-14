@@ -23,6 +23,11 @@ const groupApi = {
     listGroupRole: (id) => authService({
         url: `/group/role/${id}`,
         method: 'get'
+    }),
+    updateGroupRole: (group, role) => authService({
+        url: `/group/${group}/role`,
+        method: 'post',
+        data: role
     })
 }
 
