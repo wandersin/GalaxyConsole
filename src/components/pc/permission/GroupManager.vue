@@ -114,17 +114,17 @@ export default {
     editGroupUser(id) {
       this.edit.user.editGroupUserFlag = true;
       this.edit.currentGroup = id;
-      this.$api.authUser.isUserInGroup(id).then(data => {
-        this.edit.user.userData = [];
-        this.edit.user.withinGroup = [];
-        // 全量用户数据
-        data.outside.forEach(user => {
+      this.edit.user.userData = [];
+      this.edit.user.withinGroup = [];
+      this.$api.authUser.list().then(data => {
+        data.forEach(user => {
           this.addUserData(user);
         })
-        // 已在组中的用户
-        data.within.forEach(user => {
-          this.addUserData(user);
-          this.edit.user.withinGroup.push(user.id);
+      });
+      this.$api.authGroup.get(id).then(data => {
+        let users = data.users;
+        users.forEach(user => {
+          this.edit.user.withinGroup.push(user);
         })
       })
     },
@@ -199,7 +199,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$api.authRole.delete(id).then(() => {
+        this.$api.authGroup.delete(id).then(() => {
           this.$message.success('群组删除成功');
           this.refreshGroup();
         }).catch(() => {
