@@ -31,6 +31,14 @@ const userApi = {
     isUserInGroup: (groupId) => authService({
         url: `/user/in-group/${groupId}`,
         method: 'get'
+    }),
+    group: (uid) => authService({
+        url: `/user/${uid}/group`,
+        method: 'get'
+    }),
+    permission: (uid) => authService({
+        url: `/user/${uid}/permission`,
+        method: 'get'
     })
 }
 

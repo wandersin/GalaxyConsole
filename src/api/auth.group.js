@@ -1,6 +1,10 @@
 import authService from "@/utils/auth-service";
 
 const groupApi = {
+    get: (id) => authService({
+        url: `/group/${id}`,
+        method: 'get'
+    }),
     list: (arr) => authService({
         url: `/group/list`,
         method: 'get',

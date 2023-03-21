@@ -1,13 +1,16 @@
 <template>
   <div id="user-manager-root-panel">
+    <el-row id="user-controller-row">
+      <el-button class="inline-btn" @click="refreshUser">刷新</el-button>
+    </el-row>
     <el-row id="user-row">
       <el-table v-loading="loading" :data="user" border>
         <el-table-column type="selection" fixed/>
         <el-table-column prop="id" label="uid" width="300"/>
         <el-table-column prop="username" label="用户名" width="150"/>
-        <el-table-column prop="email" label="邮箱" width="250"/>
+        <el-table-column prop="email" label="邮箱"/>
         <el-table-column prop="status" label="状态" width="100"/>
-        <el-table-column prop="portrait" label="头像"/>
+<!--        <el-table-column prop="portrait" label="头像"/>-->
         <el-table-column label="最后登录" sortable width="110">
           <template slot-scope="scope">
             <div class="table-time">
@@ -35,7 +38,20 @@
             </div>
           </template>
         </el-table-column>
+        <el-table-column fixed="right" label="操作" width="300">
+          <template slot-scope="scope">
+            <el-button type="text" size="small" @click="listUserGroup(scope.row.id)">查看权限</el-button>
+<!--            <el-button type="text" size="small"></el-button>-->
+<!--            <el-button type="text" size="small">删除</el-button>-->
+          </template>
+        </el-table-column>
       </el-table>
+    </el-row>
+    <el-row id="user-operation-row">
+      <el-dialog title="用户权限查看" :visible.sync="userPermissionFlag" class="dialog-panel" width="40rem">
+        <el-tree :data="props">
+        </el-tree>
+      </el-dialog>
     </el-row>
   </div>
 </template>
@@ -46,7 +62,18 @@ export default {
   data() {
     return {
       loading: false,
-      user: []
+      user: [],
+      userPermissionFlag: false,
+      group: [
+        {
+          role: [
+            {
+              permission: []
+            }
+          ]
+        }
+      ],
+      props: [],
     }
   },
   methods: {
@@ -59,6 +86,14 @@ export default {
       }).catch(() => {
         this.loading = false;
       })
+    },
+    listUserGroup(uid) {
+      this.$api.authUser.group(uid).then(data => {
+        this.userPermissionFlag = true;
+        data.forEach(group => {
+          this.props.push({label: group.groupName, children: []});
+        })
+      })
     }
   },
   mounted() {
@@ -68,7 +103,15 @@ export default {
 </script>
 
 <style scoped>
+#user-controller-row {
+  margin-bottom: .5rem;
+}
+
 .table-time {
   text-align: center;
+}
+
+.inline-btn {
+  float: left;
 }
 </style>
