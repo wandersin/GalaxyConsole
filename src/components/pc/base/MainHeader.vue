@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div id="user-box">
-      <el-image id="portrait" class="portrait" :src="src" fit="fill" @click="showPanel"/>
+    <div id="user-box" @click="showPanel">
+      <el-image class="portrait" :src="src" fit="fill"/>
       <div id="user-panel" v-show="panelFlag">
         <div id="user-handler-panel">
           <div id="user-handler-panel-body">
@@ -45,16 +45,15 @@ export default {
       this.panelFlag = false;
     },
     showPanel() {
-      this.panelFlag = !this.panelFlag;
+      this.panelFlag = true;
     }
   },
   mounted() {
     let vue = this;
-    document.addEventListener('click', function (e) {
-      if (!e.target.id.startsWith('user') && e.target.id !== 'portrait') {
-        vue.hidePanel();
-      }
-    })
+    // addEventListener(event, function, useCapture);
+    // useCapture: false为冒泡传递, true为捕获传递
+    // 冒泡传递内部点击事件先触发, 捕获传递外部点击事件先触发
+    document.addEventListener('click', () => vue.hidePanel(), true);
   }
 }
 </script>
