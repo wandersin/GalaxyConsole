@@ -40,7 +40,7 @@
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="300">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="listUserGroup(scope.row.id)">查看权限</el-button>
+            <el-button type="text" size="small" @click="listUserPermissionTree(scope.row.id)">查看权限</el-button>
 <!--            <el-button type="text" size="small"></el-button>-->
 <!--            <el-button type="text" size="small">删除</el-button>-->
           </template>
@@ -49,8 +49,7 @@
     </el-row>
     <el-row id="user-operation-row">
       <el-dialog title="用户权限查看" :visible.sync="userPermissionFlag" class="dialog-panel" width="40rem">
-        <el-tree :data="props">
-        </el-tree>
+        <el-tree :props="treeProps" :key="currentUser" :load="loadTreeNode" lazy/>
       </el-dialog>
     </el-row>
   </div>
@@ -64,16 +63,12 @@ export default {
       loading: false,
       user: [],
       userPermissionFlag: false,
-      group: [
-        {
-          role: [
-            {
-              permission: []
-            }
-          ]
-        }
-      ],
-      props: [],
+      currentUser: '',
+      treeProps: {
+        label: 'label',
+        children: 'children',
+        isLeaf: 'isLeaf'
+      },
     }
   },
   methods: {
@@ -87,13 +82,52 @@ export default {
         this.loading = false;
       })
     },
-    listUserGroup(uid) {
-      this.$api.authUser.group(uid).then(data => {
-        this.userPermissionFlag = true;
-        data.forEach(group => {
-          this.props.push({label: group.groupName, children: []});
+    listUserPermissionTree(uid) {
+      this.currentUser = uid;
+      this.userPermissionFlag = true;
+    },
+    loadTreeNode(node, resolve) {
+      let level = node.level;
+      if (level === 0) { // group
+        this.$api.authUser.group(this.currentUser).then(data => {
+          let arr = [];
+          data.forEach(group => {
+            let tmp = {
+              label: group.groupName,
+              key: group.id
+            }
+            arr.push(tmp);
+          })
+          return resolve(arr);
         })
-      })
+      } else if (level === 1) { // role
+        this.$api.authGroup.listGroupRole(node.data.key).then(data => {
+          let arr = [];
+          data.forEach(role => {
+            let tmp = {
+              label: role.roleName,
+              key: role.id
+            }
+            arr.push(tmp);
+          })
+          return resolve(arr);
+        })
+      } else if (level === 2) { // permission
+        this.$api.authRole.listRolePermission(node.data.key).then(data => {
+          let arr = [];
+          data.forEach(permission => {
+            let tmp = {
+              label: permission.humanName,
+              key: permission.systemName,
+              isLeaf: true
+            }
+            arr.push(tmp);
+          })
+          return resolve(arr);
+        })
+      } else {
+        return resolve([]);
+      }
     }
   },
   mounted() {

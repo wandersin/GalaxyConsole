@@ -23,6 +23,10 @@ const roleApi = {
     delete: (id) => authService({
         url: `/role/${id}`,
         method: 'delete'
+    }),
+    listRolePermission: (role) => authService({
+        url: `/role/${role}/permission`,
+        method: 'get'
     })
 }
 
