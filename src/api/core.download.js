@@ -8,6 +8,10 @@ const downloadApi = {
     download: (id) => coreService({
         url: `/download/pt/${id}`,
         method: 'post'
+    }),
+    task: () => coreService({
+        url: `/download/task`,
+        method: 'get'
     })
 }
 

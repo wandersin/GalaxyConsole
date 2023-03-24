@@ -63,6 +63,10 @@ Vue.filter('dataFormat', function (dataStr, pattern = 'YYYY-MM-DD HH:mm:ss') {
     return moment(dataStr).format(pattern);
 });
 
+Vue.filter('fileSizeFormat', function (size) {
+    return commonUtils.fileSizeTransform(size);
+});
+
 new Vue({
     render: h => h(App),
     router: router
