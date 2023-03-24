@@ -8,7 +8,7 @@
         <el-table-column prop="id" label="任务id" width="100"/>
         <el-table-column prop="torrentId" label="种子id" width="100"/>
         <el-table-column prop="title" label="文件名称"/>
-        <el-table-column label="文件大小" width="100">
+        <el-table-column label="文件大小" width="130">
           <template slot-scope="scope">{{ scope.row.size | fileSizeFormat }}</template>
         </el-table-column>
         <el-table-column label="进度" width="200">
@@ -16,10 +16,10 @@
             <el-progress :percentage="scope.row.percentage"/>
           </template>
         </el-table-column>
-        <el-table-column label="下载速度" width="100">
+        <el-table-column label="下载速度(每秒)" width="130">
           <template slot-scope="scope">{{ scope.row.additional.transfer.speedDownload | fileSizeFormat }}</template>
         </el-table-column>
-        <el-table-column label="上传速度" width="100">
+        <el-table-column label="上传速度(每秒)" width="130">
           <template slot-scope="scope">{{ scope.row.additional.transfer.speedUpload | fileSizeFormat }}</template>
         </el-table-column>
         <el-table-column label="状态" width="100">
@@ -56,6 +56,9 @@ export default {
     statusFilter(status) {
       if (status === 'seeding') {
         return '做种中';
+      }
+      if (status === 'downloading') {
+        return '下载中';
       }
     }
   }
