@@ -28,10 +28,6 @@ const userApi = {
         method: 'get',
         data: arr
     }),
-    isUserInGroup: (groupId) => authService({
-        url: `/user/in-group/${groupId}`,
-        method: 'get'
-    }),
     group: (uid) => authService({
         url: `/user/${uid}/group`,
         method: 'get'
@@ -39,6 +35,10 @@ const userApi = {
     permission: (uid) => authService({
         url: `/user/${uid}/permission`,
         method: 'get'
+    }),
+    resetPasswd: (uid) => authService({
+        url: `/user/${uid}/password/reset`,
+        method: 'post'
     })
 }
 

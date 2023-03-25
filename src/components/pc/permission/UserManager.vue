@@ -41,7 +41,7 @@
         <el-table-column fixed="right" label="操作" width="300">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="listUserPermissionTree(scope.row.id)">查看权限</el-button>
-<!--            <el-button type="text" size="small"></el-button>-->
+            <el-button type="text" size="small" @click="resetUserPassword(scope.row.id, scope.row.username)">重置密码</el-button>
 <!--            <el-button type="text" size="small">删除</el-button>-->
           </template>
         </el-table-column>
@@ -50,6 +50,9 @@
     <el-row id="user-operation-row">
       <el-dialog title="用户权限查看" :visible.sync="userPermissionFlag" class="dialog-panel" width="40rem">
         <el-tree :props="treeProps" :key="currentUser" :load="loadTreeNode" lazy/>
+      </el-dialog>
+      <el-dialog title="重置用户密码" :visible.sync="edit.passwordFlag" width="30%">
+        <div>密码重置成功, 请妥善保管新密码: {{ edit.password }}</div>
       </el-dialog>
     </el-row>
   </div>
@@ -69,6 +72,10 @@ export default {
         children: 'children',
         isLeaf: 'isLeaf'
       },
+      edit: {
+        passwordFlag: false,
+        password: ''
+      }
     }
   },
   methods: {
@@ -85,6 +92,18 @@ export default {
     listUserPermissionTree(uid) {
       this.currentUser = uid;
       this.userPermissionFlag = true;
+    },
+    resetUserPassword(uid, name) {
+      this.$confirm(`此操作将重置用户 ${name} 的密码, 重置后该用户将退出登录, 是否继续?`, '高危动作', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$api.authUser.resetPasswd(uid).then(data => {
+          this.edit.password = data;
+          this.edit.passwordFlag = true;
+        })
+      });
     },
     loadTreeNode(node, resolve) {
       let level = node.level;
