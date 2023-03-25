@@ -1,24 +1,39 @@
 <template>
   <div>
-    <div id="user-box" @click="showPanel">
-      <el-image class="portrait" :src="src" fit="fill"/>
-      <div id="user-panel" v-show="panelFlag">
-        <div id="user-handler-panel">
-          <div id="user-handler-panel-body">
+    <el-row>
+      <div id="user-box" @click="showPanel">
+        <el-image class="portrait" :src="src" fit="fill"/>
+        <div id="user-panel" v-show="panelFlag">
+          <div id="user-handler-panel">
+            <div id="user-handler-panel-body">
 
+            </div>
+            <div id="user-handler-panel-footer" @click="showUpdatePassword">
+              <i class="el-icon-setting"></i>
+              <div>修改密码</div>
+            </div>
           </div>
-          <div id="user-handler-panel-footer">
+          <div id="user-logout" @click="logout">
+            <i class="el-icon-switch-button"></i>
+            <div>退出登录</div>
           </div>
-        </div>
-        <div id="user-logout" @click="logout">
-          <i class="el-icon-switch-button"></i>
-          <div>退出登录</div>
-        </div>
-        <div id="user-terms">
-
+          <div id="user-terms">
+            <!--          <div>隐私权政策 · 服务条款</div>-->
+          </div>
         </div>
       </div>
-    </div>
+    </el-row>
+
+    <el-row id="main-header-user-operation-row">
+      <el-dialog title="修改密码" :visible.sync="updatePasswordFlag" width="30%">
+        <el-input class="password-input" placeholder="请输入您的新密码" v-model="newPassword1" show-password/>
+        <el-input class="password-input" placeholder="请再次输入您的新密码" v-model="newPassword2" show-password/>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="cancelUpdatePassword">取消</el-button>
+          <el-button type="primary" @click="updatePassword">保存</el-button>
+        </div>
+      </el-dialog>
+    </el-row>
   </div>
 </template>
 
@@ -28,10 +43,16 @@ export default {
   data() {
     return {
       src: `${this.$auth_baseUrl}/user/portrait/${localStorage.getItem('xAuthToken')}`,
-      panelFlag: false
+      panelFlag: false,
+      updatePasswordFlag: false,
+      newPassword1: '',
+      newPassword2: ''
     }
   },
   methods: {
+    showUpdatePassword() {
+      this.updatePasswordFlag = true;
+    },
     logout() {
       let token = localStorage.getItem('xAuthToken');
       if (token) {
@@ -46,6 +67,28 @@ export default {
     },
     showPanel() {
       this.panelFlag = true;
+    },
+    cancelUpdatePassword() {
+      this.updatePasswordFlag = false;
+      this.newPassword1 = '';
+      this.newPassword2 = '';
+    },
+    updatePassword() {
+      if (this.newPassword1 !== this.newPassword2) {
+        this.$notify({
+          title: '警告',
+          message: '两次输入的密码不同, 请检查后重试',
+          type: 'warning'
+        });
+        return;
+      }
+      this.$api.authUser.updatePassword(this.newPassword1).then(() => {
+        this.$notify({
+          title: '成功',
+          message: '修改密码成功',
+          type: 'success'
+        });
+      })
     }
   },
   mounted() {
@@ -109,6 +152,7 @@ export default {
   height: 2.5rem;
   width: 100%;
   border-radius: 0 0 2rem 2rem;
+  padding-left: 1.5rem;
 }
 
 #user-logout {
@@ -117,21 +161,22 @@ export default {
   width: calc(100% - 1rem);
   left: .5rem;
   top: 10rem;
+  padding-left: 1.5rem;
 }
 
-#user-logout:hover {
+#user-handler-panel-footer:hover, #user-logout:hover {
   cursor: pointer;
 }
 
-#user-logout i {
-  font-size: 1.5rem;
+#user-handler-panel-footer i, #user-logout i {
+  font-size: 1.3rem;
   line-height: 2.5rem;
   font-weight: bolder;
   float: left;
-  margin: 0 .5rem;
+  margin: 0 .6rem;
 }
 
-#user-logout div {
+#user-handler-panel-footer div, #user-logout div {
   font-size: 1.1rem;
   line-height: 2.5rem;
   float: left;
@@ -146,5 +191,9 @@ export default {
   border-radius: 0 0 2rem 2rem;
   border-top: 1px solid lightgray;
   box-sizing: border-box;
+}
+
+.password-input {
+  margin-bottom: .5rem;
 }
 </style>

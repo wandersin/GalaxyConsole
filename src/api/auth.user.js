@@ -39,6 +39,11 @@ const userApi = {
     resetPasswd: (uid) => authService({
         url: `/user/${uid}/password/reset`,
         method: 'post'
+    }),
+    updatePassword: (password) => authService({
+        url: `/user/password/update`,
+        method: 'post',
+        data: password
     })
 }
 
