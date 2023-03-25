@@ -43,6 +43,9 @@ const userApi = {
     updatePassword: (password) => authService({
         url: `/user/password/update`,
         method: 'post',
+        headers: {
+            'Content-Type': 'text/plain'
+        },
         data: password
     })
 }

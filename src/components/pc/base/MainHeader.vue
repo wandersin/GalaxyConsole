@@ -69,26 +69,37 @@ export default {
       this.panelFlag = true;
     },
     cancelUpdatePassword() {
+      this.clearPassword();
+    },
+    updatePassword() {
+      this.$confirm(`修改密码后需要您重新登录, 是否继续`, '警告', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        if (this.newPassword1 !== this.newPassword2) {
+          this.$notify({
+            title: '警告',
+            message: '两次输入的密码不同, 请检查后重试',
+            type: 'warning'
+          });
+          return;
+        }
+        this.$api.authUser.updatePassword(this.newPassword1).then(() => {
+          this.$notify({
+            title: '成功',
+            message: '修改密码成功',
+            type: 'success'
+          });
+          this.clearPassword();
+          this.$router.push({path: '/login'}).catch(() => {});
+        })
+      });
+    },
+    clearPassword() {
       this.updatePasswordFlag = false;
       this.newPassword1 = '';
       this.newPassword2 = '';
-    },
-    updatePassword() {
-      if (this.newPassword1 !== this.newPassword2) {
-        this.$notify({
-          title: '警告',
-          message: '两次输入的密码不同, 请检查后重试',
-          type: 'warning'
-        });
-        return;
-      }
-      this.$api.authUser.updatePassword(this.newPassword1).then(() => {
-        this.$notify({
-          title: '成功',
-          message: '修改密码成功',
-          type: 'success'
-        });
-      })
     }
   },
   mounted() {
