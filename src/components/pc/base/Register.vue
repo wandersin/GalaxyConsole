@@ -43,7 +43,7 @@ export default {
       if (this.verify() === false) {
         return;
       }
-      this.$api.authUser.emailCode(this.user.email, 'register').then(() => {
+      this.$api.authUser.emailCode(this.user.email, 'USER_REGISTER').then(() => {
         alert("验证码发送成功");
       });
     },

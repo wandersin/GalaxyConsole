@@ -10,7 +10,6 @@
         <el-table-column prop="username" label="用户名" width="150"/>
         <el-table-column prop="email" label="邮箱"/>
         <el-table-column prop="status" label="状态" width="100"/>
-<!--        <el-table-column prop="portrait" label="头像"/>-->
         <el-table-column label="最后登录" sortable width="110">
           <template slot-scope="scope">
             <div class="table-time">
@@ -42,7 +41,6 @@
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="listUserPermissionTree(scope.row.id)">查看权限</el-button>
             <el-button type="text" size="small" @click="resetUserPassword(scope.row.id, scope.row.username)">重置密码</el-button>
-<!--            <el-button type="text" size="small">删除</el-button>-->
           </template>
         </el-table-column>
       </el-table>
