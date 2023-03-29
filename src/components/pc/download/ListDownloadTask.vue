@@ -60,6 +60,9 @@ export default {
       if (status === 'downloading') {
         return '下载中';
       }
+      if (status === 'waiting') {
+        return '等待中';
+      }
     }
   }
 }
