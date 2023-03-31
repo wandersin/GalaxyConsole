@@ -2,21 +2,16 @@
   <div>
     <div id="welcome-root">welcome</div>
   </div>
-
 </template>
 
 <script>
 export default {
   name: "Welcome",
-  components: {
-
-  },
+  components: {},
   data() {
-    return {
-    }
+    return {}
   },
-  methods: {
-  }
+  methods: {}
 }
 </script>
 

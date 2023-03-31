@@ -38,6 +38,8 @@
 </template>
 
 <script>
+import Vue from "vue";
+
 export default {
   name: "Header",
   data() {
@@ -103,6 +105,11 @@ export default {
     }
   },
   mounted() {
+    // 个人信息
+    this.$api.authUser.checkToken(localStorage.getItem('xAuthToken')).then(data => {
+      Vue.prototype.$me = data;
+    })
+
     let vue = this;
     // addEventListener(event, function, useCapture);
     // useCapture: false为冒泡传递, true为捕获传递
