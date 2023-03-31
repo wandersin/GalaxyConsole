@@ -6,7 +6,13 @@
         <div id="user-panel" v-show="panelFlag">
           <div id="user-handler-panel">
             <div id="user-handler-panel-body">
-
+              <div id="user-message-portrait">
+                <el-image :src="src" fit="fill" style="border-radius: 100%"/>
+              </div>
+              <div id="user-message-detail">
+                <div id="user-message-username">{{ $me.username }}</div>
+                <div id="user-message-email">{{ $me.email }}</div>
+              </div>
             </div>
             <div id="user-handler-panel-footer" @click="showUpdatePassword">
               <i class="el-icon-setting"></i>
@@ -164,6 +170,7 @@ export default {
   border-radius: 2rem 2rem 0 0;
   border-bottom: 2px solid #eaecef;
   box-sizing: border-box;
+  position: relative;
 }
 
 #user-handler-panel-footer {
@@ -213,5 +220,42 @@ export default {
 
 .password-input {
   margin-bottom: .5rem;
+}
+
+#user-message-portrait {
+  height: 4rem;
+  width: 4rem;
+  position: absolute;
+  border-radius: 100%;
+  top: 1rem;
+  left: 1rem;
+}
+
+#user-message-detail {
+  height: 4rem;
+  width: 12rem;
+  position: absolute;
+  left: 6rem;
+  top: 1rem;
+}
+
+#user-message-username {
+  font-size: 1.1rem;
+  font-weight: bolder;
+  height: 2rem;
+  line-height: 2rem;
+  width: 100%;
+  position: absolute;
+  text-align: left;
+}
+
+#user-message-email {
+  font-size: .9rem;
+  height: 2rem;
+  line-height: 2rem;
+  width: 100%;
+  position: absolute;
+  top: 2rem;
+  text-align: left;
 }
 </style>
