@@ -26,6 +26,7 @@ const Interceptors = {
     },
     errorHandler: function (error) {
         if (error.response.status === 401) {
+            Vue.prototype.$message.error('登录超时或无操作权限');
             localStorage.removeItem('xAuthToken');
             router.push({path: '/login'}).catch(() => {});
         }
