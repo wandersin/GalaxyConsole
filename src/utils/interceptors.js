@@ -25,10 +25,14 @@ const Interceptors = {
         }
     },
     errorHandler: function (error) {
-        if (error.response.status === 401) {
-            Vue.prototype.$message.error('登录超时或无操作权限');
+        if (error.response.status === 403) { // 登录超时
+            Vue.prototype.$message.error('登录超时，请重新登录');
             localStorage.removeItem('xAuthToken');
             router.push({path: '/login'}).catch(() => {});
+        } else if (error.response.status === 401) { // 权限不足
+            Vue.prototype.$message.error('操作权限不足，请联系管理员添加权限');
+        } else {
+            Vue.prototype.$message.error(error);
         }
     }
 }
