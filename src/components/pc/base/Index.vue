@@ -21,6 +21,7 @@ import Momentum from "@/components/pc/schedule/Momentum.vue";
 import ImageSearch from "@/components/pc/image/ImageSearch.vue";
 import DownloadStation from "@/components/pc/download/DownloadStation.vue";
 import PermissionCenter from "@/components/pc/permission/PermissionCenter.vue";
+import SimpleJsonViewer from "@/components/pc/utils/SimpleJsonViewer.vue";
 
 export default {
   name: 'App',
@@ -36,7 +37,8 @@ export default {
     Momentum,
     ImageSearch,
     DownloadStation,
-    PermissionCenter
+    PermissionCenter,
+    SimpleJsonViewer
   },
   methods: {
     selectLeftMenu(index) {
