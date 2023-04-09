@@ -23,7 +23,7 @@ export default {
   data() {
     return {
       jsonStr: "{}",
-      jsonTmp: "{}"
+      jsonTmp: ""
     }
   },
   methods: {
@@ -66,15 +66,21 @@ export default {
 }
 
 #json-srt-input {
-  width: 100%;
-  height: 100%;
+  width: calc(100% - 2rem);
+  height: calc(100% - 2rem);
+  padding: 1rem;
   resize: none;
+  border-radius: .5rem;
+  outline-style: none ;
+  border: 1px solid lightgray;
+  font-size: 1rem;
 }
 
 #json-viewer {
   width: 100%;
   height: 100%;
   overflow: auto;
+  border-radius: .5rem;
   border: 1px lightgray solid;
 }
 
