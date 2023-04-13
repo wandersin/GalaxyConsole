@@ -29,12 +29,12 @@
     <el-row>
       <el-col v-for="item in imageInfo" v-bind:key="item.id" :span="4" class="ocr-image-box">
         <div class="ocr-image-body">
-          <div class="ocr-image-operation">
-            <i class="el-icon-info ocr-image-operation-item" @click="showImageInfo(item)"></i>
+          <div class="ocr-image-operation" @click="showImageInfo(item)">
+            <i class="el-icon-info ocr-image-operation-item"></i>
             <span>{{ item.datetime | dataFormat('YYYY-MM-DD') }}</span>
           </div>
           <el-image style="height: 10rem" :src="getImageSrcById(item.id)" :fit="fit" lazy :previewSrcList="previewList"/>
-          <div class="ocr-image-url">{{ item.fileName }}</div>
+          <div class="ocr-image-url" @click="showImageInfo(item)">{{ item.fileName }}</div>
         </div>
       </el-col>
     </el-row>
