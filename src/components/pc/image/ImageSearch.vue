@@ -19,7 +19,17 @@
       </el-col>
       <el-col :span="1">
         <el-tooltip class="item" effect="dark" placement="right">
-          <div slot="content">输入要查询的文字开始搜索图片<br>搜索空或'*'可以查询所有图片<br>图片按时间倒序排列</div>
+          <div slot="content">
+            输入要查询的文字开始搜索图片
+            <br>
+            搜索空或'*'可以查询所有图片
+            <br>
+            图片按时间倒序排列
+            <br>
+            点击图片可以查看大图
+            <br>
+            点击标签可以查看详细信息
+          </div>
           <div id="ocr-point-icon-box">
             <i class="el-icon-warning-outline" id="ocr-point-icon"></i>
           </div>
