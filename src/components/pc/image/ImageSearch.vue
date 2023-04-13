@@ -49,10 +49,19 @@
           :total="page.numFound">
       </el-pagination>
     </el-row>
+    <el-row id="ocr-viewer-row">
+      <el-dialog :visible.sync="detailFlag" class="dialog-panel" width="40rem">
+        <div class="ocr-detail-viewer-box">
+          <json-viewer id="ocr-detail-viewer" :value="detail" copyable></json-viewer>
+        </div>
+      </el-dialog>
+    </el-row>
   </div>
 </template>
 
 <script>
+import JsonViewer from "vue-json-viewer";
+
 export default {
   name: "ImageSearch",
   data() {
@@ -73,8 +82,13 @@ export default {
         {key: '标准搜索', precision: 75},
         {key: '模糊搜索', precision: 50}
       ],
-      previewList: []
+      previewList: [],
+      detailFlag: false,
+      detail: {}
     }
+  },
+  components: {
+    JsonViewer
   },
   methods: {
     // 当前页发送变化
@@ -107,7 +121,8 @@ export default {
       return `${this.$core_baseUrl}/image/${token}/${id}/binary`;
     },
     showImageInfo(info) {
-      alert(JSON.stringify(info, null, 4));
+      this.detail = info;
+      this.detailFlag = true;
     }
   }
 }
@@ -190,5 +205,10 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.ocr-detail-viewer-box {
+  height: 60vh;
+  overflow: auto;
 }
 </style>
