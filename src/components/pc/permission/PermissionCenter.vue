@@ -1,8 +1,5 @@
 <template>
   <el-tabs id="permission-root-panel" type="border-card">
-    <el-tab-pane label="菜单管理">
-      <menu-manager/>
-    </el-tab-pane>
     <el-tab-pane label="用户管理">
       <user-manager/>
     </el-tab-pane>
@@ -16,7 +13,6 @@
 </template>
 
 <script>
-import MenuManager from "@/components/pc/permission/MenuManager.vue";
 import UserManager from "@/components/pc/permission/UserManager.vue";
 import GroupManager from "@/components/pc/permission/GroupManager.vue";
 import RoleManager from "@/components/pc/permission/RoleManager.vue";
@@ -24,7 +20,6 @@ import RoleManager from "@/components/pc/permission/RoleManager.vue";
 export default {
   name: "PermissionCenter",
   components: {
-    MenuManager,
     UserManager,
     GroupManager,
     RoleManager
