@@ -22,6 +22,7 @@ import ImageSearch from "@/components/pc/image/ImageSearch.vue";
 import DownloadStation from "@/components/pc/download/DownloadStation.vue";
 import PermissionCenter from "@/components/pc/permission/PermissionCenter.vue";
 import SimpleJsonViewer from "@/components/pc/utils/SimpleJsonViewer.vue";
+import Image2Url from "@/components/pc/utils/Image2Url.vue";
 
 export default {
   name: 'App',
@@ -38,7 +39,8 @@ export default {
     ImageSearch,
     DownloadStation,
     PermissionCenter,
-    SimpleJsonViewer
+    SimpleJsonViewer,
+    Image2Url
   },
   methods: {
     selectLeftMenu(index) {
