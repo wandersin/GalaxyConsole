@@ -1,6 +1,6 @@
 <template>
   <div id="image2url-root-body">
-    <el-upload action="http://192.168.3.2:58080/core/oss/image/upload"
+    <el-upload :action="api"
                list-type="picture-card"
                :headers="{'X-Auth-Token': token}"
                :on-change="handleChange"
@@ -25,6 +25,7 @@ export default {
   name: "Image2Url",
   data() {
     return {
+      api: `${this.$core_baseUrl}/oss/image/upload`,
       token: localStorage.getItem('xAuthToken'),
       show: false,
       url: ''
