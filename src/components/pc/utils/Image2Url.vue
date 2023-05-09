@@ -2,6 +2,7 @@
   <div id="image2url-root-body">
     <el-upload :action="api"
                list-type="picture-card"
+               :file-list="historyFile"
                :headers="{'X-Auth-Token': token}"
                :on-change="handleChange"
                accept="image"
@@ -28,14 +29,15 @@ export default {
       api: `${this.$core_baseUrl}/oss/image/upload`,
       token: localStorage.getItem('xAuthToken'),
       show: false,
-      url: ''
+      url: '',
+      historyFile: []
     }
   },
   methods: {
     beforeUpload(file) {
       let typeFlag = file.type === 'image/jpeg';
       if (!typeFlag) {
-        this.$message.error("只能上次JPG格式图片");
+        this.$message.error("只能上传JPG格式图片");
       }
       return typeFlag;
     },
@@ -54,7 +56,23 @@ export default {
     showUrl(url) {
       this.url = url;
       this.show = true;
+    },
+    listHistoryImage() {
+      let num = 20;
+      let type = 'JPEG_IMAGE';
+      this.$api.coreImage.listOssPublicImage(num, type).then(data => {
+        data.forEach(image => {
+          let file = {
+            name: image.id,
+            url: `${this.$minio_endpoint}/${image.objName}`
+          }
+          this.historyFile.unshift(file);
+        })
+      })
     }
+  },
+  mounted() {
+    this.listHistoryImage();
   }
 }
 </script>
