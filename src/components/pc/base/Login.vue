@@ -9,7 +9,6 @@
     </div>
     <div id="link-box">
       <el-link type="info" id="to-register-btn" @click="flip">还没有账号？去注册</el-link><br>
-      <el-link type="info" id="forget-password-btn">忘记密码</el-link>
     </div>
   </div>
 </template>

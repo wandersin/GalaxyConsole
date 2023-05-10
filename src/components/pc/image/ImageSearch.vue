@@ -43,6 +43,7 @@
             <i class="el-icon-info ocr-image-operation-item"></i>
             <span>{{ item.datetime | dataFormat('YYYY-MM-DD') }}</span>
           </div>
+          <el-button v-if="item.fileType === 'jpeg'" id="ocr-image2url-btn" icon="el-icon-upload2" circle @click="uploadOssPublic(item)"></el-button>
           <el-image style="height: 10rem" :src="getImageSrcById(item.id)" :fit="fit" lazy :previewSrcList="previewList"/>
           <div class="ocr-image-url" @click="showImageInfo(item)">{{ item.fileName }}</div>
         </div>
@@ -126,6 +127,13 @@ export default {
         this.page.show = true;
       })
     },
+    uploadOssPublic(file) {
+      this.$api.coreImage.uploadOcrImage(file.id).then(() => {
+        this.$message.success('图片外链生成成功');
+      }).catch(() => {
+        this.$message.error('图片外链生成失败');
+      })
+    },
     getImageSrcById(id) {
       let token = localStorage.getItem('xAuthToken');
       return `${this.$core_baseUrl}/image/${token}/${id}/binary`;
@@ -171,7 +179,7 @@ export default {
   cursor: pointer;
 }
 
-.ocr-image-body:hover .ocr-image-url, .ocr-image-body:hover .ocr-image-operation {
+.ocr-image-body:hover .ocr-image-url, .ocr-image-body:hover .ocr-image-operation, .ocr-image-body:hover #ocr-image2url-btn {
   visibility: inherit;
 }
 
@@ -220,5 +228,13 @@ export default {
 .ocr-detail-viewer-box {
   height: 60vh;
   overflow: auto;
+}
+
+#ocr-image2url-btn {
+  visibility: hidden;
+  position: absolute;
+  top: 2.5rem;
+  right: .5rem;
+  z-index: 99;
 }
 </style>
