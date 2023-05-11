@@ -8,8 +8,8 @@
                accept="image"
                :before-upload="beforeUpload">
       <i class="el-icon-plus"></i>
-      <div slot="file" slot-scope="{file}">
-        <img class="el-upload-list__item-thumbnail" :src="file.url" alt="">
+      <div slot="file" slot-scope="{file}" style="height: 100%;">
+        <el-image class="el-upload-list__item-thumbnail" :src="file.url" fit="cover"></el-image>
         <span class="el-upload-list__item-actions">
           <el-button plain @click="showUrl(file.url)">查看外链</el-button>
         </span>
