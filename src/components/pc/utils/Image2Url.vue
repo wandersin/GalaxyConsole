@@ -16,7 +16,10 @@
       </div>
     </el-upload>
     <el-dialog title="图片外部链接" :visible.sync="show">
-      <div>{{ this.url }}</div>
+      <div>
+        <span style="margin: 0 1rem;">{{ url }}</span>
+        <el-button icon="el-icon-document-copy" size="mini" plain @click="copyImageUrl(url)"></el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -69,6 +72,10 @@ export default {
           this.historyFile.unshift(file);
         })
       })
+    },
+    async copyImageUrl(text) {
+      await navigator.clipboard.writeText(text);
+      this.$message.success("图片外链已复制到剪贴板");
     }
   },
   mounted() {
