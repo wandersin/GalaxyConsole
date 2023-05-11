@@ -21,13 +21,11 @@
 </template>
 
 <script>
-import ali from '@/images/alipay.jpg';
-
 export default {
   name: "LeftMenu",
   data() {
     return {
-      ali: ali,
+      ali: `${this.$minio_endpoint}/image/1b/1b21890d87fe0613e22de53995eaa16f`,
       menuList: []
     }
   },
