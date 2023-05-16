@@ -5,7 +5,7 @@
       <!-- 只有一级菜单时index和indexPath作用相同 -->
       <el-menu class="el-menu-vertical-demo" @select="select" unique-opened>
         <!-- 独立菜单 -->
-        <el-menu-item v-for="item in menuList.item" :index="item.index" :key="item.id" :disabled="item.disable" class="menu-item">
+        <el-menu-item v-for="item in menuList.item" :index="item.index" :key="item.id" :disabled="item.disable">
           <i :class="item.icon"></i>
           <span slot="title">{{ item.title }}</span>
           <el-tag v-if="item.tag != null && item.tag !== ''" class="beta-tag" type="danger" effect="plain">{{ item.tag }}</el-tag>
@@ -15,7 +15,7 @@
           <template slot="title">
             <span class="menu-group-title">{{ group.name }}</span>
           </template>
-          <el-menu-item v-for="item in group.list" :index="item.index" :key="item.id" :disabled="item.disable" class="menu-item">
+          <el-menu-item v-for="item in group.list" :index="item.index" :key="item.id" :disabled="item.disable">
             <i :class="item.icon"></i>
             <span slot="title">{{ item.title }}</span>
             <el-tag v-if="item.tag != null && item.tag !== ''" class="beta-tag" type="danger" effect="plain">{{ item.tag }}</el-tag>
@@ -85,10 +85,6 @@ export default {
   bottom: 0;
   right: 5%;
   margin: auto;
-}
-
-.menu-item {
-    color: black;
 }
 
 .menu-group-title {
