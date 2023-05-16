@@ -1,9 +1,10 @@
 import coreService from "@/utils/core-service";
 
 const imageApi = {
-    search: (keyWord, start, row, precision) => coreService({
-        url: `/image/search/word?word=${keyWord}&start=${start}&row=${row}&precision=${precision}`,
-        method: 'get'
+    search: (searchParam) => coreService({
+        url: `/image/search/word`,
+        method: 'get',
+        params: searchParam
     }),
     listOssPublicImage: (num, type) => coreService({
         url: `/oss/list?num=${num}&type=${type}`,

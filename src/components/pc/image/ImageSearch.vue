@@ -2,7 +2,7 @@
   <div id="image-ocr-root">
     <el-row id="ocr-input-row">
       <el-col :span="2">
-        <el-select v-model="precision" placeholder="请选择搜索模式">
+        <el-select v-model="searchParam.precision" placeholder="请选择搜索模式">
           <el-option
               v-for="item in selectionType"
               :key="item.key"
@@ -12,7 +12,7 @@
         </el-select>
       </el-col>
       <el-col :span="4">
-        <el-input v-model="keyWord" placeholder="请输入关键词" @keydown.enter.native="search"></el-input>
+        <el-input v-model="searchParam.searchKey" placeholder="请输入关键词" @keydown.enter.native="search"></el-input>
       </el-col>
       <el-col :span="2">
         <el-button @click="search">搜索</el-button>
@@ -77,7 +77,13 @@ export default {
   name: "ImageSearch",
   data() {
     return {
-      keyWord: '',
+      searchParam: {
+        searchKey: '',
+        start: 0,
+        row: 24,
+        precision: 75,
+        type: 'KEY_WORD'
+      },
       imageInfo:[],
       fit: 'cover',
       page: {
@@ -87,7 +93,6 @@ export default {
         size: [12, 24, 48],
         show: false
       },
-      precision: 75,
       selectionType: [
         {key: '精确搜索', precision: 100},
         {key: '标准搜索', precision: 75},
@@ -117,7 +122,7 @@ export default {
     search() {
       this.previewList = [];
       this.imageInfo = [];
-      this.$api.coreImage.search(this.keyWord, this.page.start, this.page.row, this.precision).then(data => {
+      this.$api.coreImage.search(this.searchParam).then(data => {
         this.page.numFound = data.numFound;
         let tmpList = data.list;
         for (let i = 0; i < tmpList.length; i++) {
