@@ -2,17 +2,27 @@
   <div id="image-ocr-root">
     <el-row id="ocr-input-row">
       <el-col :span="2">
-        <el-select v-model="searchParam.precision" placeholder="请选择搜索模式">
+        <el-select v-model="searchParam.type" placeholder="请选择搜索方式">
           <el-option
-              v-for="item in selectionType"
+              v-for="item in searchType"
               :key="item.key"
               :label="item.key"
-              :value="item.precision">
+              :value="item.type">
           </el-option>
         </el-select>
       </el-col>
       <el-col :span="4">
         <el-input v-model="searchParam.searchKey" placeholder="请输入关键词" @keydown.enter.native="search"></el-input>
+      </el-col>
+      <el-col v-if="searchParam.type === 'KEY_WORD'" :span="2">
+        <el-select v-model="searchParam.precision" placeholder="请选择置信模式">
+          <el-option
+              v-for="item in searchPrecision"
+              :key="item.key"
+              :label="item.key"
+              :value="item.precision">
+          </el-option>
+        </el-select>
       </el-col>
       <el-col :span="2">
         <el-button @click="search">搜索</el-button>
@@ -84,6 +94,16 @@ export default {
         precision: 75,
         type: 'KEY_WORD'
       },
+      searchType: [
+        {key: '关键字搜索', type: 'KEY_WORD'},
+        {key: '文件名搜索', type: 'FILE_NAME'},
+        {key: 'id搜索', type: 'IMAGE_ID'}
+      ],
+      searchPrecision: [
+        {key: '精确搜索', precision: 100},
+        {key: '标准搜索', precision: 75},
+        {key: '模糊搜索', precision: 50}
+      ],
       imageInfo:[],
       fit: 'cover',
       page: {
@@ -93,11 +113,6 @@ export default {
         size: [12, 24, 48],
         show: false
       },
-      selectionType: [
-        {key: '精确搜索', precision: 100},
-        {key: '标准搜索', precision: 75},
-        {key: '模糊搜索', precision: 50}
-      ],
       previewList: [],
       detailFlag: false,
       detail: {}
