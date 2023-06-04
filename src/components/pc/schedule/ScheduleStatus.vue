@@ -23,7 +23,7 @@ export default {
   methods: {
     // 查询当前schedule是否在运行中
     loadScheduleStatus(name) {
-      this.$commonUtils.get(`http://192.168.3.2:58080/apollo/schedule/all`, data => {
+      this.$commonUtils.get(`http://192.168.3.3:58080/apollo/schedule/all`, data => {
         this.running = data.indexOf(name) > -1 ? 'running' : 'stopped';
       })
     }
