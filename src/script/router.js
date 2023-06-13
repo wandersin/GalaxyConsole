@@ -4,7 +4,7 @@ import VueRouter from "vue-router";
 import pcLoginPage from "@/components/pc/base/LoginPage";
 import pcIndex from "@/components/pc/base/Index";
 
-import mobileIndex from "@/components/mobile/index.vue"
+import mobileIndex from "@/components/mobile/base/Index.vue"
 import mobileLoginPage from "@/components/mobile/base/LoginPage.vue"
 
 Vue.use(VueRouter);
