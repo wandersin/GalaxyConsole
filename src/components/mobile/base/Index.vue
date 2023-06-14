@@ -1,10 +1,15 @@
 <template>
   <div>
     <!-- 头部 -->
-    <main-header @showDrawer="showDrawer"/>
+    <div id="mobile-app-header">
+      <main-header @showDrawer="showDrawer"/>
+    </div>
+    <div id="mobile-app-main">
+      <component :is="currentComponent"></component>
+    </div>
     <!-- 侧边栏 -->
     <el-drawer :visible.sync="drawerFlag" direction="ltr" size="70%" :show-close="showClose">
-      <left-menu/>
+      <left-menu @selectLeftMenu="selectLeftMenu"/>
     </el-drawer>
   </div>
 </template>
@@ -12,13 +17,15 @@
 <script>
 import MainHeader from "@/components/mobile/base/MainHeader.vue";
 import LeftMenu from "@/components/mobile/base/LeftMenu.vue";
+import ImageSearch from "@/components/mobile/image/ImageSearch.vue";
 
 export default {
   name: "index",
   data() {
     return {
       drawerFlag: false,
-      showClose: false
+      showClose: false,
+      currentComponent: ''
     }
   },
   methods: {
@@ -27,15 +34,34 @@ export default {
     },
     hideDrawer() {
       this.drawerFlag = false;
+    },
+    selectLeftMenu(index) {
+      this.currentComponent = index;
+      this.hideDrawer();
     }
   },
   components: {
     MainHeader,
-    LeftMenu
+    LeftMenu,
+    ImageSearch,
   }
 }
 </script>
 
 <style scoped>
+#mobile-app-header {
+  width: 100%;
+  height: 3rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
 
+#mobile-app-main {
+  width: 100%;
+  height: calc(100% - 3rem);
+  position: absolute;
+  top: 3rem;
+  left: 0;
+}
 </style>

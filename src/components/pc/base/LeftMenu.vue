@@ -48,7 +48,7 @@ export default {
     }
   },
   created() {
-    this.$api.coreIndex.listMenu().then(data => {
+    this.$api.coreIndex.listMenu(2).then(data => {
       this.menuList = data;
     })
   }
