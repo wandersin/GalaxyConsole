@@ -22,7 +22,7 @@
           background
           :pager-count="5"
           @current-change="pageChangeHandler"
-          :page-size="page.row"
+          :page-size="searchParam.row"
           layout="prev, pager, next"
           :total="page.numFound">
       </el-pagination>
@@ -54,8 +54,6 @@ export default {
       imageInfo:[],
       fit: 'cover',
       page: {
-        start: 0,
-        row: 16,
         numFound: 0,
         show: false
       },
@@ -70,7 +68,7 @@ export default {
   methods: {
     // 当前页发生变化
     pageChangeHandler(page) {
-      this.page.start = (page - 1) * this.page.row;
+      this.searchParam.start = (page - 1) * this.searchParam.row;
       this.search();
     },
     // 搜索, 并刷新结果
