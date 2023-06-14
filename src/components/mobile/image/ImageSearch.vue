@@ -1,53 +1,12 @@
 <template>
   <div id="image-ocr-root">
-    <el-row id="ocr-input-row">
-      <el-col :span="2">
-        <el-select v-model="searchParam.type" placeholder="请选择搜索方式">
-          <el-option
-              v-for="item in searchType"
-              :key="item.key"
-              :label="item.key"
-              :value="item.type">
-          </el-option>
-        </el-select>
-      </el-col>
-      <el-col :span="4">
-        <el-input v-model="searchParam.searchKey" placeholder="请输入关键词" @keydown.enter.native="search"></el-input>
-      </el-col>
-      <el-col v-if="searchParam.type === 'KEY_WORD'" :span="2">
-        <el-select v-model="searchParam.precision" placeholder="请选择置信模式">
-          <el-option
-              v-for="item in searchPrecision"
-              :key="item.key"
-              :label="item.key"
-              :value="item.precision">
-          </el-option>
-        </el-select>
-      </el-col>
-      <el-col :span="2">
-        <el-button @click="search">搜索</el-button>
-      </el-col>
-      <el-col :span="1">
-        <el-tooltip class="item" effect="dark" placement="right">
-          <div slot="content">
-            输入要查询的文字开始搜索图片
-            <br>
-            搜索空或'*'可以查询所有图片
-            <br>
-            图片按时间倒序排列
-            <br>
-            点击图片可以查看大图
-            <br>
-            点击标签可以查看详细信息
-          </div>
-          <div id="ocr-point-icon-box">
-            <i class="el-icon-warning-outline" id="ocr-point-icon"></i>
-          </div>
-        </el-tooltip>
-      </el-col>
+    <el-row type="flex" class="header-search-row" align="middle">
+      <el-input placeholder="请输入关键词" v-model="searchParam.searchKey" size="medium" class="input-with-select input-img-search" @keydown.enter.native="search">
+        <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+      </el-input>
     </el-row>
     <el-row>
-      <el-col v-for="item in imageInfo" v-bind:key="item.id" :span="4" class="ocr-image-box">
+      <el-col v-for="item in imageInfo" v-bind:key="item.id" :span="12" class="ocr-image-box">
         <div class="ocr-image-body">
           <div class="ocr-image-operation" @click="showImageInfo(item)">
             <i class="el-icon-info ocr-image-operation-item"></i>
@@ -94,11 +53,6 @@ export default {
         precision: 75,
         type: 'KEY_WORD'
       },
-      searchType: [
-        {key: '关键字搜索', type: 'KEY_WORD'},
-        {key: '文件名搜索', type: 'FILE_NAME'},
-        {key: 'id搜索', type: 'IMAGE_ID'}
-      ],
       searchPrecision: [
         {key: '精确搜索', precision: 100},
         {key: '标准搜索', precision: 75},
@@ -167,21 +121,18 @@ export default {
 </script>
 
 <style scoped>
-#ocr-input-row {
-  padding: 1rem .5rem;
-  position: relative;
+.header-search-row {
+  height: 3rem;
+  margin: 0 3rem;
+  z-index: 99;
 }
 
-#ocr-point-icon {
-  font-size: 1.5rem;
-  color: gray;
+/deep/ .el-input__inner {
+  border-radius: .5rem 0 0 .5rem;
 }
 
-#ocr-point-icon-box {
-  position: absolute;
-  height: calc(100% - 2rem);
-  display: flex;
-  align-items: center;
+/deep/ .el-input-group__append {
+  border-radius: 0 .5rem .5rem 0;
 }
 
 .ocr-image-box {

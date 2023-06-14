@@ -55,13 +55,14 @@ export default {
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 9;
 }
 
 #mobile-app-main {
   width: 100%;
-  height: calc(100% - 3rem);
+  height: 100%;
   position: absolute;
-  top: 3rem;
+  top: 0;
   left: 0;
 }
 </style>
