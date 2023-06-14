@@ -17,7 +17,7 @@
         </div>
       </el-col>
     </el-row>
-    <el-row v-show="page.show">
+    <el-row class="pagination-row" v-show="page.show">
       <el-pagination
           background
           :pager-count="5"
@@ -182,6 +182,9 @@ export default {
 }
 
 .image-show-row {
-  background-color: lightgoldenrodyellow;
+}
+
+.pagination-row {
+  margin: .5rem;
 }
 </style>
