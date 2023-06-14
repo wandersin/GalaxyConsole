@@ -55,7 +55,7 @@
           </div>
           <el-button v-if="item.fileType === 'jpeg'" id="ocr-image2url-btn" icon="el-icon-upload2" circle @click="uploadOssPublic(item)"></el-button>
           <el-image style="height: 10rem" :src="getImageSrcById(item.id)" :fit="fit" lazy :previewSrcList="previewList"/>
-          <div class="ocr-image-url" @click="showImageInfo(item)">{{ item.fileName }}</div>
+          <div class="ocr-image-name" @click="showImageInfo(item)">{{ item.fileName }}</div>
         </div>
       </el-col>
     </el-row>
@@ -199,7 +199,7 @@ export default {
   cursor: pointer;
 }
 
-.ocr-image-body:hover .ocr-image-url, .ocr-image-body:hover .ocr-image-operation, .ocr-image-body:hover #ocr-image2url-btn {
+.ocr-image-body:hover .ocr-image-name, .ocr-image-body:hover .ocr-image-operation, .ocr-image-body:hover #ocr-image2url-btn {
   visibility: inherit;
 }
 
@@ -226,7 +226,7 @@ export default {
   cursor: pointer;
 }
 
-.ocr-image-url {
+.ocr-image-name {
   visibility: hidden;
   position: absolute;
   bottom: 0;

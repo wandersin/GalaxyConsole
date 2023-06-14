@@ -5,32 +5,30 @@
         <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
       </el-input>
     </el-row>
-    <el-row>
+    <el-row class="image-show-row">
       <el-col v-for="item in imageInfo" v-bind:key="item.id" :span="12" class="ocr-image-box">
         <div class="ocr-image-body">
           <div class="ocr-image-operation" @click="showImageInfo(item)">
             <i class="el-icon-info ocr-image-operation-item"></i>
             <span>{{ item.datetime | dataFormat('YYYY-MM-DD') }}</span>
           </div>
-          <el-button v-if="item.fileType === 'jpeg'" id="ocr-image2url-btn" icon="el-icon-upload2" circle @click="uploadOssPublic(item)"></el-button>
           <el-image style="height: 10rem" :src="getImageSrcById(item.id)" :fit="fit" lazy :previewSrcList="previewList"/>
-          <div class="ocr-image-url" @click="showImageInfo(item)">{{ item.fileName }}</div>
+          <div class="ocr-image-name" @click="showImageInfo(item)">{{ item.fileName }}</div>
         </div>
       </el-col>
     </el-row>
     <el-row v-show="page.show">
       <el-pagination
           background
-          @size-change="pageSizeChangeHandler"
+          :pager-count="5"
           @current-change="pageChangeHandler"
-          :page-sizes="page.size"
           :page-size="page.row"
-          layout="total, sizes, prev, pager, next"
+          layout="prev, pager, next"
           :total="page.numFound">
       </el-pagination>
     </el-row>
     <el-row id="ocr-viewer-row">
-      <el-dialog :visible.sync="detailFlag" class="dialog-panel" width="40rem">
+      <el-dialog :visible.sync="detailFlag" class="dialog-panel" width="90%">
         <div class="ocr-detail-viewer-box">
           <json-viewer id="ocr-detail-viewer" :value="detail" copyable></json-viewer>
         </div>
@@ -49,22 +47,16 @@ export default {
       searchParam: {
         searchKey: '',
         start: 0,
-        row: 24,
+        row: 16,
         precision: 75,
         type: 'KEY_WORD'
       },
-      searchPrecision: [
-        {key: '精确搜索', precision: 100},
-        {key: '标准搜索', precision: 75},
-        {key: '模糊搜索', precision: 50}
-      ],
       imageInfo:[],
       fit: 'cover',
       page: {
         start: 0,
-        row: 24,
+        row: 16,
         numFound: 0,
-        size: [12, 24, 48],
         show: false
       },
       previewList: [],
@@ -76,15 +68,9 @@ export default {
     JsonViewer
   },
   methods: {
-    // 当前页发送变化
+    // 当前页发生变化
     pageChangeHandler(page) {
       this.page.start = (page - 1) * this.page.row;
-      this.search();
-    },
-    // 每页显示个数变化
-    pageSizeChangeHandler(size) {
-      this.page.row = size;
-      this.page.start = 0;
       this.search();
     },
     // 搜索, 并刷新结果
@@ -99,13 +85,6 @@ export default {
           this.previewList.push(this.getImageSrcById(tmpList[i].id));
         }
         this.page.show = true;
-      })
-    },
-    uploadOssPublic(file) {
-      this.$api.coreImage.uploadOcrImage(file.id).then(() => {
-        this.$message.success('图片外链生成成功');
-      }).catch(() => {
-        this.$message.error('图片外链生成失败');
       })
     },
     getImageSrcById(id) {
@@ -123,7 +102,8 @@ export default {
 <style scoped>
 .header-search-row {
   height: 3rem;
-  margin: 0 3rem;
+  margin: 0 3.5rem;
+  padding: 0 .5rem;
   z-index: 99;
 }
 
@@ -150,7 +130,7 @@ export default {
   cursor: pointer;
 }
 
-.ocr-image-body:hover .ocr-image-url, .ocr-image-body:hover .ocr-image-operation, .ocr-image-body:hover #ocr-image2url-btn {
+.ocr-image-body:hover .ocr-image-name, .ocr-image-body:hover .ocr-image-operation {
   visibility: inherit;
 }
 
@@ -177,7 +157,7 @@ export default {
   cursor: pointer;
 }
 
-.ocr-image-url {
+.ocr-image-name {
   visibility: hidden;
   position: absolute;
   bottom: 0;
@@ -201,11 +181,7 @@ export default {
   overflow: auto;
 }
 
-#ocr-image2url-btn {
-  visibility: hidden;
-  position: absolute;
-  top: 2.5rem;
-  right: .5rem;
-  z-index: 99;
+.image-show-row {
+  background-color: lightgoldenrodyellow;
 }
 </style>
