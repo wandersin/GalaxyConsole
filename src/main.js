@@ -16,6 +16,7 @@ Axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
 Vue.prototype.$commonUtils = commonUtils;
 Vue.prototype.$rsa = rsa;
 Vue.prototype.$axios = Axios;
+Vue.prototype.$prophet_baseUrl = process.env.VUE_APP_PROPHET_BASEURL;
 Vue.prototype.$core_baseUrl = process.env.VUE_APP_CORE_BASEURL;
 Vue.prototype.$auth_baseUrl = process.env.VUE_APP_AUTH_MAN_BASEURL;
 Vue.prototype.$archimedes_active = process.env.VUE_APP_ARCHIMEDES_ACTIVE;
