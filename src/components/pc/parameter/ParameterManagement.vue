@@ -1,5 +1,42 @@
 <template>
-  <div></div>
+  <div id="parameter-managerment-root">
+    <el-row id="parameter-managerment-controller-row">
+      <el-button @click="listParameter" class="controller-item">刷新</el-button>
+      <el-button class="controller-item">添加参数</el-button>
+      <el-select v-model="query.application" placeholder="按应用筛选" @change="listParameter" class="controller-item">
+        <el-option key="application-all" label="全部" value=""></el-option>
+        <el-option v-for="item in filter.application" :key="item" :label="item" :value="item"></el-option>
+      </el-select>
+    </el-row>
+    <el-row id="parameter-managerment-tb-row">
+      <el-table :data="parameterList" :height="table.height" border style="width: 100%">
+        <el-table-column prop="application" label="服务" width="200"></el-table-column>
+        <el-table-column prop="key" label="参数名" width="250"></el-table-column>
+        <el-table-column label="参数值" >
+          <template slot-scope="scope">
+            <div v-for="(list, env, index) in scope.row.active" :key="getParameterDivKey(scope.row, index)" style="margin: .5rem;">
+              <el-row type="flex" align="middle">
+                <el-col :span="2">
+                  <el-tag :key="env" effect="plain" style="width: 75%; text-align: center;">
+                    {{ env }}
+                  </el-tag>
+                </el-col>
+                <el-col :span="14">
+                  <div v-for="item in list" :key="item.parameterId" class="parameter-value-box">
+                    {{ item.value }}
+                  </div>
+                </el-col>
+                <el-col :span="8" style="text-align: center;">
+                  <el-button type="success" size="small" plain>刷新缓存</el-button>
+                  <el-button type="warning" size="small" plain>编辑</el-button>
+                </el-col>
+              </el-row>
+            </div>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-row>
+  </div>
 </template>
 
 <script>
@@ -12,21 +49,64 @@ export default {
         application: '',
         active: '',
         key: ''
+      },
+      filter: {
+        application: []
+      },
+      parameterList: [],
+      table: {
+        height: 0
       }
     }
   },
   methods: {
     listParameter() {
+      this.parameterList.length = 0;
       this.$api.prophetParameter.listParameter(this.query).then(data => {
-        console.log(data);
+        this.parameterList = data;
+      })
+    },
+    getParameterDivKey(param, index) {
+      return `${param.application}-${param.key}-${index}`;
+    },
+    listApplication() {
+      this.filter.application.length = 0;
+      this.$api.prophetApplication.listApplication().then(data => {
+        this.filter.application = data;
       })
     }
   },
   created() {
     this.listParameter();
+    this.listApplication();
+    this.table.height = window.innerHeight * 0.8;
   }
 }
 </script>
 
 <style scoped>
+#parameter-managerment-root {
+  padding: .5rem;
+}
+
+#parameter-managerment-tb-row {
+  padding: .5rem;
+  height: 60vh;
+}
+
+#parameter-managerment-controller-row {
+  padding: .5rem;
+}
+
+.parameter-value-box {
+  background-color: #d3d3d35c;
+  border-radius: 5px;
+  padding: .25rem 1rem;
+  margin: .25rem;
+  width: fit-content;
+}
+
+.controller-item {
+  margin: 0 1rem 0 0;
+}
 </style>
