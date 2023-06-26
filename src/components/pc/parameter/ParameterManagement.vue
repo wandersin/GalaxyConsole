@@ -2,14 +2,14 @@
   <div id="parameter-managerment-root">
     <el-row id="parameter-managerment-controller-row">
       <el-button @click="listParameter" class="controller-item">刷新</el-button>
-      <el-button class="controller-item">添加参数</el-button>
+      <el-button class="controller-item" @click="add">添加参数</el-button>
       <el-select v-model="query.application" placeholder="按应用筛选" @change="listParameter" class="controller-item">
         <el-option key="application-all" label="全部" value=""></el-option>
         <el-option v-for="item in filter.application" :key="item" :label="item" :value="item"></el-option>
       </el-select>
     </el-row>
     <el-row id="parameter-managerment-tb-row">
-      <el-table :data="parameterList" :height="table.height" border style="width: 100%">
+      <el-table :data="parameterList" :height="table.height" border style="width: 100%" v-loading="table.loading">
         <el-table-column prop="application" label="服务" width="200"></el-table-column>
         <el-table-column prop="key" label="参数名" width="250"></el-table-column>
         <el-table-column label="参数值" >
@@ -27,8 +27,8 @@
                   </div>
                 </el-col>
                 <el-col :span="8" style="text-align: center;">
-                  <el-button type="success" size="small" plain>刷新缓存</el-button>
-                  <el-button type="warning" size="small" plain>编辑</el-button>
+                  <el-button type="success" size="small" plain disabled>刷新缓存</el-button>
+                  <el-button type="warning" size="small" plain @click="edit(scope.row.application, scope.row.key, env)">编辑</el-button>
                 </el-col>
               </el-row>
             </div>
@@ -36,13 +36,20 @@
         </el-table-column>
       </el-table>
     </el-row>
+    <el-row id="parameter-edit-row">
+      <parameter-edit ref="paramterEdit" @listParameter="listParameter"/>
+    </el-row>
   </div>
 </template>
 
 <script>
+import ParameterEdit from "@/components/pc/parameter/ParameterEdit.vue";
+
 export default {
   name: "ParameterManagement",
-  components: {},
+  components: {
+    ParameterEdit
+  },
   data() {
     return {
       query: {
@@ -55,15 +62,18 @@ export default {
       },
       parameterList: [],
       table: {
-        height: 0
+        height: 0,
+        loading: false
       }
     }
   },
   methods: {
     listParameter() {
       this.parameterList.length = 0;
+      this.table.loading = true;
       this.$api.prophetParameter.listParameter(this.query).then(data => {
         this.parameterList = data;
+        this.table.loading = false;
       })
     },
     getParameterDivKey(param, index) {
@@ -74,6 +84,26 @@ export default {
       this.$api.prophetApplication.listApplication().then(data => {
         this.filter.application = data;
       })
+    },
+    edit(application, key, active) {
+      this.$refs.paramterEdit.model = 'edit';
+      this.$refs.paramterEdit.info = {
+        application: application,
+        key: key,
+        active: active,
+        list: []
+      };
+      this.$refs.paramterEdit.show();
+    },
+    add() {
+      this.$refs.paramterEdit.model = 'add';
+      this.$refs.paramterEdit.info = {
+        application: '',
+        key: '',
+        active: '',
+        list: []
+      };
+      this.$refs.paramterEdit.show();
     }
   },
   created() {
