@@ -151,9 +151,9 @@ export default {
         application: this.info.application,
         active: this.info.active,
         key: this.info.key,
-        list: []
+        value: []
       }
-      param.list.push(row.value);
+      param.value.push(row.value);
       body.push(param);
       this.$api.prophetParameter.add(body).then(() => {
         this.refreshInfo();
