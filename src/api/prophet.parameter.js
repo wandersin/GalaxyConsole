@@ -17,7 +17,7 @@ const groupApi = {
     }),
     add: (arr) => prophetService({
         url: `/parameter/add`,
-        method: 'post',
+        method: 'put',
         data: arr
     }),
     delete: (arr) => prophetService({
