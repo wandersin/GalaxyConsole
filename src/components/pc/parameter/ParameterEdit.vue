@@ -13,7 +13,7 @@
       <el-button plain @click="addParameter">添加参数值</el-button>
     </el-row>
     <el-row>
-      <el-table :data="info.list" border style="width: 100%">
+      <el-table :data="info.value" border style="width: 100%">
         <el-table-column prop="parameterId" label="id" width="300"></el-table-column>
         <el-table-column label="参数值">
           <template slot-scope="scope">
@@ -61,7 +61,12 @@ export default {
       },
       application: [],
       key: [],
-      info: {}
+      info: {
+        active: '',
+        application: '',
+        key: '',
+        value: []
+      }
     }
   },
   methods: {
@@ -88,7 +93,7 @@ export default {
       }).then(data => {
         this.info = data;
       }).catch(() => {
-        this.info.list = [];
+        this.info.value = [];
       })
     },
     listApplication() {
@@ -104,7 +109,7 @@ export default {
       })
     },
     addParameter() {
-      this.info.list.push({
+      this.info.value.push({
         parameterId: '<default>',
         edit: true,
         new: true
@@ -113,7 +118,7 @@ export default {
     deleteParameter(row, index) {
       if (row.new && row.edit) {
         // 取消新增参数, 可以直接删除
-        this.info.list.splice(index, 1);
+        this.info.value.splice(index, 1);
         return;
       }
       // 删除已有参数, 调用删除接口

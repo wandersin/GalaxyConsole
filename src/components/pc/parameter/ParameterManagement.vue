@@ -91,7 +91,7 @@ export default {
         application: application,
         key: key,
         active: active,
-        list: []
+        value: []
       };
       this.$refs.paramterEdit.show();
     },
@@ -101,7 +101,7 @@ export default {
         application: '',
         key: '',
         active: '',
-        list: []
+        value: []
       };
       this.$refs.paramterEdit.show();
     }
