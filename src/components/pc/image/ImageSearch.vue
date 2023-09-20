@@ -54,7 +54,7 @@
             <span>{{ item.datetime | dataFormat('YYYY-MM-DD') }}</span>
           </div>
           <el-button v-if="item.fileType === 'jpeg'" id="ocr-image2url-btn" icon="el-icon-upload2" circle @click="uploadOssPublic(item)"></el-button>
-          <el-image style="height: 10rem" :src="getImageSrcById(item.id)" :fit="fit" lazy :previewSrcList="previewList"/>
+          <el-image style="height: 10rem" :src="item.src" :fit="fit" lazy :previewSrcList="previewList"/>
           <div class="ocr-image-name" @click="showImageInfo(item)">{{ item.fileName }}</div>
         </div>
       </el-col>
@@ -140,11 +140,12 @@ export default {
         let tmpList = data.list;
         for (let i = 0; i < tmpList.length; i++) {
           this.imageInfo.push(tmpList[i]);
-          this.previewList.push(this.getImageSrcById(tmpList[i].id));
         }
+        this.createTempUrl();
         this.page.show = true;
       })
     },
+    // 生成图片外链
     uploadOssPublic(file) {
       this.$api.coreImage.uploadOcrImage(file.id).then(() => {
         this.$message.success('图片外链生成成功');
@@ -152,9 +153,21 @@ export default {
         this.$message.error('图片外链生成失败');
       })
     },
-    getImageSrcById(id) {
-      let token = localStorage.getItem('xAuthToken');
-      return `${this.$core_baseUrl}/image/${token}/${id}/binary`;
+    // tag: 通过axios携带header从后台获取图片, 生成浏览器临时路径展示
+    // 从后台下载图片并缓存
+    async createTempUrl() {
+      for (let i = 0; i < this.imageInfo.length; i++) {
+        let id = this.imageInfo[i].id;
+        let { data: result } = await this.$axios.get(`${this.$core_baseUrl}/image/${id}/binary`, {
+          headers: {
+            'X-Auth-Token': localStorage.getItem('xAuthToken')
+          },
+          responseType: 'blob'
+        });
+        let url = window.URL.createObjectURL(result);
+        this.imageInfo[i].src = url;
+        this.previewList.push(url);
+      }
     },
     showImageInfo(info) {
       this.detail = info;
@@ -172,7 +185,7 @@ export default {
 
 #ocr-point-icon {
   font-size: 1.5rem;
-  color: gray;
+  color: grey;
 }
 
 #ocr-point-icon-box {
