@@ -156,18 +156,18 @@ export default {
     // tag: 通过axios携带header从后台获取图片, 生成浏览器临时路径展示
     // 从后台下载图片并缓存
     async createTempUrl() {
-      for (let i = 0; i < this.imageInfo.length; i++) {
-        let id = this.imageInfo[i].id;
-        let { data: result } = await this.$axios.get(`${this.$core_baseUrl}/image/${id}/binary`, {
+      this.imageInfo.forEach(image => {
+        this.$axios.get(`${this.$core_baseUrl}/image/${image.id}/binary`, {
           headers: {
             'X-Auth-Token': localStorage.getItem('xAuthToken')
           },
           responseType: 'blob'
+        }).then(resp => {
+          let url = window.URL.createObjectURL(resp.data);
+          image.src = url;
+          this.previewList.push(url);
         });
-        let url = window.URL.createObjectURL(result);
-        this.imageInfo[i].src = url;
-        this.previewList.push(url);
-      }
+      })
     },
     showImageInfo(info) {
       this.detail = info;
