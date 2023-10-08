@@ -62,7 +62,7 @@
                 <span>{{ item.datetime | dataFormat('YYYY-MM-DD') }}</span>
               </div>
               <el-button v-if="item.fileType === 'jpeg'" id="ocr-image2url-btn" icon="el-icon-upload2" circle @click="uploadOssPublic(item)"></el-button>
-              <el-image style="height: 10rem" :src="item.src" :fit="fit" :preview-src-list="imageInfo.map(t => t.src)" :refresh="refresh" lazy/>
+              <el-image style="height: 10rem" :src="item.src" :fit="fit" :preview-src-list="imageInfo.map(t => t.src)" :refresh="refresh"/>
               <div class="ocr-image-name" @click="showImageInfo(item)">{{ item.fileName }}</div>
             </div>
           </template>
@@ -146,10 +146,7 @@ export default {
       this.imageInfo = [];
       this.$api.coreImage.search(this.searchParam).then(data => {
         this.page.numFound = data.numFound;
-        let tmpList = data.list;
-        for (let i = 0; i < tmpList.length; i++) {
-          this.imageInfo.push(tmpList[i]);
-        }
+        this.imageInfo = data.list;
         // 加载图片
         this.createTempUrl();
         this.page.show = true;
@@ -179,7 +176,6 @@ export default {
         }).then(resp => {
           image.src = window.URL.createObjectURL(resp.data);
           image.loading = false;
-          this.refresh++;
         });
       })
     },
@@ -187,6 +183,11 @@ export default {
       this.detail = info;
       this.detailFlag = true;
     }
+  },
+  created() {
+    setInterval(() => {
+      this.refresh++;
+    }, 500);
   }
 }
 </script>
