@@ -49,24 +49,15 @@
     <el-row>
       <el-col v-for="item in imageInfo" v-bind:key="item.id" :span="4" class="ocr-image-box">
         <!-- 图片展示 -->
-        <el-skeleton style="width: 240px" :loading="item.loading" animated>
-          <template slot="template">
-            <div class="ocr-image-body-skeleton">
-              <el-skeleton-item class="image-skeleton" variant="image"/>
-            </div>
-          </template>
-          <template>
-            <div class="ocr-image-body" style="border: 1px solid lightgray; height: 10rem; text-align: center; position: relative;">
-              <div class="ocr-image-operation" @click="showImageInfo(item)">
-                <i class="el-icon-info ocr-image-operation-item"></i>
-                <span>{{ item.datetime | dataFormat('YYYY-MM-DD') }}</span>
-              </div>
-              <el-button v-if="item.fileType === 'jpeg'" id="ocr-image2url-btn" icon="el-icon-upload2" circle @click="uploadOssPublic(item)"></el-button>
-              <el-image style="height: 10rem" :src="item.src" :fit="fit" :preview-src-list="imageInfo.map(t => t.src)" :refresh="refresh"/>
-              <div class="ocr-image-name" @click="showImageInfo(item)">{{ item.fileName }}</div>
-            </div>
-          </template>
-        </el-skeleton>
+        <div class="ocr-image-body">
+          <div class="ocr-image-operation" @click="showImageInfo(item)">
+            <i class="el-icon-info ocr-image-operation-item"></i>
+            <span>{{ item.datetime | dataFormat('YYYY-MM-DD') }}</span>
+          </div>
+          <el-button v-if="item.fileType === 'jpeg'" id="ocr-image2url-btn" icon="el-icon-upload2" circle @click="uploadOssPublic(item)"></el-button>
+          <el-image v-show="item.show" style="height: 10rem" :src="item.src" :fit="fit" :preview-src-list="imageInfo.map(t => t.src)" :refresh="refresh"/>
+          <div class="ocr-image-name" @click="showImageInfo(item)">{{ item.fileName }}</div>
+        </div>
       </el-col>
     </el-row>
     <el-row v-show="page.show">
@@ -162,11 +153,10 @@ export default {
     },
     // tag: 通过axios携带header从后台获取图片, 生成浏览器临时路径展示
     // 从后台下载图片并缓存
-    async createTempUrl() {
-      for (let i = 0; i < this.imageInfo.length; i++) {
-        let image = this.imageInfo[i];
+    createTempUrl() {
+      this.imageInfo.forEach(image => {
         // 查询图片
-        await this.$axios.get(`${this.$core_baseUrl}/image/${image.id}/binary`, {
+        this.$axios.get(`${this.$core_baseUrl}/image/${image.id}/binary`, {
           headers: {
             'X-Auth-Token': localStorage.getItem('xAuthToken'),
             'Archimedes-Active': this.$archimedes_active
@@ -177,13 +167,10 @@ export default {
           }
         }).then(resp => {
           image.src = window.URL.createObjectURL(resp.data);
-          image.loading = false;
-          if ((i + 1) % 6 === 0) {
-            this.refresh++;
-          }
+          image.show = true;
+          this.refresh++;
         });
-      }
-      this.refresh++;
+      })
     },
     showImageInfo(info) {
       this.detail = info;
@@ -215,7 +202,8 @@ export default {
   padding: .5rem;
 }
 
-.ocr-image-body-skeleton {
+.ocr-image-body {
+  border: 1px solid lightgray;
   height: 10rem;
   text-align: center;
   position: relative;
