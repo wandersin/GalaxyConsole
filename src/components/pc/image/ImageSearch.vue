@@ -51,7 +51,7 @@
         <!-- 图片展示 -->
         <el-skeleton style="width: 240px" :loading="item.loading" animated>
           <template slot="template">
-            <div class="ocr-image-body-skeleton" style="border: none;">
+            <div class="ocr-image-body-skeleton">
               <el-skeleton-item class="image-skeleton" variant="image"/>
             </div>
           </template>
@@ -162,12 +162,14 @@ export default {
     },
     // tag: 通过axios携带header从后台获取图片, 生成浏览器临时路径展示
     // 从后台下载图片并缓存
-    createTempUrl() {
-      this.imageInfo.forEach(image => {
+    async createTempUrl() {
+      for (let i = 0; i < this.imageInfo.length; i++) {
+        let image = this.imageInfo[i];
         // 查询图片
-        this.$axios.get(`${this.$core_baseUrl}/image/${image.id}/binary`, {
+        await this.$axios.get(`${this.$core_baseUrl}/image/${image.id}/binary`, {
           headers: {
-            'X-Auth-Token': localStorage.getItem('xAuthToken')
+            'X-Auth-Token': localStorage.getItem('xAuthToken'),
+            'Archimedes-Active': this.$archimedes_active
           },
           responseType: 'blob',
           params: {
@@ -176,18 +178,17 @@ export default {
         }).then(resp => {
           image.src = window.URL.createObjectURL(resp.data);
           image.loading = false;
+          if ((i + 1) % 6 === 0) {
+            this.refresh++;
+          }
         });
-      })
+      }
+      this.refresh++;
     },
     showImageInfo(info) {
       this.detail = info;
       this.detailFlag = true;
     }
-  },
-  created() {
-    setInterval(() => {
-      this.refresh++;
-    }, 500);
   }
 }
 </script>
