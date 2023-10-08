@@ -56,7 +56,7 @@
             </div>
           </template>
           <template>
-            <div class="ocr-image-body">
+            <div class="ocr-image-body" style="border: 1px solid lightgray; height: 10rem; text-align: center; position: relative;">
               <div class="ocr-image-operation" @click="showImageInfo(item)">
                 <i class="el-icon-info ocr-image-operation-item"></i>
                 <span>{{ item.datetime | dataFormat('YYYY-MM-DD') }}</span>
@@ -190,6 +190,7 @@ export default {
             quality: 'ORIGINAL'
           }
         }).then(resp => {
+          // 因为每张图片大图获取所需时间不同, 可能会出现加入到数组中顺序不同的问题, 需要排序
           this.previewList.push(window.URL.createObjectURL(resp.data));
         });
       })
@@ -222,13 +223,6 @@ export default {
 
 .ocr-image-box {
   padding: .5rem;
-}
-
-.ocr-image-body {
-  border: 1px solid lightgray;
-  height: 10rem;
-  text-align: center;
-  position: relative;
 }
 
 .ocr-image-body-skeleton {
