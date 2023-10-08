@@ -48,15 +48,25 @@
     </el-row>
     <el-row>
       <el-col v-for="item in imageInfo" v-bind:key="item.id" :span="4" class="ocr-image-box">
-        <div class="ocr-image-body">
-          <div class="ocr-image-operation" @click="showImageInfo(item)">
-            <i class="el-icon-info ocr-image-operation-item"></i>
-            <span>{{ item.datetime | dataFormat('YYYY-MM-DD') }}</span>
-          </div>
-          <el-button v-if="item.fileType === 'jpeg'" id="ocr-image2url-btn" icon="el-icon-upload2" circle @click="uploadOssPublic(item)"></el-button>
-          <el-image style="height: 10rem" :src="item.src" :fit="fit" lazy :previewSrcList="previewList"/>
-          <div class="ocr-image-name" @click="showImageInfo(item)">{{ item.fileName }}</div>
-        </div>
+        <!-- 图片展示 -->
+        <el-skeleton style="width: 240px" :loading="item.loading" animated>
+          <template slot="template">
+            <div class="ocr-image-body-skeleton" style="border: none;">
+              <el-skeleton-item class="image-skeleton" variant="image"/>
+            </div>
+          </template>
+          <template>
+            <div class="ocr-image-body">
+              <div class="ocr-image-operation" @click="showImageInfo(item)">
+                <i class="el-icon-info ocr-image-operation-item"></i>
+                <span>{{ item.datetime | dataFormat('YYYY-MM-DD') }}</span>
+              </div>
+              <el-button v-if="item.fileType === 'jpeg'" id="ocr-image2url-btn" icon="el-icon-upload2" circle @click="uploadOssPublic(item)"></el-button>
+              <el-image style="height: 10rem" :src="item.thumbnail" :fit="fit" lazy :previewSrcList="previewList"/>
+              <div class="ocr-image-name" @click="showImageInfo(item)">{{ item.fileName }}</div>
+            </div>
+          </template>
+        </el-skeleton>
       </el-col>
     </el-row>
     <el-row v-show="page.show">
@@ -157,15 +167,30 @@ export default {
     // 从后台下载图片并缓存
     async createTempUrl() {
       this.imageInfo.forEach(image => {
+        // 获取缩略图
         this.$axios.get(`${this.$core_baseUrl}/image/${image.id}/binary`, {
           headers: {
             'X-Auth-Token': localStorage.getItem('xAuthToken')
           },
-          responseType: 'blob'
+          responseType: 'blob',
+          params: {
+            quality: 'THUMBNAIL'
+          }
         }).then(resp => {
-          let url = window.URL.createObjectURL(resp.data);
-          image.src = url;
-          this.previewList.push(url);
+          image.thumbnail = window.URL.createObjectURL(resp.data);
+          image.loading = false;
+        });
+        // 获取大图
+        this.$axios.get(`${this.$core_baseUrl}/image/${image.id}/binary`, {
+          headers: {
+            'X-Auth-Token': localStorage.getItem('xAuthToken')
+          },
+          responseType: 'blob',
+          params: {
+            quality: 'ORIGINAL'
+          }
+        }).then(resp => {
+          this.previewList.push(window.URL.createObjectURL(resp.data));
         });
       })
     },
@@ -201,6 +226,12 @@ export default {
 
 .ocr-image-body {
   border: 1px solid lightgray;
+  height: 10rem;
+  text-align: center;
+  position: relative;
+}
+
+.ocr-image-body-skeleton {
   height: 10rem;
   text-align: center;
   position: relative;
@@ -267,5 +298,10 @@ export default {
   top: 2.5rem;
   right: .5rem;
   z-index: 99;
+}
+
+.image-skeleton {
+  height: 10rem;
+  opacity: .8;
 }
 </style>
