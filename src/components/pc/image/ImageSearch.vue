@@ -62,7 +62,7 @@
                 <span>{{ item.datetime | dataFormat('YYYY-MM-DD') }}</span>
               </div>
               <el-button v-if="item.fileType === 'jpeg'" id="ocr-image2url-btn" icon="el-icon-upload2" circle @click="uploadOssPublic(item)"></el-button>
-              <el-image style="height: 10rem" :src="item.thumbnail" :fit="fit" lazy :previewSrcList="previewList"/>
+              <el-image style="height: 10rem" :src="item.src" :fit="fit" :preview-src-list="imageInfo.map(t => t.src)" :refresh="refresh" lazy/>
               <div class="ocr-image-name" @click="showImageInfo(item)">{{ item.fileName }}</div>
             </div>
           </template>
@@ -121,9 +121,9 @@ export default {
         size: [12, 24, 48],
         show: false
       },
-      previewList: [],
       detailFlag: false,
-      detail: {}
+      detail: {},
+      refresh: 0
     }
   },
   components: {
@@ -143,7 +143,6 @@ export default {
     },
     // 搜索, 并刷新结果
     search() {
-      this.previewList = [];
       this.imageInfo = [];
       this.$api.coreImage.search(this.searchParam).then(data => {
         this.page.numFound = data.numFound;
@@ -151,6 +150,7 @@ export default {
         for (let i = 0; i < tmpList.length; i++) {
           this.imageInfo.push(tmpList[i]);
         }
+        // 加载图片
         this.createTempUrl();
         this.page.show = true;
       })
@@ -165,22 +165,9 @@ export default {
     },
     // tag: 通过axios携带header从后台获取图片, 生成浏览器临时路径展示
     // 从后台下载图片并缓存
-    async createTempUrl() {
+    createTempUrl() {
       this.imageInfo.forEach(image => {
-        // 获取缩略图
-        this.$axios.get(`${this.$core_baseUrl}/image/${image.id}/binary`, {
-          headers: {
-            'X-Auth-Token': localStorage.getItem('xAuthToken')
-          },
-          responseType: 'blob',
-          params: {
-            quality: 'THUMBNAIL'
-          }
-        }).then(resp => {
-          image.thumbnail = window.URL.createObjectURL(resp.data);
-          image.loading = false;
-        });
-        // 获取大图
+        // 查询图片
         this.$axios.get(`${this.$core_baseUrl}/image/${image.id}/binary`, {
           headers: {
             'X-Auth-Token': localStorage.getItem('xAuthToken')
@@ -190,8 +177,9 @@ export default {
             quality: 'ORIGINAL'
           }
         }).then(resp => {
-          // 因为每张图片大图获取所需时间不同, 可能会出现加入到数组中顺序不同的问题, 需要排序
-          this.previewList.push(window.URL.createObjectURL(resp.data));
+          image.src = window.URL.createObjectURL(resp.data);
+          image.loading = false;
+          this.refresh++;
         });
       })
     },
