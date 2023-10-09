@@ -13,6 +13,10 @@ const imageApi = {
     uploadOcrImage: (id) => coreService({
         url: `/oss/image/upload/${id}`,
         method: 'post'
+    }),
+    deleteImage: (id) => coreService({
+        url: `/image/${id}`,
+        method: 'delete'
     })
 }
 

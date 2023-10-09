@@ -54,6 +54,7 @@
             <i class="el-icon-info ocr-image-operation-item"></i>
             <span>{{ item.datetime | dataFormat('YYYY-MM-DD') }}</span>
           </div>
+          <el-button id="ocr-delete-btn" icon="el-icon-delete" circle @click="deleteOcrImage(item.id)"></el-button>
           <el-button v-if="item.fileType === 'jpeg'" id="ocr-image2url-btn" icon="el-icon-upload2" circle @click="uploadOssPublic(item)"></el-button>
           <el-image v-show="item.show" style="height: 10rem" :src="item.src" :fit="fit" :preview-src-list="imageInfo.map(t => t.src)" :refresh="refresh"/>
           <div class="ocr-image-name" @click="showImageInfo(item)">{{ item.fileName }}</div>
@@ -151,6 +152,20 @@ export default {
         this.$message.error('图片外链生成失败');
       })
     },
+    deleteOcrImage(id) {
+      this.$confirm(`即将删除图片 ${id}, 此操作无法恢复, 是否继续`, '请确认', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$api.coreImage.deleteImage(id).then(() => {
+          this.$message.success('图片删除成功');
+          this.search();
+        }).catch(() => {
+          this.$message.error('删除失败, 请稍后重试');
+        })
+      });
+    },
     // tag: 通过axios携带header从后台获取图片, 生成浏览器临时路径展示
     // 从后台下载图片并缓存
     createTempUrl() {
@@ -213,7 +228,7 @@ export default {
   cursor: pointer;
 }
 
-.ocr-image-body:hover .ocr-image-name, .ocr-image-body:hover .ocr-image-operation, .ocr-image-body:hover #ocr-image2url-btn {
+.ocr-image-body:hover .ocr-image-name, .ocr-image-body:hover .ocr-image-operation, .ocr-image-body:hover #ocr-image2url-btn, .ocr-image-body:hover #ocr-delete-btn {
   visibility: inherit;
 }
 
@@ -272,8 +287,11 @@ export default {
   z-index: 99;
 }
 
-.image-skeleton {
-  height: 10rem;
-  opacity: .8;
+#ocr-delete-btn {
+  visibility: hidden;
+  position: absolute;
+  top: 2.5rem;
+  left: .5rem;
+  z-index: 99;
 }
 </style>
