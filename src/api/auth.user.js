@@ -19,8 +19,8 @@ const userApi = {
         url: `/user/logout/${token}`,
         method: 'post'
     }),
-    checkToken: (token) => authService({
-        url: `/user/verification/${token}`,
+    info: () => authService({
+        url: `/user/info`,
         method: 'get'
     }),
     list: (arr) => authService({

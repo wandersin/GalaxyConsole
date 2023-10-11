@@ -17,7 +17,7 @@ export default {
             return false;
         }
         try {
-            let resp = await api.authUser.checkToken(token);
+            let resp = await api.authUser.info(token);
             let result = !!resp;
             if (!result) {
                 localStorage.removeItem('xAuthToken');

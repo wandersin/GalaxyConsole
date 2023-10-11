@@ -50,7 +50,7 @@ export default {
   name: "Header",
   data() {
     return {
-      src: `${this.$auth_baseUrl}/user/portrait/${localStorage.getItem('xAuthToken')}`,
+      src: '',
       panelFlag: false,
       updatePasswordFlag: false,
       newPassword1: '',
@@ -112,8 +112,19 @@ export default {
   },
   mounted() {
     // 个人信息
-    this.$api.authUser.checkToken(localStorage.getItem('xAuthToken')).then(data => {
+    this.$api.authUser.info().then(data => {
       Vue.prototype.$me = data;
+    })
+
+    // 头像
+    this.$axios.get(`${this.$auth_baseUrl}/user/portrait`, {
+      headers: {
+        'X-Auth-Token': localStorage.getItem("xAuthToken"),
+        'Archimedes-Active': this.$archimedes_active
+      },
+      responseType: 'blob'
+    }).then(resp => {
+      this.src = window.URL.createObjectURL(resp.data);
     })
 
     let vue = this;
