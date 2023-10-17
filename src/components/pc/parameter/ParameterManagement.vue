@@ -7,6 +7,9 @@
         <el-option key="application-all" label="全部" value=""></el-option>
         <el-option v-for="item in filter.application" :key="item" :label="item" :value="item"></el-option>
       </el-select>
+      <el-input placeholder="请输入参数 KEY 进行查询" v-model="query.key" class="parameter-search-key">
+        <el-button slot="append" icon="el-icon-search" @click="listParameter"></el-button>
+      </el-input>
     </el-row>
     <el-row id="parameter-managerment-tb-row">
       <el-table :data="parameterList" :height="table.height" border style="width: 100%" v-loading="table.loading">
@@ -138,5 +141,9 @@ export default {
 
 .controller-item {
   margin: 0 1rem 0 0;
+}
+
+.parameter-search-key {
+  width: 25rem;
 }
 </style>
