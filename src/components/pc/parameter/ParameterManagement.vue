@@ -7,7 +7,7 @@
         <el-option key="application-all" label="全部" value=""></el-option>
         <el-option v-for="item in filter.application" :key="item" :label="item" :value="item"></el-option>
       </el-select>
-      <el-input placeholder="请输入参数 KEY 进行查询" v-model="query.key" class="parameter-search-key">
+      <el-input placeholder="请输入参数 KEY 进行查询" v-model="query.key" class="parameter-search-key" clearable>
         <el-button slot="append" icon="el-icon-search" @click="listParameter"></el-button>
       </el-input>
     </el-row>
