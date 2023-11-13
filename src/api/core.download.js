@@ -10,7 +10,7 @@ const downloadApi = {
         method: 'post'
     }),
     task: () => coreService({
-        url: `/download/task`,
+        url: `/download/task?additional=detail&additional=transfer`,
         method: 'get'
     })
 }
