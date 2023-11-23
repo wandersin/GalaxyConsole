@@ -42,7 +42,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="size" label="文件大小" width="100"/>
-        <el-table-column label="发布日期" sortable width="110">
+        <el-table-column label="发布日期" width="110">
           <template slot-scope="scope">
             <div class="release-date">
               {{ scope.row.date | dataFormat('YYYY-MM-DD') }}
