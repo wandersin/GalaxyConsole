@@ -4,6 +4,10 @@ import commonUtils from "@/script/common-utils";
 
 const Interceptors = {
     headersHandler: function (config) {
+        // 所有请求添加token
+        if (config.headers == null) {
+            config.headers = {};
+        }
         let token = localStorage.getItem('xAuthToken');
         if (token) {
             config.headers['X-Auth-Token'] = token;
@@ -13,9 +17,10 @@ const Interceptors = {
             config.headers['Archimedes-Active'] = Vue.prototype.$archimedes_active;
         }
         // 所有前端请求添加时间戳
-        config.params = {
-            "_": commonUtils.getTimestamp()
-        };
+        if (config.params == null) {
+            config.params = {};
+        }
+        config.params._ = commonUtils.getTimestamp();
         return config;
     },
     responseHandler: function (response) {
