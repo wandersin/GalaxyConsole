@@ -84,6 +84,7 @@
 
 <script>
 import JsonViewer from "vue-json-viewer";
+import commonUtils from "@/script/common-utils";
 
 export default {
   name: "ImageSearch",
@@ -137,10 +138,13 @@ export default {
     search() {
       this.imageInfo = [];
       this.$api.coreImage.search(this.searchParam).then(data => {
+        // 更新图片总数
         this.page.numFound = data.numFound;
+        // 更新图片地址
+        for (let i = 0; i < data.list.length; i++) {
+          data.list[i].src = `${this.$core_baseUrl}/image/${data.list[i].id}/binary?X-Auth-Token=${localStorage.getItem('xAuthToken')}&_=${commonUtils.getTimestamp()}`;
+        }
         this.imageInfo = data.list;
-        // 加载图片
-        this.createTempUrl();
         this.page.show = true;
       })
     },
@@ -165,27 +169,6 @@ export default {
           this.$message.error('删除失败, 请稍后重试');
         })
       });
-    },
-    // tag: 通过axios携带header从后台获取图片, 生成浏览器临时路径展示
-    // 从后台下载图片并缓存
-    createTempUrl() {
-      this.imageInfo.forEach(image => {
-        // 查询图片
-        this.$axios.get(`${this.$core_baseUrl}/image/${image.id}/binary`, {
-          headers: {
-            'X-Auth-Token': localStorage.getItem('xAuthToken'),
-            'Archimedes-Active': this.$archimedes_active
-          },
-          responseType: 'blob',
-          params: {
-            quality: 'ORIGINAL'
-          }
-        }).then(resp => {
-          image.src = window.URL.createObjectURL(resp.data);
-          image.show = true;
-          this.refresh++;
-        });
-      })
     },
     showImageInfo(info) {
       this.detail = info;
