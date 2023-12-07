@@ -56,7 +56,7 @@
           </div>
           <el-button id="ocr-delete-btn" icon="el-icon-delete" circle @click="deleteOcrImage(item.id)"></el-button>
           <el-button v-if="item.fileType === 'jpeg'" id="ocr-image2url-btn" icon="el-icon-upload2" circle @click="uploadOssPublic(item)"></el-button>
-          <el-image v-show="item.show" style="height: 10rem" :src="item.src" :fit="fit" :preview-src-list="imageInfo.map(t => t.src)" :refresh="refresh"/>
+          <el-image style="height: 10rem" :src="item.src" :fit="fit" :preview-src-list="imageInfo.map(t => t.src)" :refresh="refresh"/>
           <div class="ocr-image-name" @click="showImageInfo(item)">{{ item.fileName }}</div>
         </div>
       </el-col>
