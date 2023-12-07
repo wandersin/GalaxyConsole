@@ -136,16 +136,37 @@ export default {
     },
     // 搜索, 并刷新结果
     search() {
+      let root = this;
       this.imageInfo = [];
       this.$api.coreImage.search(this.searchParam).then(data => {
+        let listCopy = [...data.list];
         // 更新图片总数
         this.page.numFound = data.numFound;
         // 更新图片地址
         for (let i = 0; i < data.list.length; i++) {
-          data.list[i].src = `${this.$core_baseUrl}/image/${data.list[i].id}/binary?X-Auth-Token=${localStorage.getItem('xAuthToken')}&_=${commonUtils.getTimestamp()}`;
+          root.$axios({
+            method: 'get',
+            url: `${this.$core_baseUrl}/image/${data.list[i].id}/binary?_=${commonUtils.getTimestamp()}`,
+            headers: {
+              'X-Auth-Token': localStorage.getItem('xAuthToken')
+            },
+            responseType: 'blob'
+          }).then(response => {
+            let reader = new FileReader();
+            reader.onloadend = function() {
+              // 设置图片src
+              listCopy[i].src = reader.result;
+              // 如果所有的图片URL都更新后再更新图片信息
+              if (listCopy.every(item => item.src)) {
+                root.imageInfo = listCopy;
+                root.page.show = true;
+              }
+            }
+            if (response.data) {
+              reader.readAsDataURL(response.data);
+            }
+          });
         }
-        this.imageInfo = data.list;
-        this.page.show = true;
       })
     },
     // 生成图片外链
