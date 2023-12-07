@@ -12,6 +12,10 @@ const Interceptors = {
         if (commonUtils.isNotEmpty(active)) {
             config.headers['Archimedes-Active'] = Vue.prototype.$archimedes_active;
         }
+        // 所有前端请求添加时间戳
+        config.params = {
+            "_": commonUtils.getTimestamp()
+        };
         return config;
     },
     responseHandler: function (response) {

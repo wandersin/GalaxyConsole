@@ -71,5 +71,10 @@ export default {
                 size = temp;
             }
         }
+    },
+    getTimestamp() {
+        let timestamp = new Date().getTime();
+        let random = Math.ceil(Math.random() * 10000).toString().padStart(4, '0');
+        return `${timestamp}${random}`;
     }
 }
