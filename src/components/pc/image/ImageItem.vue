@@ -1,6 +1,6 @@
 <template>
   <div id="image-show-root" v-loading="loading">
-    <div id="image-show-box">
+    <div id="image-show-box" @click="showImageDetail(image)">
       <el-image v-show="!loading" :src="src" :fit="fit" class="image-item"/>
     </div>
   </div>
@@ -18,7 +18,7 @@ export default {
       loading: true
     }
   },
-  props: ['image'],
+  props: ['image', 'showImageDetail'],
   created() {
     let root = this;
     // 加载图片
@@ -63,12 +63,16 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background: lightgray;
+  background: white;
   border-radius: .5rem;
+  border: 1px solid lightgray;
+  box-sizing: border-box;
 }
 
 .image-item {
-  width: 100%;
-  height: 100%;
+  width: calc(100% - 10px);
+  height: calc(100% - 10px);
+  border-radius: .5rem;
+  margin: 5px;
 }
 </style>

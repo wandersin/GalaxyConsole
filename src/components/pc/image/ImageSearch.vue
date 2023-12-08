@@ -50,7 +50,7 @@
     <!-- 小图显示 -->
     <el-row v-show="imageData.list !== null && imageData.list.length > 0">
       <div class="ocr-image-box">
-        <image-item v-for="item in imageData.list" :key="item.id" :image="item"/>
+        <image-item v-for="item in imageData.list" :key="item.id" :image="item" :showImageDetail="showImageDetail"/>
       </div>
     </el-row>
     <!-- 分页页码 -->
@@ -67,13 +67,25 @@
     </el-row>
     <!-- 大图浏览, 信息展示 -->
     <el-row>
-
+      <el-dialog :visible.sync="imageData.dialog.show" :show-close="false" class="image-dialog" width="max-content">
+        <!-- 去除dialog的title部分 -->
+        <div slot="title"></div>
+        <el-row>
+          <!-- 大图 -->
+          <div class="panel-box panel-image-box">
+            <el-image :src="imageData.current.src" :fit="imageData.dialog.fit" v-loading="imageData.dialog.loading"/>
+          </div>
+          <!-- 详情 -->
+          <div class="panel-box panel-info-box"></div>
+        </el-row>
+      </el-dialog>
     </el-row>
   </div>
 </template>
 
 <script>
 import ImageItem from "@/components/pc/image/ImageItem.vue";
+import commonUtils from "@/script/common-utils";
 
 export default {
   name: "ImageSearch",
@@ -101,7 +113,12 @@ export default {
       },
       imageData: {
         list: [],
-        current: {}
+        current: {},
+        dialog: {
+          fit: 'contain',
+          show: false,
+          loading: false
+        },
       },
       page: {
         numFound: 0,
@@ -132,6 +149,38 @@ export default {
         this.page.numFound = data.numFound;
         this.imageData.list = data.list;
       })
+    },
+    // 显示大图和详细信息
+    showImageDetail(item) {
+      this.imageData.current = item;
+      this.imageData.dialog.loading = true;
+      this.imageData.dialog.src = null;
+      let root = this;
+      // 加载图片
+      this.$axios({
+        method: 'get',
+        url: `${this.$core_baseUrl}/image/${item.id}/binary`,
+        headers: {
+          'X-Auth-Token': localStorage.getItem('xAuthToken')
+        },
+        params: {
+          quality: 'ORIGINAL',
+          _: commonUtils.getTimestamp()
+        },
+        responseType: 'blob'
+      }).then(response => {
+        let reader = new FileReader();
+        reader.onloadend = function() {
+          // 设置图片src
+          root.imageData.current.src = reader.result;
+          root.imageData.dialog.loading = false;
+        }
+        if (response.data) {
+          reader.readAsDataURL(response.data);
+        }
+      });
+      // 最后显示详情面板
+      this.imageData.dialog.show = true;
     }
   }
 }
@@ -139,7 +188,7 @@ export default {
 
 <style scoped>
 #ocr-input-row {
-  padding: 1rem .5rem;
+  padding: 1rem 1rem 0 1rem;
   position: relative;
 }
 
@@ -163,5 +212,53 @@ export default {
   padding: .5rem;
   border: 1px solid lightgray;
   border-radius: .5rem;
+}
+
+.ocr-image-box:hover {
+  cursor: pointer;
+}
+
+.image-dialog {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image-dialog /deep/ .el-dialog {
+  margin: 0 !important;
+  background: none;
+  box-shadow: none;
+}
+
+.image-dialog /deep/ .el-dialog__header {
+  padding: 0;
+}
+
+.image-dialog /deep/ .el-dialog__body {
+  padding: 0;
+}
+
+.panel-box {
+  height: 80vh;
+  float: left;
+}
+
+.panel-info-box {
+  background-color: lightgray;
+  width: 20rem;
+  padding: 1rem;
+  border-radius: 0 1rem 1rem 0;
+}
+
+.panel-image-box {
+  display: inline-block;
+  max-width: calc(80vw - 20rem);
+  background-color: black;
+  border-radius: 1rem 0 0 1rem;
+  padding: 1rem;
+}
+
+.panel-image-box /deep/ .el-image {
+  height: 80vh;
 }
 </style>
