@@ -23,7 +23,8 @@
         </el-submenu>
       </el-menu>
     </el-row>
-    <div id="donate-me">
+    <!-- 捐赠付款码 -->
+    <div v-show="env === 'prod'" id="donate-me">
       <el-popover placement="top" width="300" trigger="hover">
         <el-image style="width: 300px; height: 450px" :src="ali" fit="contain"></el-image>
         <div slot="reference">用起来感觉还不错<br>请我喝杯咖啡吧</div>
@@ -38,7 +39,8 @@ export default {
   data() {
     return {
       ali: `${this.$minio_endpoint}/image/1b/1b21890d87fe0613e22de53995eaa16f`,
-      menuList: []
+      menuList: [],
+      env: process.env.NODE_ENV // 当前环境
     }
   },
   methods: {
