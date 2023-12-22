@@ -1,10 +1,11 @@
 <template>
   <div id="image-ocr-root">
+    <!-- 搜索框, 提示标语 -->
     <el-row id="ocr-input-row">
       <el-col :span="2">
-        <el-select v-model="searchParam.type" placeholder="请选择搜索方式">
+        <el-select v-model="searchData.searchParam.type" placeholder="请选择搜索方式">
           <el-option
-              v-for="item in searchType"
+              v-for="item in searchData.searchType"
               :key="item.key"
               :label="item.key"
               :value="item.type">
@@ -12,12 +13,12 @@
         </el-select>
       </el-col>
       <el-col :span="4">
-        <el-input v-model="searchParam.searchKey" placeholder="请输入关键词" @keydown.enter.native="search"></el-input>
+        <el-input v-model="searchData.searchParam.searchKey" placeholder="请输入关键词" @keydown.enter.native="search"></el-input>
       </el-col>
-      <el-col v-if="searchParam.type === 'KEY_WORD'" :span="2">
-        <el-select v-model="searchParam.precision" placeholder="请选择置信模式">
+      <el-col v-if="searchData.searchParam.type === 'KEY_WORD'" :span="2">
+        <el-select v-model="searchData.searchParam.precision" placeholder="请选择置信模式">
           <el-option
-              v-for="item in searchPrecision"
+              v-for="item in searchData.searchPrecision"
               :key="item.key"
               :label="item.key"
               :value="item.precision">
@@ -46,154 +47,140 @@
         </el-tooltip>
       </el-col>
     </el-row>
-    <el-row>
-      <el-col v-for="item in imageInfo" v-bind:key="item.id" :span="4" class="ocr-image-box">
-        <!-- 图片展示 -->
-        <div class="ocr-image-body">
-          <div class="ocr-image-operation" @click="showImageInfo(item)">
-            <i class="el-icon-info ocr-image-operation-item"></i>
-            <span>{{ item.datetime | dataFormat('YYYY-MM-DD') }}</span>
-          </div>
-          <el-button id="ocr-delete-btn" icon="el-icon-delete" circle @click="deleteOcrImage(item.id)"></el-button>
-          <el-button v-if="item.fileType === 'jpeg'" id="ocr-image2url-btn" icon="el-icon-upload2" circle @click="uploadOssPublic(item)"></el-button>
-          <el-image style="height: 10rem" :src="item.src" :fit="fit" :preview-src-list="imageInfo.map(t => t.src)" :refresh="refresh"/>
-          <div class="ocr-image-name" @click="showImageInfo(item)">{{ item.fileName }}</div>
-        </div>
-      </el-col>
+    <!-- 小图显示 -->
+    <el-row v-show="imageData.list !== null && imageData.list.length > 0">
+      <div class="ocr-image-box">
+        <image-item v-for="item in imageData.list" :key="item.id" :image="item" :showImageDetail="showImageDetail"/>
+      </div>
     </el-row>
-    <el-row v-show="page.show">
+    <!-- 分页页码 -->
+    <el-row v-show="imageData.list !== null && imageData.list.length > 0">
       <el-pagination
           background
           @size-change="pageSizeChangeHandler"
           @current-change="pageChangeHandler"
           :page-sizes="page.size"
-          :page-size="searchParam.row"
+          :page-size="searchData.searchParam.row"
           layout="total, sizes, prev, pager, next"
           :total="page.numFound">
       </el-pagination>
     </el-row>
-    <el-row id="ocr-viewer-row">
-      <el-dialog :visible.sync="detailFlag" class="dialog-panel" width="40rem">
-        <div class="ocr-detail-viewer-box">
-          <json-viewer id="ocr-detail-viewer" :value="detail" copyable></json-viewer>
-        </div>
+    <!-- 大图浏览, 信息展示 -->
+    <el-row>
+      <el-dialog :visible.sync="imageData.dialog.show" :show-close="false" class="image-dialog" width="max-content">
+        <!-- 去除dialog的title部分 -->
+        <div slot="title"></div>
+        <el-row>
+          <!-- 大图 -->
+          <div class="panel-box panel-image-box">
+            <el-image :src="imageData.current.src" :fit="imageData.dialog.fit" v-loading="imageData.dialog.loading"/>
+          </div>
+          <!-- 详情 -->
+          <div class="panel-box panel-info-box"></div>
+        </el-row>
       </el-dialog>
     </el-row>
   </div>
 </template>
 
 <script>
-import JsonViewer from "vue-json-viewer";
+import ImageItem from "@/components/pc/image/ImageItem.vue";
 import commonUtils from "@/script/common-utils";
 
 export default {
   name: "ImageSearch",
   data() {
     return {
-      searchParam: {
-        searchKey: '',
-        start: 0,
-        row: 24,
-        precision: 75,
-        type: 'KEY_WORD'
+      // 图片搜索相关参数
+      searchData: {
+        searchParam: {
+          searchKey: '',
+          start: 0,
+          row: 24,
+          precision: 75,
+          type: 'KEY_WORD'
+        },
+        searchType: [
+          {key: '关键字搜索', type: 'KEY_WORD'},
+          {key: '文件名搜索', type: 'FILE_NAME'},
+          {key: 'id搜索', type: 'IMAGE_ID'}
+        ],
+        searchPrecision: [
+          {key: '精确搜索', precision: 100},
+          {key: '标准搜索', precision: 75},
+          {key: '模糊搜索', precision: 50}
+        ]
       },
-      searchType: [
-        {key: '关键字搜索', type: 'KEY_WORD'},
-        {key: '文件名搜索', type: 'FILE_NAME'},
-        {key: 'id搜索', type: 'IMAGE_ID'}
-      ],
-      searchPrecision: [
-        {key: '精确搜索', precision: 100},
-        {key: '标准搜索', precision: 75},
-        {key: '模糊搜索', precision: 50}
-      ],
-      imageInfo:[],
-      fit: 'cover',
+      imageData: {
+        list: [],
+        current: {},
+        dialog: {
+          fit: 'contain',
+          show: false,
+          loading: false
+        },
+      },
       page: {
         numFound: 0,
-        size: [12, 24, 48],
-        show: false
-      },
-      detailFlag: false,
-      detail: {},
-      refresh: 0
+        size: [12, 24, 48]
+      }
     }
   },
   components: {
-    JsonViewer
+    ImageItem: ImageItem
   },
   methods: {
     // 当前页发送变化
     pageChangeHandler(page) {
-      this.searchParam.start = (page - 1) * this.searchParam.row;
+      this.searchData.searchParam.start = (page - 1) * this.searchData.searchParam.row;
       this.search();
     },
     // 每页显示个数变化
     pageSizeChangeHandler(size) {
-      this.searchParam.row = size;
-      this.searchParam.start = 0;
+      this.searchData.searchParam.row = size;
+      this.searchData.searchParam.start = 0;
       this.search();
     },
     // 搜索, 并刷新结果
     search() {
-      let root = this;
-      this.imageInfo = [];
-      this.$api.coreImage.search(this.searchParam).then(data => {
-        let listCopy = [...data.list];
+      this.imageData.list = [];
+      this.$api.coreImage.search(this.searchData.searchParam).then(data => {
         // 更新图片总数
         this.page.numFound = data.numFound;
-        // 更新图片地址
-        for (let i = 0; i < data.list.length; i++) {
-          root.$axios({
-            method: 'get',
-            url: `${this.$core_baseUrl}/image/${data.list[i].id}/binary?_=${commonUtils.getTimestamp()}`,
-            headers: {
-              'X-Auth-Token': localStorage.getItem('xAuthToken')
-            },
-            responseType: 'blob'
-          }).then(response => {
-            let reader = new FileReader();
-            reader.onloadend = function() {
-              // 设置图片src
-              listCopy[i].src = reader.result;
-              // 如果所有的图片URL都更新后再更新图片信息
-              if (listCopy.every(item => item.src)) {
-                root.imageInfo = listCopy;
-                root.page.show = true;
-              }
-            }
-            if (response.data) {
-              reader.readAsDataURL(response.data);
-            }
-          });
+        this.imageData.list = data.list;
+      })
+    },
+    // 显示大图和详细信息
+    showImageDetail(item) {
+      this.imageData.current = item;
+      this.imageData.dialog.loading = true;
+      this.imageData.dialog.src = null;
+      let root = this;
+      // 加载图片
+      this.$axios({
+        method: 'get',
+        url: `${this.$core_baseUrl}/image/${item.id}/binary`,
+        headers: {
+          'X-Auth-Token': localStorage.getItem('xAuthToken')
+        },
+        params: {
+          quality: 'ORIGINAL',
+          _: commonUtils.getTimestamp()
+        },
+        responseType: 'blob'
+      }).then(response => {
+        let reader = new FileReader();
+        reader.onloadend = function() {
+          // 设置图片src
+          root.imageData.current.src = reader.result;
+          root.imageData.dialog.loading = false;
         }
-      })
-    },
-    // 生成图片外链
-    uploadOssPublic(file) {
-      this.$api.coreImage.uploadOcrImage(file.id).then(() => {
-        this.$message.success('图片外链生成成功');
-      }).catch(() => {
-        this.$message.error('图片外链生成失败');
-      })
-    },
-    deleteOcrImage(id) {
-      this.$confirm(`即将删除图片 ${id}, 此操作无法恢复, 是否继续`, '请确认', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.$api.coreImage.deleteImage(id).then(() => {
-          this.$message.success('图片删除成功');
-          this.search();
-        }).catch(() => {
-          this.$message.error('删除失败, 请稍后重试');
-        })
+        if (response.data) {
+          reader.readAsDataURL(response.data);
+        }
       });
-    },
-    showImageInfo(info) {
-      this.detail = info;
-      this.detailFlag = true;
+      // 最后显示详情面板
+      this.imageData.dialog.show = true;
     }
   }
 }
@@ -201,7 +188,7 @@ export default {
 
 <style scoped>
 #ocr-input-row {
-  padding: 1rem .5rem;
+  padding: 1rem 1rem 0 1rem;
   position: relative;
 }
 
@@ -218,84 +205,60 @@ export default {
 }
 
 .ocr-image-box {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: .5rem;
+  margin: 1rem;
   padding: .5rem;
-}
-
-.ocr-image-body {
   border: 1px solid lightgray;
-  height: 10rem;
-  text-align: center;
-  position: relative;
+  border-radius: .5rem;
 }
 
-.ocr-image-body:hover {
+.ocr-image-box:hover {
   cursor: pointer;
 }
 
-.ocr-image-body:hover .ocr-image-name, .ocr-image-body:hover .ocr-image-operation, .ocr-image-body:hover #ocr-image2url-btn, .ocr-image-body:hover #ocr-delete-btn {
-  visibility: inherit;
+.image-dialog {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.ocr-image-operation {
-  visibility: hidden;
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 2rem;
-  width: calc(100% - 1rem);
-  background: lightgray;
-  line-height: 2rem;
-  padding: 0 .5rem;
-  opacity: .9;
-  z-index: 99;
-  text-align: left;
+.image-dialog /deep/ .el-dialog {
+  margin: 0 !important;
+  background: none;
+  box-shadow: none;
 }
 
-.ocr-image-operation-item {
-  margin: 0 .5rem;
+.image-dialog /deep/ .el-dialog__header {
+  padding: 0;
 }
 
-.ocr-image-operation-item:hover {
-  cursor: pointer;
+.image-dialog /deep/ .el-dialog__body {
+  padding: 0;
 }
 
-.ocr-image-name {
-  visibility: hidden;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  height: 2rem;
-  width: calc(100% - 1rem);
-  background: lightgray;
-  text-align: left;
-  font-size: .8rem;
-  line-height: 2rem;
-  padding: 0 .5rem;
-  opacity: .9;
-  z-index: 99;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.panel-box {
+  height: 80vh;
+  float: left;
 }
 
-.ocr-detail-viewer-box {
-  height: 60vh;
-  overflow: auto;
+.panel-info-box {
+  background-color: lightgray;
+  width: 20rem;
+  padding: 1rem;
+  border-radius: 0 1rem 1rem 0;
 }
 
-#ocr-image2url-btn {
-  visibility: hidden;
-  position: absolute;
-  top: 2.5rem;
-  right: .5rem;
-  z-index: 99;
+.panel-image-box {
+  display: inline-block;
+  max-width: calc(80vw - 20rem);
+  background-color: black;
+  border-radius: 1rem 0 0 1rem;
+  padding: 1rem;
 }
 
-#ocr-delete-btn {
-  visibility: hidden;
-  position: absolute;
-  top: 2.5rem;
-  left: .5rem;
-  z-index: 99;
+.panel-image-box /deep/ .el-image {
+  height: 80vh;
 }
 </style>
