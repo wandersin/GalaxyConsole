@@ -5,8 +5,8 @@
         <i class="el-icon-info ocr-image-operation-item"></i>
         <span>{{ image.datetime | dataFormat('YYYY-MM-DD') }}</span>
       </div>
-      <el-button id="ocr-delete-btn" class="image-hidden-item" icon="el-icon-delete" circle></el-button>
-      <el-button v-if="image.fileType === 'jpeg'" id="ocr-image2url-btn" class="image-hidden-item" icon="el-icon-upload2" circle></el-button>
+      <el-button id="ocr-delete-btn" class="image-hidden-item" icon="el-icon-delete" circle @click="deleteOcrImage(image)"></el-button>
+      <el-button v-if="image.fileType === 'jpeg'" id="ocr-image2url-btn" class="image-hidden-item" icon="el-icon-upload2" circle @click="uploadOssPublic(image)"></el-button>
       <el-image v-show="!loading" :src="src" :fit="fit" class="image-item" @click="showImageDetail(image)"/>
       <div class="image-show-component image-show-footer image-hidden-item">{{ image.fileName }}</div>
     </div>
@@ -25,7 +25,34 @@ export default {
       loading: true
     }
   },
-  props: ['image', 'showImageDetail'],
+  methods: {
+    // 生成图片外链
+    uploadOssPublic(file) {
+      this.$api.coreImage.uploadOcrImage(file.id).then(() => {
+        this.$message.success('图片外链生成成功');
+      }).catch(() => {
+        this.$message.error('图片外链生成失败');
+      })
+    },
+    // 删除OCR图片
+    deleteOcrImage(image) {
+      let id = image.id;
+      let name = image.fileName;
+      this.$confirm(`即将删除图片 ${name}, 此操作无法恢复, 是否继续`, '请确认', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$api.coreImage.deleteImage(id).then(() => {
+          this.$message.success('图片删除成功');
+          this.search();
+        }).catch(() => {
+          this.$message.error('删除失败, 请稍后重试');
+        })
+      });
+    },
+  },
+  props: ['search', 'image', 'showImageDetail'],
   created() {
     let root = this;
     // 加载图片
