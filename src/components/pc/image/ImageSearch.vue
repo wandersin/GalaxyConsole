@@ -50,7 +50,7 @@
     <!-- 小图显示 -->
     <el-row v-show="imageData.list !== null && imageData.list.length > 0">
       <div class="ocr-image-box">
-        <image-item v-for="item in imageData.list" :key="item.id" :image="item" :showImageDetail="showImageDetail"/>
+        <image-item v-for="item in imageData.list" :key="item.id" :search="search" :image="item" :showImageDetail="showImageDetail"/>
       </div>
     </el-row>
     <!-- 分页页码 -->
