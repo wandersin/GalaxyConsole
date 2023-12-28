@@ -8,7 +8,9 @@
       <el-button id="ocr-delete-btn" class="image-hidden-item" icon="el-icon-delete" circle @click="deleteOcrImage(image)"></el-button>
       <el-button v-if="image.fileType === 'jpeg'" id="ocr-image2url-btn" class="image-hidden-item" icon="el-icon-upload2" circle @click="uploadOssPublic(image)"></el-button>
       <el-image v-show="!loading" :src="src" :fit="fit" class="image-item" @click="showImageDetail(image)"/>
-      <div class="image-show-component image-show-footer image-hidden-item">{{ image.fileName }}</div>
+      <div class="image-show-component image-show-footer image-hidden-item">
+        <span>{{ image.fileName }}</span>
+      </div>
     </div>
   </div>
 </template>
@@ -124,6 +126,10 @@ export default {
   opacity: .9;
 }
 
+.image-show-component span {
+  font-size: .8rem;
+}
+
 #ocr-delete-btn {
   position: absolute;
   top: 20%;
@@ -157,6 +163,10 @@ export default {
 .image-show-footer {
   bottom: 0;
   left: 0;
+}
+
+.image-show-footer span {
+  width: 100%;
   text-align: left;
   overflow: hidden;
   text-overflow: ellipsis;
