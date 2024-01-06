@@ -3,7 +3,7 @@
     <!-- 搜索框, 提示标语 -->
     <el-row id="ocr-input-row">
       <el-col :span="2">
-        <el-select v-model="searchData.searchParam.type" placeholder="请选择搜索方式">
+        <el-select v-model="searchData.searchParam.type" placeholder="请选择搜索方式" class="search-item">
           <el-option
               v-for="item in searchData.searchType"
               :key="item.key"
@@ -13,10 +13,10 @@
         </el-select>
       </el-col>
       <el-col :span="4">
-        <el-input v-model="searchData.searchParam.searchKey" placeholder="请输入关键词" @keydown.enter.native="search"></el-input>
+        <el-input v-model="searchData.searchParam.searchKey" placeholder="请输入关键词" @keydown.enter.native="search" class="search-item"></el-input>
       </el-col>
       <el-col v-if="searchData.searchParam.type === 'KEY_WORD'" :span="2">
-        <el-select v-model="searchData.searchParam.precision" placeholder="请选择置信模式">
+        <el-select v-model="searchData.searchParam.precision" placeholder="请选择置信模式" class="search-item">
           <el-option
               v-for="item in searchData.searchPrecision"
               :key="item.key"
@@ -26,25 +26,7 @@
         </el-select>
       </el-col>
       <el-col :span="2">
-        <el-button @click="search">搜索</el-button>
-      </el-col>
-      <el-col :span="1">
-        <el-tooltip class="item" effect="dark" placement="right">
-          <div slot="content">
-            输入要查询的文字开始搜索图片
-            <br>
-            搜索空或'*'可以查询所有图片
-            <br>
-            图片按时间倒序排列
-            <br>
-            点击图片可以查看大图
-            <br>
-            点击标签可以查看详细信息
-          </div>
-          <div id="ocr-point-icon-box">
-            <i class="el-icon-warning-outline" id="ocr-point-icon"></i>
-          </div>
-        </el-tooltip>
+        <el-button @click="search" class="search-item">搜索</el-button>
       </el-col>
     </el-row>
     <!-- 小图显示 -->
@@ -76,7 +58,35 @@
             <el-image :src="imageData.current.src" :fit="imageData.dialog.fit" v-loading="imageData.dialog.loading"/>
           </div>
           <!-- 详情 -->
-          <div class="panel-box panel-info-box"></div>
+          <div class="panel-box panel-info-box">
+            <el-tabs v-model="imageData.dialog.detail.tab">
+              <el-tab-pane label="信息" name="info">
+                <el-row class="image-dialog-info-row">
+                  <i class="image-dialog-info-icon el-icon-date"></i>
+                  <div class="image-dialog-info-title">
+                    <span>{{ imageData.current.datetime | dataFormat('YYYY-MM-DD') }}</span>
+                  </div>
+                  <div class="image-dialog-info-content">
+                    <span>{{ imageData.current.datetime | day() }}, {{ imageData.current.datetime | dataFormat('hh:mm') }}</span>
+                  </div>
+                </el-row>
+                <el-row class="image-dialog-info-row">
+                  <i class="image-dialog-info-icon el-icon-document"></i>
+                  <el-tooltip class="item" effect="dark" :content="imageData.current.id" placement="top-start">
+                    <div class="image-dialog-info-title">
+                      <span>{{ imageData.current.fileName }}</span>
+                    </div>
+                  </el-tooltip>
+                  <div class="image-dialog-info-content">
+                    <span>{{ imageData.current.width }} * {{ imageData.current.height }}</span>
+                  </div>
+                </el-row>
+              </el-tab-pane>
+              <el-tab-pane label="更多" name="more">
+                <json-viewer id="json-viewer" :value="imageData.current" copyable></json-viewer>
+              </el-tab-pane>
+            </el-tabs>
+          </div>
         </el-row>
       </el-dialog>
     </el-row>
@@ -86,6 +96,7 @@
 <script>
 import ImageItem from "@/components/pc/image/ImageItem.vue";
 import commonUtils from "@/script/common-utils";
+import JsonViewer from "vue-json-viewer";
 
 export default {
   name: "ImageSearch",
@@ -116,6 +127,9 @@ export default {
         current: {},
         dialog: {
           fit: 'contain',
+          detail: {
+            tab: 'info'
+          },
           show: false,
           loading: false
         },
@@ -127,6 +141,7 @@ export default {
     }
   },
   components: {
+    JsonViewer,
     ImageItem: ImageItem
   },
   methods: {
@@ -214,10 +229,6 @@ export default {
   border-radius: .5rem;
 }
 
-.ocr-image-box:hover {
-  cursor: pointer;
-}
-
 .image-dialog {
   display: flex;
   justify-content: center;
@@ -244,10 +255,11 @@ export default {
 }
 
 .panel-info-box {
-  background-color: lightgray;
+  background-color: white;
   width: 20rem;
   padding: 1rem;
   border-radius: 0 1rem 1rem 0;
+  overflow: auto;
 }
 
 .panel-image-box {
@@ -260,5 +272,59 @@ export default {
 
 .panel-image-box /deep/ .el-image {
   height: 80vh;
+}
+
+.image-dialog-info-row {
+  position: relative;
+  width: 100%;
+  height: 4rem;
+  margin-top: .5rem;
+}
+
+.image-dialog-info-icon {
+  width: 4rem;
+  height: 4rem;
+  line-height: 4rem;
+  text-align: center;
+  font-size: 2rem;
+}
+
+.image-dialog-info-title {
+  width: calc(100% - 4rem);
+  height: 2rem;
+  position: absolute;
+  top: 0;
+  right: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.image-dialog-info-title span {
+  line-height: 2rem;
+  margin: 0 .5rem;
+  font-size: 1.2rem;
+  font-weight: bolder;
+}
+
+.image-dialog-info-content {
+  width: calc(100% - 4rem);
+  height: 2rem;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.image-dialog-info-content span {
+  line-height: 2rem;
+  margin: 0 .5rem;
+  font-size: 1rem;
+}
+
+.search-item {
+  margin: 0 5px;
 }
 </style>

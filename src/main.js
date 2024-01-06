@@ -66,6 +66,11 @@ Vue.filter('dataFormat', function (dataStr, pattern = 'YYYY-MM-DD HH:mm:ss') {
     return moment(dataStr).format(pattern);
 });
 
+Vue.filter('day', function (dataStr) {
+    let weeks = ['星期天', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
+    return weeks[moment(dataStr).day()];
+});
+
 Vue.filter('fileSizeFormat', function (size) {
     return commonUtils.fileSizeTransform(size);
 });

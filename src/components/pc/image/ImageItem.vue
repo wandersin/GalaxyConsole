@@ -106,6 +106,10 @@ export default {
   overflow: hidden;
 }
 
+#image-show-box:hover {
+  cursor: pointer;
+}
+
 #image-show-box:hover .image-hidden-item {
   visibility: inherit;
 }
