@@ -1,5 +1,19 @@
 # 功能整合控制台
-CalaxyConsole是一个实用工具合集, 包括一些如随机密码生成等小工具, 也可以对接Archimedes系统对系统进行权限管理, 参数配置等
+CalaxyConsole是一个实用工具合集, 包括一些如随机密码生成等小工具, 也可以对接Archimedes系统对系统进行权限管理, 参数配置等; 在集成Archimedes前, 可以使用离线工具, 在集成Archimedes后可以使用完整的图片OCR和其他的功能
+## 部署方式
+### 本地启动
+```shell
+npm run serve
+```
+### 构建
+```shell
+# 测试环境
+npm run build.dev
+
+# 生产环境
+npm run build.prod
+```
+> 注意: 构建前需根据需要修改.env.{{env}}中对应的配置文件
 ## 功能简介
 ### 核心功能
 * 图片OCR
