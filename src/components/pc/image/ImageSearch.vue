@@ -13,7 +13,7 @@
         </el-select>
       </el-col>
       <el-col :span="4">
-        <el-input v-model="searchData.searchParam.searchKey" placeholder="请输入关键词" @keydown.enter.native="search" class="search-item"></el-input>
+        <el-input v-model="searchData.searchParam.searchKey" placeholder="请输入关键词" @keydown.enter.native="newSearch" class="search-item"></el-input>
       </el-col>
       <el-col v-if="searchData.searchParam.type === 'KEY_WORD'" :span="2">
         <el-select v-model="searchData.searchParam.precision" placeholder="请选择置信模式" class="search-item">
@@ -26,7 +26,7 @@
         </el-select>
       </el-col>
       <el-col :span="2">
-        <el-button @click="search" class="search-item">搜索</el-button>
+        <el-button @click="newSearch" class="search-item">搜索</el-button>
       </el-col>
     </el-row>
     <!-- 小图显示 -->
@@ -153,6 +153,11 @@ export default {
     // 每页显示个数变化
     pageSizeChangeHandler(size) {
       this.searchData.searchParam.row = size;
+      this.searchData.searchParam.start = 0;
+      this.search();
+    },
+    // 重新搜索关键字
+    newSearch() {
       this.searchData.searchParam.start = 0;
       this.search();
     },
