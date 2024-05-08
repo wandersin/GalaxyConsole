@@ -41,6 +41,7 @@
           background
           @size-change="pageSizeChangeHandler"
           @current-change="pageChangeHandler"
+          :current-page.sync="page.current"
           :page-sizes="page.size"
           :page-size="searchData.searchParam.row"
           layout="total, sizes, prev, pager, next"
@@ -135,6 +136,7 @@ export default {
         },
       },
       page: {
+        current: 1,
         numFound: 0,
         size: [12, 24, 48]
       }
@@ -159,6 +161,7 @@ export default {
     // 重新搜索关键字
     newSearch() {
       this.searchData.searchParam.start = 0;
+      this.page.current = 1;
       this.search();
     },
     // 搜索, 并刷新结果
