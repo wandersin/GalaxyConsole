@@ -1,26 +1,18 @@
 <template>
   <div id="left-menu-root">
+    <!-- 左侧菜单 -->
     <el-row class="tac">
-      <!-- @select事件第一个参数为index, 第二个参数indexPath包括各级菜单的index -->
-      <!-- 只有一级菜单时index和indexPath作用相同 -->
       <el-menu class="el-menu-vertical-demo" @select="select" unique-opened>
-        <!-- 独立菜单 -->
-        <el-menu-item v-for="item in menuList.item" :index="item.index" :key="item.id" :disabled="item.disable">
-          <i :class="item.icon"></i>
-          <span slot="title">{{ item.title }}</span>
-          <el-tag v-if="item.tag != null && item.tag !== ''" class="beta-tag" type="danger" effect="plain">{{ item.tag }}</el-tag>
-        </el-menu-item>
-        <!-- 分组菜单 -->
-        <el-submenu v-for="group in menuList.group" :index="group.name" :key="group.name">
-          <template slot="title">
-            <span class="menu-group-title">{{ group.name }}</span>
-          </template>
-          <el-menu-item v-for="item in group.list" :index="item.index" :key="item.id" :disabled="item.disable">
+        <div v-for="menu in menuList.group" :key="menu.name">
+          <!-- 分组名称 -->
+          <div class="el-submenu__title menu-group-title">{{ menu.name }}</div>
+          <!-- 分组条目 -->
+          <el-menu-item v-for="item in menu.list" :index="item.index" :key="item.id" :disabled="item.disable">
             <i :class="item.icon"></i>
             <span slot="title">{{ item.title }}</span>
             <el-tag v-if="item.tag != null && item.tag !== ''" class="beta-tag" type="danger" effect="plain">{{ item.tag }}</el-tag>
           </el-menu-item>
-        </el-submenu>
+        </div>
       </el-menu>
     </el-row>
     <!-- 捐赠付款码 -->
