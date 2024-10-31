@@ -21,9 +21,7 @@ import Momentum from "@/components/pc/schedule/Momentum.vue";
 import ImageSearch from "@/components/pc/image/ImageSearch.vue";
 import DownloadStation from "@/components/pc/download/DownloadStation.vue";
 import PermissionCenter from "@/components/pc/permission/PermissionCenter.vue";
-import SimpleJsonViewer from "@/components/pc/utils/SimpleJsonViewer.vue";
 import Image2Url from "@/components/pc/image/Image2Url.vue";
-import RandomPassword from "@/components/pc/utils/RandomPassword.vue";
 import ParameterManagement from "@/components/pc/parameter/ParameterManagement.vue";
 
 export default {
@@ -41,9 +39,7 @@ export default {
     ImageSearch,
     DownloadStation,
     PermissionCenter,
-    SimpleJsonViewer,
     Image2Url,
-    RandomPassword,
     ParameterManagement
   },
   methods: {
