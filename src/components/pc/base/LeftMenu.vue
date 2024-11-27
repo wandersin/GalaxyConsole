@@ -10,7 +10,7 @@
           <el-menu-item v-for="item in menu.list" :index="item.index" :key="item.id" :disabled="item.disable">
             <i :class="item.icon"></i>
             <span slot="title">{{ item.title }}</span>
-            <el-tag v-if="item.tag != null && item.tag !== ''" class="beta-tag" type="danger" effect="plain">{{ item.tag }}</el-tag>
+            <el-tag v-if="item.tag != null && item.tag !== ''" class="beta-tag" type="danger" effect="plain" size="mini">{{ item.tag }}</el-tag>
           </el-menu-item>
         </div>
       </el-menu>
