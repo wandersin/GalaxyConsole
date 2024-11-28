@@ -3,9 +3,9 @@ import api from "@/api";
 
 function reqCallback(resp, callback, failed) {
     let data = resp.data;
-    if (data.status === 'ok' && typeof callback === 'function') { // 成功
+    if (data.status === 'SUCCESS' && typeof callback === 'function') { // 成功
         callback(data.result);
-    } else if (data.status !== 'ok' && typeof failed === 'function') { // 失败
+    } else if (data.status !== 'SUCCESS' && typeof failed === 'function') { // 失败
         failed(data.message);
     }
 }

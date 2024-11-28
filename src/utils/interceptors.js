@@ -27,7 +27,7 @@ const Interceptors = {
         if (response.headers['content-type'] === 'application/octet-stream') {
             return response.data;
         }
-        if (response.data.status === 'ok') {
+        if (response.data.status === 'SUCCESS') {
             return response.data.result;
         } else {
             throw response.data.message;

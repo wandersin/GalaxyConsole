@@ -96,7 +96,7 @@
                 "synology": "DS1821plus"
             }),
             onload(downloadResp) {
-                if (JSON.parse(downloadResp.response).status === 'ok') {
+                if (JSON.parse(downloadResp.response).status === 'SUCCESS') {
                     alert(`添加下载任务成功: ${id}`);
                 } else {
                     console.log(JSON.parse(downloadResp.response));
