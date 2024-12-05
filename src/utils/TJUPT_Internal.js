@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PT AutoDownload
-// @namespace    https://mrtree.vip:51443
-// @version      0.1
+// @namespace    https://core.mrtree.vip:50443
+// @version      v0.2
 // @description  自动下载pt站资源
 // @author       wangyunshu
 // @match        *://tjupt.org/torrents.php*
@@ -16,14 +16,14 @@
     console.log('TJUPT AutoDownload Start >>>>>');
     let data = {
         "development": {
-            "serviceUrl": "http://ds920plus.internal.mrtree.vip:58080",
-            "username": "wangyunshu",
-            "password": "514232098zx."
+            "serviceUrl": "https://ds920plus.internal.mrtree.vip:58443",
+            "username": "{{username}}",
+            "password": "{{password}}"
         },
         "production": {
-            "serviceUrl": "https://ds1821plus.internal.mrtree.vip:50444",
-            "username": "wangyunshu",
-            "password": "514232098zx."
+            "serviceUrl": "https://ds1821plus.internal.mrtree.vip:50443",
+            "username": "{{username}}",
+            "password": "{{password}}"
         }
     }
     let env = 'development';
