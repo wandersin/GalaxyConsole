@@ -16,7 +16,7 @@
         <el-table-column label="封面图" width="150">
           <template slot-scope="scope">
             <div class="emby-resources-image-box">
-              <el-image :src="getImageUrl(scope.row.image)" fit="contain" style="width: 100px;"/>
+              <el-image :src="getImageUrl(scope.row.image)" fit="contain" style="width: 100px;" lazy/>
             </div>
           </template>
         </el-table-column>
