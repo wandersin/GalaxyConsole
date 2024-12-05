@@ -21,6 +21,7 @@ Vue.prototype.$core_baseUrl = process.env.VUE_APP_CORE_BASEURL;
 Vue.prototype.$auth_baseUrl = process.env.VUE_APP_AUTH_MAN_BASEURL;
 Vue.prototype.$archimedes_active = process.env.VUE_APP_ARCHIMEDES_ACTIVE;
 Vue.prototype.$minio_endpoint = process.env.VUE_APP_MINIO_ENDPOINT;
+Vue.prototype.$emby_resources_image_endpoint = process.env.VUE_APP_EMBY_RESOURCES_IMAGE_ENDPOINT;
 
 Vue.prototype.$me = {}; // 在MainHeader中进行赋值
 Vue.prototype.$api = api;
