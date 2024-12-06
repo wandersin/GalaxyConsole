@@ -45,7 +45,7 @@
           :page-sizes="page.size"
           :page-size="searchData.searchParam.row"
           layout="total, sizes, prev, pager, next"
-          :total="page.numFound">
+          :total="page.total">
       </el-pagination>
     </el-row>
     <!-- 大图浏览, 信息展示 -->
@@ -137,7 +137,7 @@ export default {
       },
       page: {
         current: 1,
-        numFound: 0,
+        total: 0,
         size: [12, 24, 48]
       }
     }
@@ -169,7 +169,7 @@ export default {
       this.imageData.list = [];
       this.$api.coreImage.search(this.searchData.searchParam).then(data => {
         // 更新图片总数
-        this.page.numFound = data.numFound;
+        this.page.total = data.total;
         this.imageData.list = data.list;
       })
     },

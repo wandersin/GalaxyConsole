@@ -23,6 +23,7 @@ import DownloadStation from "@/components/pc/download/DownloadStation.vue";
 import PermissionCenter from "@/components/pc/permission/PermissionCenter.vue";
 import Image2Url from "@/components/pc/image/Image2Url.vue";
 import ParameterManagement from "@/components/pc/parameter/ParameterManagement.vue";
+import EmbyResources from "@/components/pc/video/EmbyResources.vue";
 
 export default {
   name: 'App',
@@ -40,7 +41,8 @@ export default {
     DownloadStation,
     PermissionCenter,
     Image2Url,
-    ParameterManagement
+    ParameterManagement,
+    EmbyResources
   },
   methods: {
     selectLeftMenu(index) {

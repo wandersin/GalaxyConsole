@@ -1,11 +1,11 @@
 // ==UserScript==
-// @name         CHDBits AutoDownload
-// @namespace    http://tampermonkey.net/
-// @version      2024-10-15
-// @description  彩虹岛资源快速下载
+// @name         PT AutoDownload
+// @namespace    https://core.mrtree.vip:50443
+// @version      v0.2
+// @description  自动下载pt站资源
 // @author       wangyunshu
-// @match        *://ptchdbits.co/torrents.php*
-// @icon         https://ptchdbits.co/favicon.ico?v=2022
+// @match        *://tjupt.org/torrents.php*
+// @icon         https://tjupt.org/assets/favicon/favicon.png
 // @grant        GM_xmlhttpRequest
 // ==/UserScript==
 
@@ -15,24 +15,16 @@
     // Start
     console.log('TJUPT AutoDownload Start >>>>>');
     let data = {
-        "development": {
-            "serviceUrl": "http://ds920plus.internal.mrtree.vip:58080",
-            "username": "wangyunshu",
-            "password": "514232098zx."
-        },
-        "production": {
-            "serviceUrl": "https://ds1821plus.internal.mrtree.vip:50444",
-            "username": "wangyunshu",
-            "password": "514232098zx."
-        }
+        "serviceUrl": "https://core.mrtree.vip:50443",
+        "username": "{{username}}",
+        "password": "{{password}}"
     }
-    let env = 'development';
     // 1. 获取请求token
     let token = await getToken();
     // 2. 在指定位置添加按钮
     let itemTable = document.querySelectorAll('.torrentname');
     for (let i = 0; i < itemTable.length; i++) {
-        let parent = itemTable[i].querySelector('td');
+        let parent = itemTable[i].querySelector('tr');
         // 2.1 查询所有的a标签
         let allLinks = parent.querySelectorAll('a');
         // 2.2 提取id
@@ -53,7 +45,8 @@
         parent.setAttribute('style', 'position: relative;')
         let btn = document.createElement('button');
         btn.innerText = '快速下载';
-        btn.setAttribute('style', 'position: absolute; top: 0; right: 0; bottom: 0; height: 1.5rem; margin: auto;');
+        btn.setAttribute('class', 'medium');
+        btn.setAttribute('style', 'position: absolute; top: 0; right: 3rem; bottom: 0; height: 2rem; margin: auto; border-radius: 10px; background: #fbe7df;');
         btn.setAttribute('task-id', id);
         btn.onmouseover = function() {
             this.style.cursor = 'pointer';
@@ -68,14 +61,14 @@
     // 获取token
     async function getToken() {
         let resp = await httpRequestPromise({
-            url: `${data[env].serviceUrl}/authman/user/login`,
+            url: `${data.serviceUrl}/authman/user/login`,
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
             },
             data: JSON.stringify({
-                "username": data[env].username,
-                "password": data[env].password,
+                "username": data.username,
+                "password": data.password,
                 "email": ''
             })
         });
@@ -85,14 +78,14 @@
     // 添加下载任务
     function addTask(id) {
         GM_xmlhttpRequest({
-            url: `${data[env].serviceUrl}/core/download/pt/${id}`,
+            url: `${data.serviceUrl}/core/download/pt/${id}`,
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
                 "X-Auth-Token": token
             },
             data: JSON.stringify({
-                "pt": "CHDBits",
+                "pt": "TJU",
                 "synology": "DS1821plus"
             }),
             onload(downloadResp) {

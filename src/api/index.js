@@ -7,12 +7,14 @@ import authRole from "@/api/auth.role";
 import authPermission from "@/api/auth.permission";
 import prophetParameter from "@/api/prophet.parameter";
 import prophetApplication from "@/api/prophet.application";
+import coreVideo from "@/api/core.video";
 
 class API {
     constructor() {
         this.coreIndex = coreIndex
         this.coreImage = coreImage
-        this.coreDownload= coreDownload
+        this.coreDownload = coreDownload
+        this.coreVideo = coreVideo
         this.authUser = authUser
         this.authGroup = authGroup
         this.authRole = authRole

@@ -124,7 +124,6 @@ export default {
 
 #parameter-managerment-tb-row {
   padding: .5rem;
-  height: 60vh;
 }
 
 #parameter-managerment-controller-row {

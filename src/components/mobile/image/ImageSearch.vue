@@ -24,7 +24,7 @@
           @current-change="pageChangeHandler"
           :page-size="searchParam.row"
           layout="prev, pager, next"
-          :total="page.numFound">
+          :total="page.total">
       </el-pagination>
     </el-row>
     <el-row id="ocr-viewer-row">
@@ -54,7 +54,7 @@ export default {
       imageInfo:[],
       fit: 'cover',
       page: {
-        numFound: 0,
+        total: 0,
         show: false
       },
       previewList: [],
@@ -76,7 +76,7 @@ export default {
       this.previewList = [];
       this.imageInfo = [];
       this.$api.coreImage.search(this.searchParam).then(data => {
-        this.page.numFound = data.numFound;
+        this.page.total = data.total;
         let tmpList = data.list;
         for (let i = 0; i < tmpList.length; i++) {
           this.imageInfo.push(tmpList[i]);
