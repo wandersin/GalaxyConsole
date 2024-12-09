@@ -65,7 +65,7 @@
 
 <script>
 export default {
-  name: "AddDownloadTask",
+  name: "DownloadStationTaskSearchSpace.vue",
   data() {
     return {
       tableHeight: 0,

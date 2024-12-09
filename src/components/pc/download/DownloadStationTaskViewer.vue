@@ -33,7 +33,7 @@
 
 <script>
 export default {
-  name: "ListDownloadTask",
+  name: "DownloadStationTaskViewer",
   data() {
     return {
       loading: false,
