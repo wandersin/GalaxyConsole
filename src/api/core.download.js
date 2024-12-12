@@ -12,6 +12,11 @@ const downloadApi = {
     task: () => coreService({
         url: `/download/task?additional=detail&additional=transfer`,
         method: 'get'
+    }),
+    delete: (body) => coreService({
+        url: `/download/delete`,
+        method: 'delete',
+        data: body
     })
 }
 

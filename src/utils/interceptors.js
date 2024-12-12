@@ -40,6 +40,10 @@ const Interceptors = {
             router.push({path: '/login'}).catch(() => {});
         } else if (error.response.status === 401) { // 权限不足
             Vue.prototype.$message.error('操作权限不足，请联系管理员添加权限');
+            throw new Error('操作权限不足，请联系管理员添加权限');
+        } else if (error.response.status === 404) {
+            Vue.prototype.$message.error('请求失败, 请稍后重试');
+            throw new Error('请求地址错误, 请检查后重试');
         } else {
             Vue.prototype.$message.error(error);
         }
