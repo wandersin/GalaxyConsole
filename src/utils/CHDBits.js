@@ -16,7 +16,7 @@
     console.log('TJUPT AutoDownload Start >>>>>');
     let data = {
         "development": {
-            "serviceUrl": "http://ds920plus.internal.mrtree.vip:58080",
+            "serviceUrl": "https://ds920plus.internal.mrtree.vip:58443",
             "username": "wangyunshu",
             "password": "514232098zx."
         },
