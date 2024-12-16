@@ -89,7 +89,7 @@ export default {
     },
     // 判断当前任务是否可删除
     isDeleteEnable(row) {
-      if (row.status === '5') {
+      if (row.status === 'COMPLETED') {
         return true;
       }
       // 下载完成, 或进度大于 30% 的任务不允许删除
