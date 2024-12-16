@@ -28,15 +28,24 @@
         <el-table-column label="上传速度(每秒)" width="130">
           <template slot-scope="scope">{{ scope.row.additional.transfer.speedUpload | fileSizeFormat }}</template>
         </el-table-column>
-        <el-table-column label="状态" width="100">
+        <el-table-column width="100">
+          <template slot="header" slot-scope="{}">
+            <div class="header-cell">
+              <span>状态</span>
+              <el-tooltip class="item" effect="dark" placement="top">
+                <div slot="content">状态简析：<br/>1. 未完成的任务显示为“下载中”<br/>2. 下载完成后需要做种7天, 期间显示为“做种中”<br/>3. 做种完成后显示为“已完成”</div>
+                <i class="el-icon-question header-cell-icon"></i>
+              </el-tooltip>
+            </div>
+          </template>
           <template slot-scope="scope">{{ scope.row.status_zh }}</template>
         </el-table-column>
-        <el-table-column label="操作" width="200">
+        <el-table-column width="200">
           <template slot="header" slot-scope="{}">
             <div class="header-cell">
               <span>操作</span>
               <el-tooltip class="item" effect="dark" placement="top">
-                <div slot="content">允许删除的任务:<br/>1. 无人做种无下载速度的任务<br/>2. 下载进度小于30%的任务<br/>3. 做种完成的任务</div>
+                <div slot="content">允许删除的任务：<br/>1. 无人做种无下载速度的任务<br/>2. 下载进度小于30%的任务<br/>3. 做种完成的任务</div>
                 <i class="el-icon-question header-cell-icon"></i>
               </el-tooltip>
             </div>
