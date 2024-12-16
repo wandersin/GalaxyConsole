@@ -33,7 +33,7 @@
             <div class="header-cell">
               <span>状态</span>
               <el-tooltip class="item" effect="dark" placement="top">
-                <div slot="content">状态简析：<br/>1. 未完成的任务显示为“下载中”<br/>2. 下载完成后需要做种7天, 期间显示为“做种中”<br/>3. 做种完成后显示为“已完成”</div>
+                <div slot="content">状态简析：<br/>1. 未完成的任务显示为“下载中”<br/>2. 下载完成后需要做种10天, 期间显示为“做种中”<br/>3. 做种完成后显示为“已完成”</div>
                 <i class="el-icon-question header-cell-icon"></i>
               </el-tooltip>
             </div>

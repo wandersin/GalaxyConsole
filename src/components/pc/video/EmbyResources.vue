@@ -3,21 +3,26 @@
     <el-tab-pane label="资源总览">
       <emby-resources-view/>
     </el-tab-pane>
-    <el-tab-pane label="资源管理">
-      <emby-resources-manager/>
+    <el-tab-pane label="批量下载">
+      <download-station-task-search-space/>
+    </el-tab-pane>
+    <el-tab-pane label="下载管理">
+      <download-station-task-viewer/>
     </el-tab-pane>
   </el-tabs>
 </template>
 
 <script>
 import EmbyResourcesView from "@/components/pc/video/EmbyResourcesView.vue";
-import EmbyResourcesManager from "@/components/pc/video/EmbyResourcesManager.vue";
+import DownloadStationTaskViewer from "@/components/pc/download/DownloadStationTaskViewer.vue";
+import DownloadStationTaskSearchSpace from "@/components/pc/download/DownloadStationTaskSearchSpace.vue";
 
 export default {
   name: "EmbyResources",
   components: {
-    EmbyResourcesManager,
-    EmbyResourcesView
+    EmbyResourcesView,
+    DownloadStationTaskViewer,
+    DownloadStationTaskSearchSpace,
   },
 }
 </script>
