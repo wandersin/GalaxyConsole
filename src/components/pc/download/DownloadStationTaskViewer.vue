@@ -72,7 +72,10 @@ export default {
   data() {
     return {
       loading: false,
-      task: []
+      task: {
+        total: 0,
+        list: []
+      }
     }
   },
   methods: {
