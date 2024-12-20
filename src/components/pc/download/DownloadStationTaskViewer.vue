@@ -4,7 +4,7 @@
       <el-button class="inline-btn" @click="listDownloadTask">刷新</el-button>
     </el-row>
     <el-row id="download-task-row">
-      <el-table v-loading="loading" :data="task" height="80vh" border>
+      <el-table v-loading="loading" :data="task.list" height="80vh" border>
         <el-table-column prop="id" label="任务id" width="100"/>
         <el-table-column prop="torrentId" label="种子id" width="100"/>
         <el-table-column prop="title" label="文件名称">
