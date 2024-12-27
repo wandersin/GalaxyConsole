@@ -17,13 +17,13 @@
     let data = {
         "development": {
             "serviceUrl": "https://ds920plus.internal.mrtree.vip:58443",
-            "username": "wangyunshu",
-            "password": "514232098zx."
+            "username": "{{username}}",
+            "password": "{{password}}"
         },
         "production": {
-            "serviceUrl": "https://ds1821plus.internal.mrtree.vip:50444",
-            "username": "wangyunshu",
-            "password": "514232098zx."
+            "serviceUrl": "https://ds1821plus.internal.mrtree.vip:50443",
+            "username": "{{username}}",
+            "password": "{{password}}"
         }
     }
     let env = 'development';
